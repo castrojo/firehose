@@ -25,7 +25,13 @@ const formattedDate = data.isoDate
   : null;
 ---
 
-<article class="release-card">
+<article 
+  class="release-card" 
+  data-pagefind-body
+  data-project={data.projectName || data.feedTitle || 'Unknown'}
+  data-status={data.projectStatus || 'unknown'}
+  data-date={data.isoDate ? data.isoDate.split('T')[0] : ''}
+>
   <div class="release-header">
     <span class="project-name">{data.projectName || data.feedTitle || 'Unknown Project'}</span>
     {data.projectStatus && (

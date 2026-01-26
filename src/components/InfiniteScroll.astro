@@ -85,7 +85,13 @@
         : '';
       
       return `
-        <article class="release-card">
+        <article 
+          class="release-card" 
+          data-pagefind-ignore
+          data-project="${escapeHtml(data.projectName || data.feedTitle || 'Unknown')}"
+          data-status="${escapeHtml(data.projectStatus || 'unknown')}"
+          data-date="${escapeHtml(data.isoDate ? data.isoDate.split('T')[0] : '')}"
+        >
           <div class="release-header">
             <span class="project-name">${escapeHtml(data.projectName || data.feedTitle || 'Unknown Project')}</span>
             ${projectStatus}
