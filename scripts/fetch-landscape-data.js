@@ -10,7 +10,7 @@ const path = require('path');
 const https = require('https');
 
 const OUTPUT_PATH = path.join(__dirname, '../public/landscape-data.json');
-const LANDSCAPE_URL = 'https://raw.githubusercontent.com/cncf/landscape/master/landscape.yml';
+const LANDSCAPE_YML_URL = 'https://raw.githubusercontent.com/cncf/landscape/master/landscape.yml';
 
 function fetchUrl(url) {
   return new Promise((resolve, reject) => {
@@ -29,40 +29,99 @@ function fetchUrl(url) {
   });
 }
 
-function parseYaml(yaml) {
+function parseYaml(text) {
   const projects = [];
-  const lines = yaml.split('\n');
-  let currentProject = null;
+  const lines = text.split('\n');
+  let currentItem = null;
+  let inExtra = false;
+  let inSummaryUseCase = false;
+  let summaryLines = [];
   
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     
-    // Match project name
-    if (line.match(/^\s+- name:\s*(.+)$/)) {
-      if (currentProject) {
-        projects.push(currentProject);
+    // New item starts (check for "- item:" at any indentation)
+    if (line.match(/^\s+- item:\s*$/)) {
+      // Save previous item
+      if (currentItem && currentItem.name) {
+        // Finalize any pending summary
+        if (inSummaryUseCase && summaryLines.length > 0) {
+          currentItem.description = summaryLines.join(' ').trim();
+        }
+        projects.push(currentItem);
       }
-      currentProject = { name: line.match(/^\s+- name:\s*(.+)$/)[1].trim() };
+      currentItem = { name: '', description: '', repo_url: '', homepage_url: '' };
+      inExtra = false;
+      inSummaryUseCase = false;
+      summaryLines = [];
+      continue;
+    } 
+    
+    if (!currentItem) continue;
+    
+    // Check for name (12 spaces + "name:")
+    if (line.match(/^\s{12}name:\s+(.+)$/)) {
+      currentItem.name = line.match(/^\s{12}name:\s+(.+)$/)[1].trim();
+      continue;
     }
     
-    // Match description
-    if (currentProject && line.match(/^\s+description:\s*(.+)$/)) {
-      currentProject.description = line.match(/^\s+description:\s*(.+)$/)[1].trim();
+    // Check for repo_url (12 spaces + "repo_url:")
+    if (line.match(/^\s{12}repo_url:\s+(.+)$/)) {
+      currentItem.repo_url = line.match(/^\s{12}repo_url:\s+(.+)$/)[1].trim();
+      continue;
     }
     
-    // Match repo URL
-    if (currentProject && line.match(/^\s+repo_url:\s*(.+)$/)) {
-      currentProject.repo_url = line.match(/^\s+repo_url:\s*(.+)$/)[1].trim();
+    // Check for homepage_url (12 spaces + "homepage_url:")
+    if (line.match(/^\s{12}homepage_url:\s+(.+)$/)) {
+      currentItem.homepage_url = line.match(/^\s{12}homepage_url:\s+(.+)$/)[1].trim();
+      continue;
     }
     
-    // Match homepage
-    if (currentProject && line.match(/^\s+homepage_url:\s*(.+)$/)) {
-      currentProject.homepage_url = line.match(/^\s+homepage_url:\s*(.+)$/)[1].trim();
+    // Check for extra section (12 spaces + "extra:")
+    if (line.match(/^\s{12}extra:\s*$/)) {
+      inExtra = true;
+      continue;
+    }
+    
+    // Inside extra section
+    if (inExtra) {
+      // Start of summary_use_case (14 spaces + "summary_use_case:")
+      if (line.match(/^\s{14}summary_use_case:\s+>-?\s*$/)) {
+        inSummaryUseCase = true;
+        summaryLines = [];
+        continue;
+      }
+      
+      // Collecting summary_use_case lines (16 spaces + content)
+      if (inSummaryUseCase) {
+        if (line.match(/^\s{16}\S/)) {
+          summaryLines.push(line.trim());
+        } else if (line.match(/^\s{14}\S/)) {
+          // Another field at 14 spaces means summary_use_case ended
+          if (summaryLines.length > 0) {
+            currentItem.description = summaryLines.join(' ').trim();
+          }
+          inSummaryUseCase = false;
+          summaryLines = [];
+        } else if (line.match(/^\s{0,13}\S/)) {
+          // Back to item level, exit extra
+          if (summaryLines.length > 0) {
+            currentItem.description = summaryLines.join(' ').trim();
+          }
+          inExtra = false;
+          inSummaryUseCase = false;
+          summaryLines = [];
+        }
+      }
     }
   }
   
-  if (currentProject) {
-    projects.push(currentProject);
+  // Save last item
+  if (currentItem && currentItem.name) {
+    if (inSummaryUseCase && summaryLines.length > 0) {
+      currentItem.description = summaryLines.join(' ').trim();
+    }
+    projects.push(currentItem);
   }
   
   return projects;
@@ -97,10 +156,10 @@ function createProjectMap(projects) {
 }
 
 async function fetchLandscapeData() {
-  console.log('🌍 Fetching CNCF Landscape data...');
+  console.log('🌍 Fetching CNCF Landscape YAML...');
   
   try {
-    const yaml = await fetchUrl(LANDSCAPE_URL);
+    const yaml = await fetchUrl(LANDSCAPE_YML_URL);
     const projects = parseYaml(yaml);
     const projectMap = createProjectMap(projects);
     

@@ -114,11 +114,43 @@ body {
 
 /* Source Group */
 .source-group {
-  margin-bottom: var(--spacing-8);
+  margin-bottom: var(--spacing-12);
+  padding-bottom: var(--spacing-8);
+  border-bottom: 2px solid var(--color-border-secondary);
 }
 
 .source-group:last-child {
   margin-bottom: 0;
+  border-bottom: none;
+}
+
+.source-header {
+  margin-bottom: var(--spacing-6);
+}
+
+.project-name {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 var(--spacing-3) 0;
+  color: var(--color-text-primary);
+}
+
+.project-link {
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+.project-link:hover {
+  color: var(--color-link);
+  text-decoration: underline;
+}
+
+.project-description {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 900px;
 }
 
 .source-title {

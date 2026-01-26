@@ -25,15 +25,20 @@
         {{#each dates}}
           {{#each sources}}
             <div class="source-group">
-              <h3 class="source-title">
-                <a href="{{siteUrl}}" class="source-link">
-                  {{#if projectName}}
-                    <strong>{{projectName}}</strong>{{#if projectDescription}} - {{projectDescription}}{{/if}}
-                  {{else}}
-                    {{title}}
+              <div class="source-header">
+                {{#if projectName}}
+                  <h2 class="project-name">
+                    <a href="{{siteUrl}}" class="project-link">{{projectName}}</a>
+                  </h2>
+                  {{#if projectDescription}}
+                    <p class="project-description">{{projectDescription}}</p>
                   {{/if}}
-                </a>
-              </h3>
+                {{else}}
+                  <h2 class="project-name">
+                    <a href="{{siteUrl}}" class="project-link">{{title}}</a>
+                  </h2>
+                {{/if}}
+              </div>
               
               {{#each articles}}
                 <article class="release-card">
@@ -74,6 +79,7 @@
       </footer>
     </div>
     <script src="html-loader.js"></script>
+    <script src="project-info-loader.js"></script>
     <!-- %before-body-end.html% -->
   </body>
 
