@@ -48,6 +48,12 @@ export const FeedEntrySchema = z.object({
   // Feed metadata
   feedUrl: z.string().url(),
   feedTitle: z.string().optional(),
+  
+  // Feed status tracking (Phase 2)
+  feedStatus: z.enum(['success', 'error']).optional().default('success'),
+  feedError: z.string().optional(), // Error message if feedStatus is 'error'
+  feedErrorType: z.enum(['network', 'parse', 'validation', 'timeout']).optional(),
+  fetchedAt: z.string().optional(), // ISO timestamp of when feed was fetched
 });
 export type FeedEntry = z.infer<typeof FeedEntrySchema>;
 
