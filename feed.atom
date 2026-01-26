@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://castrojo.github.io/firehose/index.html</id>
     <title>osmos::feed</title>
-    <updated>2026-01-26T17:20:23.139Z</updated>
+    <updated>2026-01-26T17:24:14.451Z</updated>
     <generator>osmosfeed 1.15.1</generator>
     <link rel="alternate" href="https://castrojo.github.io/firehose/index.html"/>
     <link rel="self" href="https://castrojo.github.io/firehose/feed.atom"/>
@@ -38,17 +38,6 @@ Only require client_id and client_secret. issuer_url is now optional and is used
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[There is No Need to Trap Focus on a Dialog Element]]></title>
-        <id>https://css-tricks.com/?p=388430</id>
-        <link href="https://css-tricks.com/there-is-no-need-to-trap-focus-on-a-dialog-element/"/>
-        <updated>2026-01-26T15:02:27.000Z</updated>
-        <summary type="html"><![CDATA[Accessibility advice around modals have commonly taught us to trap focus within the modal. Upon further research, it seems like we no longer need to trap focus within the <dialog> (even in modal mode).
-There is No Need to Trap Focus on a Dialog Element originally published on CSS-Tricks, which is part of the DigitalOcean family. You should get the newsletter.]]></summary>
-        <author>
-            <name>Zell Liew</name>
-        </author>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[k0s in 2025: A year of community growth, governance, and Kubernetes innovation]]></title>
         <id>https://www.cncf.io/?p=155760</id>
         <link href="https://www.cncf.io/blog/2026/01/26/k0s-in-2025-a-year-of-community-growth-governance-and-kubernetes-innovation/"/>
@@ -56,46 +45,6 @@ There is No Need to Trap Focus on a Dialog Element originally published on CSS-T
         <summary type="html"><![CDATA[As we begin 2026, it’s worth reflecting on the remarkable progress we made with k0s as a project and as a community during 2025. Last year brought exciting advancements, adoption, and stronger community engagement.  k0s is...]]></summary>
         <author>
             <name>Prithvi Raj, CNCF Ambassador</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[How to Use the Singleton Design Pattern in Flutter: Lazy, Eager, and Factory Variations]]></title>
-        <id>69740b7bc3e68b8de44a179f</id>
-        <link href="https://www.freecodecamp.org/news/how-to-use-the-singleton-design-pattern-in-flutter-lazy-eager-and-factory-variations/"/>
-        <updated>2026-01-23T23:59:55.000Z</updated>
-        <summary type="html"><![CDATA[In software engineering, sometimes you need only one instance of a class across your entire application. Creating multiple instances in such cases can lead to inconsistent behavior, wasted memory, or resource conflicts. The Singleton Design Pattern i...]]></summary>
-        <author>
-            <name>Oluwaseyi Fatunmole</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[How to Evaluate and Select the Right LLM for Your GenAI Application]]></title>
-        <id>6974017e2a79920d2cc4e0c0</id>
-        <link href="https://www.freecodecamp.org/news/how-to-evaluate-and-select-the-right-llm-for-your-genai-application/"/>
-        <updated>2026-01-23T23:17:18.000Z</updated>
-        <summary type="html"><![CDATA[Every day, we learn something new about generative AI applications – how they behave, where they shine, and where they fall short. As Large Language Models (LLMs) rapidly evolve, one thing becomes increasingly clear: selecting the right model for you...]]></summary>
-        <author>
-            <name>Wisamul Haque</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[How to Implement Type Safe Unions in C# With OneOf]]></title>
-        <id>6973f8cd15349392f17d3760</id>
-        <link href="https://www.freecodecamp.org/news/how-to-implement-type-safe-unions-in-c-with-oneof/"/>
-        <updated>2026-01-23T22:40:13.000Z</updated>
-        <summary type="html"><![CDATA[Have you ever needed a method to return different types depending on the situation? Perhaps a payment processor that returns different payment types, an order that can be in various states with different data, or better, a file loader that handles mu...]]></summary>
-        <author>
-            <name>Grant Riordan</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[How to Work with PDF Files in Python: A PyPDF Guide]]></title>
-        <id>6973c6fe48425c5c266e4979</id>
-        <link href="https://www.freecodecamp.org/news/how-to-work-with-pdf-files-in-python-a-pypdf-guide/"/>
-        <updated>2026-01-23T19:07:42.000Z</updated>
-        <summary type="html"><![CDATA[PDF files are everywhere. They’re used for reports, invoices, bank statements, research papers, and legal documents. While PDFs are easy to read for humans, they’re not easy to work with in code. Extracting text, splitting pages, or merging files oft...]]></summary>
-        <author>
-            <name>Manish Shivanandhan</name>
         </author>
     </entry>
     <entry>
@@ -131,40 +80,6 @@ Signed-off-by: Leonardo Grasso <me@leonardograsso.com>
 Signed-off-by: Leonardo Di Giovanna <leonardodigiovanna1@gmail.com>]]></summary>
         <author>
             <name>Release notes from falco</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[How to stay curious as a dev in the AI hype era with Sumit Saha [Podcast #205]]]></title>
-        <id>69738cfe142ebfb1e40aff80</id>
-        <link href="https://www.freecodecamp.org/news/how-to-stay-curious-as-a-dev-in-the-ai-hype-era-with-sumit-saha-podcast-205/"/>
-        <updated>2026-01-23T15:00:14.000Z</updated>
-        <summary type="html"><![CDATA[Today Quincy Larson interviews Sumit Saha, a software engineer and prolific teacher on YouTube. Sumit is based in Dhaka, Bangladesh, where he runs a developer agency building projects for clients throughout Asia. We talk about: How the hunger for le...]]></summary>
-        <author>
-            <name>Beau Carnes</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Responsive Hexagon Grid Using Modern CSS]]></title>
-        <id>https://css-tricks.com/?p=391573</id>
-        <link href="https://css-tricks.com/responsive-hexagon-grid-using-modern-css/"/>
-        <updated>2026-01-23T14:39:56.000Z</updated>
-        <summary type="html"><![CDATA[A while back, Temani tacked a repeating grid of hexagon shapes. Well, he's updated it with modern CSS features that result in fewer magic numbers. And it's impressive!
-Responsive Hexagon Grid Using Modern CSS originally published on CSS-Tricks, which is part of the DigitalOcean family. You should get the newsletter.]]></summary>
-        <author>
-            <name>Temani Afif</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Open Props @custom-media Recipes]]></title>
-        <id>https://css-tricks.com/?p=391757</id>
-        <link href="https://css-tricks.com/open-props-custom-media-recipes/"/>
-        <updated>2026-01-23T13:00:00.000Z</updated>
-        <summary type="html"><![CDATA[The @custom-media at-rule has landed in Firefox Nightly! I couldn’t find it in the release notes but Adam Argyle’s on the beat noting that it’s behind a flag for now.
-Look for layout.css.custom-media.enabled
-I often forget the exact name of …
-Open Props @custom-media Recipes originally published on CSS-Tricks, which is part of the DigitalOcean family. You should get the newsletter.]]></summary>
-        <author>
-            <name>Geoff Graham</name>
         </author>
     </entry>
     <entry>
@@ -359,16 +274,6 @@ Full Changelog: v3.2.5...v3.2.6]]></summary>
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[How to Build a Singleton in Python (and Why You Probably Shouldn't)]]></title>
-        <id>697268cdbe089d77317d8295</id>
-        <link href="https://www.freecodecamp.org/news/how-to-build-a-singleton-in-python-and-why-you-probably-shouldnt/"/>
-        <updated>2026-01-22T18:13:33.000Z</updated>
-        <summary type="html"><![CDATA[The singleton pattern ensures that a class has exactly one instance throughout your application. You've probably seen it in configuration managers, database connections, or logging systems. While singletons seem useful, they often create more problem...]]></summary>
-        <author>
-            <name>Bala Priya C</name>
-        </author>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[LitmusChaos Q4 2025 update: community, contributions, and project progress]]></title>
         <id>https://www.cncf.io/?p=154920</id>
         <link href="https://www.cncf.io/blog/2026/01/22/litmuschaos-q4-2025-update-community-contributions-and-project-progress/"/>
@@ -395,16 +300,6 @@ Thanks to all the contributors! ❤️]]></summary>
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Learn RAG & MCP Fundamentals]]></title>
-        <id>6972357968889fc0fe8adf6b</id>
-        <link href="https://www.freecodecamp.org/news/learn-rag-and-mcp-fundamentals/"/>
-        <updated>2026-01-22T14:34:33.000Z</updated>
-        <summary type="html"><![CDATA[Building AI today is about more than just a clever prompt. If you really want to move from playing with standalone tools to creating integrated systems that actually work with your data, our new crash course on the freeCodeCamp.org YouTube channel is...]]></summary>
-        <author>
-            <name>Beau Carnes</name>
-        </author>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[3.5.1 / 2026-01-07]]></title>
         <id>https://github.com/prometheus/prometheus/releases/tag/v3.5.1</id>
         <link href="https://github.com/prometheus/prometheus/releases/tag/v3.5.1"/>
@@ -414,16 +309,6 @@ Docker library updated from 28.2.2 to 28.5.2. #17821
 Built with Go 1.24.11.]]></summary>
         <author>
             <name>Release notes from prometheus</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Beyond Generative: The Rise Of Agentic AI And User-Centric Design]]></title>
-        <id>https://smashingmagazine.com/2026/01/beyond-generative-rise-agentic-ai-user-centric-design/</id>
-        <link href="https://smashingmagazine.com/2026/01/beyond-generative-rise-agentic-ai-user-centric-design/"/>
-        <updated>2026-01-22T13:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Developing effective agentic AI requires a new research playbook. When systems plan, decide, and act on our behalf, UX moves beyond usability testing into the realm of trust, consent, and accountability. Victor Yocco outlines the research methods needed to design agentic AI systems responsibly.]]></summary>
-        <author>
-            <name>hello@smashingmagazine.com (Victor Yocco)</name>
         </author>
     </entry>
     <entry>
@@ -484,47 +369,6 @@ Feature: improved plugin name validation error messages and field name detection
 Feature: improved the --wait flag by allowing explicit strategy selection (including explicit --wait=hookOnly) and preventing SDK timeout errors when timeout is …]]></summary>
         <author>
             <name>Release notes from helm</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[How to Turn Your Favorite Tech Blogs into a Personal Podcast]]></title>
-        <id>6971493162f064cd7502688f</id>
-        <link href="https://www.freecodecamp.org/news/how-to-turn-your-favorite-blogs-into-personal-podcast/"/>
-        <updated>2026-01-21T21:46:25.000Z</updated>
-        <summary type="html"><![CDATA[These days it feels almost impossible to keep up with tech news. I step away for three days, and suddenly there is a new AI model, a new framework, and a new tool everyone says I must learn. Reading everything no longer scales, but I still want to st...]]></summary>
-        <author>
-            <name>Spruce Emmanuel</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Learn Dynamic Programming Through Dynamic Visuals]]></title>
-        <id>69711a5a740ddc945562fb4d</id>
-        <link href="https://www.freecodecamp.org/news/learn-dynamic-programming-through-dynamic-visuals/"/>
-        <updated>2026-01-21T18:26:34.000Z</updated>
-        <summary type="html"><![CDATA[Dynamic programming (DP) is often considered one of the most intimidating topics in coding interviews. It has a reputation for being abstract and counterintuitive, but it doesn't have to be. We just published a comprehensive Dynamic Programming cours...]]></summary>
-        <author>
-            <name>Beau Carnes</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Build a The Backrooms Game in Unreal Engine 5]]></title>
-        <id>69711728bb0d008e8a022fe5</id>
-        <link href="https://www.freecodecamp.org/news/build-a-the-backrooms-game-in-unreal-engine-5/"/>
-        <updated>2026-01-21T18:12:56.000Z</updated>
-        <summary type="html"><![CDATA[The "liminal space" aesthetic of the Backrooms has become a staple of modern indie horror. If you’ve ever wanted to create your own unsettling, claustrophobic experience, the latest course on the freeCodeCamp.org YouTube channel is your perfect start...]]></summary>
-        <author>
-            <name>Beau Carnes</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[I Learned The First Rule of ARIA the Hard Way]]></title>
-        <id>https://css-tricks.com/?p=391390</id>
-        <link href="https://css-tricks.com/i-learned-the-first-rule-of-aria-the-hard-way/"/>
-        <updated>2026-01-21T17:51:30.000Z</updated>
-        <summary type="html"><![CDATA[Semantic HTML does a lot more accessibility work than we usually give it credit for already — and ARIA is simple to abuse when we use it both as a shortcut and as a supplement.
-I Learned The First Rule of ARIA the Hard Way originally published on CSS-Tricks, which is part of the DigitalOcean family. You should get the newsletter.]]></summary>
-        <author>
-            <name>Hashim Quraishi</name>
         </author>
     </entry>
     <entry>
@@ -695,16 +539,6 @@ Release Notes]]></summary>
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Rethinking “Pixel Perfect” Web Design]]></title>
-        <id>https://smashingmagazine.com/2026/01/rethinking-pixel-perfect-web-design/</id>
-        <link href="https://smashingmagazine.com/2026/01/rethinking-pixel-perfect-web-design/"/>
-        <updated>2026-01-20T10:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Amit Sheen takes a hard look at the “Pixel Perfect” legacy concept, explaining why it’s failing us and redefining what “perfection” actually looks like in a multi-device, fluid world.]]></summary>
-        <author>
-            <name>hello@smashingmagazine.com (Amit Sheen)</name>
-        </author>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[v8.5.4-20260120-d25f155: crossbeam-skiplist: fix RefRange iterator memory leak (#19284) (#19293)]]></title>
         <id>https://github.com/tikv/tikv/releases/tag/v8.5.4-20260120-d25f155</id>
         <link href="https://github.com/tikv/tikv/releases/tag/v8.5.4-20260120-d25f155"/>
@@ -732,17 +566,6 @@ you1474600@gmail.com]]></summary>
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[HTTP Archive 2025 Web Almanac]]></title>
-        <id>https://css-tricks.com/?p=391564</id>
-        <link href="https://css-tricks.com/http-archive-2025-web-almanac/"/>
-        <updated>2026-01-16T17:30:43.000Z</updated>
-        <summary type="html"><![CDATA[I love me some good web research reports. I’m a sucker for them. HTTP Archive’s Web Almanac is one report I look forward to every year, and I know I’m not alone there. It’s one of those highly-anticipated publications on …
-HTTP Archive 2025 Web Almanac originally published on CSS-Tricks, which is part of the DigitalOcean family. You should get the newsletter.]]></summary>
-        <author>
-            <name>Geoff Graham</name>
-        </author>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[Dapr Runtime v1.16.7-rc.1]]></title>
         <id>https://github.com/dapr/dapr/releases/tag/v1.16.7-rc.1</id>
         <link href="https://github.com/dapr/dapr/releases/tag/v1.16.7-rc.1"/>
@@ -750,17 +573,6 @@ HTTP Archive 2025 Web Almanac originally published on CSS-Tricks, which is part 
         <summary type="html"><![CDATA[This is the release candidate 1.16.7-rc.1]]></summary>
         <author>
             <name>Release notes from dapr</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[“I Heart CSS” DailyDev Squad]]></title>
-        <id>https://css-tricks.com/?p=391529</id>
-        <link href="https://css-tricks.com/i-heart-css-dailydev-squad/"/>
-        <updated>2026-01-16T14:46:24.000Z</updated>
-        <summary type="html"><![CDATA[If you’re reading this, chances are you already have some sort of way that you’re following when we publish new content, whether that’s RSS, Bluesky, Mastodon, or what have you. But I know a lot of folks …
-“I Heart CSS” DailyDev Squad originally published on CSS-Tricks, which is part of the DigitalOcean family. You should get the newsletter.]]></summary>
-        <author>
-            <name>Geoff Graham</name>
         </author>
     </entry>
     <entry>
@@ -801,17 +613,6 @@ JWT-SVID caching now uses the SPIFFE ID returned by the server to prevent stale 
 Documentation fixes (#6488, #6521)]]></summary>
         <author>
             <name>Release notes from spire</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[What’s !important #3: Popover Context Menus, @scope, New Web Platform Features, and More]]></title>
-        <id>https://css-tricks.com/?p=391542</id>
-        <link href="https://css-tricks.com/whats-important-3/"/>
-        <updated>2026-01-15T15:08:58.000Z</updated>
-        <summary type="html"><![CDATA[The developer community hasn’t wasted any time kicking off 2026 with some really great articles, demos, and insights. Firefox 147 and Chrome 144 also shipped, and while they’re not jam-packed with features, the releases are still pretty exciting for what’s normally a slow time of year, so without further ado, here’s what’s important from the last couple of weeks (or should I say the first couple of weeks, of 2026?)…
-What’s !important #3: Popover Context Menus, @scope, New Web Platform Features, and More originally published on CSS-Tricks, which is part of the DigitalOcean family. You should get the newsletter.]]></summary>
-        <author>
-            <name>Daniel Schwarz</name>
         </author>
     </entry>
     <entry>
@@ -1065,17 +866,6 @@ Full Changelog: edge-26.1.1...edge-26.1.2]]></summary>
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Playing With CodePen slideVars]]></title>
-        <id>https://css-tricks.com/?p=391494</id>
-        <link href="https://css-tricks.com/playing-with-codepen-slidevars/"/>
-        <updated>2026-01-14T14:59:07.000Z</updated>
-        <summary type="html"><![CDATA[Super cool new CodePen feature alert! You've probably seen a bunch of "interactive" demos that let you changed values on the fly from a UI panel embedded directly in the demo.
-Playing With CodePen slideVars originally published on CSS-Tricks, which is part of the DigitalOcean family. You should get the newsletter.]]></summary>
-        <author>
-            <name>Geoff Graham</name>
-        </author>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[0.43.0-rc1]]></title>
         <id>https://github.com/falcosecurity/falco/releases/tag/0.43.0-rc1</id>
         <link href="https://github.com/falcosecurity/falco/releases/tag/0.43.0-rc1"/>
@@ -1086,16 +876,6 @@ simply replace the commit SHA with the release name.
 Signed-off-by: Leonardo Di Giovanna <leonardodigiovanna1@gmail.com>]]></summary>
         <author>
             <name>Release notes from falco</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Smashing Animations Part 8: Theming Animations Using CSS Relative Colour]]></title>
-        <id>https://smashingmagazine.com/2026/01/smashing-animations-part-8-css-relative-colour/</id>
-        <link href="https://smashingmagazine.com/2026/01/smashing-animations-part-8-css-relative-colour/"/>
-        <updated>2026-01-14T10:00:00.000Z</updated>
-        <summary type="html"><![CDATA[CSS relative colour values are now widely supported. In this article, pioneering author and web designer [Andy Clarke](https://stuffandnonsense.co.uk/) shares practical techniques for using them to theme and animate SVG graphics.]]></summary>
-        <author>
-            <name>hello@smashingmagazine.com (Andy Clarke)</name>
         </author>
     </entry>
     <entry>
@@ -1495,17 +1275,6 @@ Full Changelog: v2.14.1...v2.14.2-rc2]]></summary>
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Postcard From Web Directions Dev Summit, 2025]]></title>
-        <id>https://css-tricks.com/?p=391345</id>
-        <link href="https://css-tricks.com/postcard-from-web-directions-dev-summit-2025/"/>
-        <updated>2026-01-12T14:54:32.000Z</updated>
-        <summary type="html"><![CDATA[Lee Meyer recently spoke at Web Directions Summit 2025. This is his experience, not only speaking at the event, but experiencing the event through the lens of anxiety and imposter syndrome.
-Postcard From Web Directions Dev Summit, 2025 originally published on CSS-Tricks, which is part of the DigitalOcean family. You should get the newsletter.]]></summary>
-        <author>
-            <name>Lee Meyer</name>
-        </author>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[v2.18.3]]></title>
         <id>https://github.com/kedacore/keda/releases/tag/v2.18.3</id>
         <link href="https://github.com/kedacore/keda/releases/tag/v2.18.3"/>
@@ -1515,16 +1284,6 @@ Fixes
 General: Fix CVE-2025-68476 (#7334)]]></summary>
         <author>
             <name>Release notes from keda</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[UX And Product Designer’s Career Paths In 2026]]></title>
-        <id>https://smashingmagazine.com/2026/01/ux-product-designer-career-paths/</id>
-        <link href="https://smashingmagazine.com/2026/01/ux-product-designer-career-paths/"/>
-        <updated>2026-01-12T10:00:00.000Z</updated>
-        <summary type="html"><![CDATA[How to shape your career path for 2026, with decision trees for designers and a UX skills self-assessment matrix. The only limits for tomorrow are the doubts we have today. Brought to you by Smart Interface Design Patterns, a **friendly video course on UX** and design patterns by Vitaly.]]></summary>
-        <author>
-            <name>hello@smashingmagazine.com (Vitaly Friedman)</name>
         </author>
     </entry>
     <entry>
@@ -1580,16 +1339,6 @@ Users inspecting sidecar injector logs and metrics saw misl…]]></summary>
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Penpot Is Experimenting With MCP Servers For AI-Powered Design Workflows]]></title>
-        <id>https://smashingmagazine.com/2026/01/penpot-experimenting-mcp-servers-ai-powered-design-workflows/</id>
-        <link href="https://smashingmagazine.com/2026/01/penpot-experimenting-mcp-servers-ai-powered-design-workflows/"/>
-        <updated>2026-01-08T08:00:00.000Z</updated>
-        <summary type="html"><![CDATA[[Penpot](https://penpot.app/?utm_source=SmashingMagazine&utm_medium=Article&utm_campaign=MCPserver) is experimenting with MCP (Model Context Protocol) servers, which could lead to designers and developers being able to perform tasks in Penpot using AI that’s able to understand and interact with Penpot design files. Daniel Schwarz explains how [Penpot MCP](https://github.com/penpot/penpot-mcp) servers work, what they could mean for creating and managing designs in Penpot, and what you can do to help shape their development.]]></summary>
-        <author>
-            <name>hello@smashingmagazine.com (Daniel Schwarz)</name>
-        </author>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[v1.14.0]]></title>
         <id>https://github.com/coredns/coredns/releases/tag/v1.14.0</id>
         <link href="https://github.com/coredns/coredns/releases/tag/v1.14.0"/>
@@ -1630,17 +1379,6 @@ plugin/sign: Report parser err before missing SOA (#7775)]]></summary>
 [BUGFIX] Scraping: fix relabel keep/drop not working. #17807]]></summary>
         <author>
             <name>Release notes from prometheus</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Future CSS: :drag (and Maybe ::dragged-image?)]]></title>
-        <id>https://css-tricks.com/?p=390960</id>
-        <link href="https://css-tricks.com/future-css-drag-and-maybe-dragged-image/"/>
-        <updated>2026-01-07T15:16:47.000Z</updated>
-        <summary type="html"><![CDATA[Have you ever struggled to style an element while it's being dragged? Sunkanmi explains some ways it could become easier in the future.
-Future CSS: :drag (and Maybe ::dragged-image?) originally published on CSS-Tricks, which is part of the DigitalOcean family. You should get the newsletter.]]></summary>
-        <author>
-            <name>Sunkanmi Fafowora</name>
         </author>
     </entry>
     <entry>
@@ -1690,16 +1428,6 @@ Changelog
 [F…]]></summary>
         <author>
             <name>Release notes from prometheus</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Pivoting Your Career Without Starting From Scratch]]></title>
-        <id>https://smashingmagazine.com/2026/01/pivoting-career-without-starting-from-scratch/</id>
-        <link href="https://smashingmagazine.com/2026/01/pivoting-career-without-starting-from-scratch/"/>
-        <updated>2026-01-07T10:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Most developers spend their days fixing bugs, shipping features, and jumping into the next sprint without even thinking about it. After a while, you begin to ask yourself, “Is this still what I want to be doing?” This article looks at how you can move into a new direction in your career without starting from scratch, and how the skills you already use, like problem-solving, communication, and empathy, can open new doors.]]></summary>
-        <author>
-            <name>hello@smashingmagazine.com (Joas Pambou)</name>
         </author>
     </entry>
     <entry>
@@ -2066,17 +1794,6 @@ Bug fixes
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[What’s !important #2: Conditional View Transitions, CSS/SVG Text Effects, the Best of CSS Bluesky, and More]]></title>
-        <id>https://css-tricks.com/?p=391298</id>
-        <link href="https://css-tricks.com/whats-important-2/"/>
-        <updated>2025-12-31T16:18:23.000Z</updated>
-        <summary type="html"><![CDATA[2026 is almost upon us. I know we’re all itching to see the clock strike midnight (cue The Final Countdown by Europe), but not without recapping the best CSS-related things that happened over the last two weeks!
-What’s !important #2: Conditional View Transitions, CSS/SVG Text Effects, the Best of CSS Bluesky, and More originally published on CSS-Tricks, which is part of the DigitalOcean family. You should get the newsletter.]]></summary>
-        <author>
-            <name>Daniel Schwarz</name>
-        </author>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[v8.5.4-20251231-f006964: compact-log-backup: pick some of fixs of restoring. (#19258)]]></title>
         <id>https://github.com/tikv/tikv/releases/tag/v8.5.4-20251231-f006964</id>
         <link href="https://github.com/tikv/tikv/releases/tag/v8.5.4-20251231-f006964"/>
@@ -2147,16 +1864,6 @@ nkcs_lykx@hotmail.com]]></summary>
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Countdown To New Adventures (January 2026 Wallpapers Edition)]]></title>
-        <id>https://smashingmagazine.com/2025/12/desktop-wallpaper-calendars-january-2026/</id>
-        <link href="https://smashingmagazine.com/2025/12/desktop-wallpaper-calendars-january-2026/"/>
-        <updated>2025-12-31T09:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Whether 2026 has already begun as you’re reading this or you’re still waiting for the big countdown to start, how about some new wallpapers to get your desktop ready for the new year? We’ve got you covered.]]></summary>
-        <author>
-            <name>hello@smashingmagazine.com (Cosima Mielke)</name>
-        </author>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[Release v3.5.3 - 2025/12/23]]></title>
         <id>https://github.com/cubefs/cubefs/releases/tag/v3.5.3</id>
         <link href="https://github.com/cubefs/cubefs/releases/tag/v3.5.3"/>
@@ -2172,16 +1879,6 @@ High-throughput LLM/MLLM training (Tolerable storage-compute disaggregation late
 client: Support asynchronous flush for extent handler to improve write performance. Write speed exceeds 1.2 GB/s; on a high-spec H20 training node, a single client can achieve 10+ …]]></summary>
         <author>
             <name>Release notes from cubefs</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[How To Design For (And With) Deaf People]]></title>
-        <id>https://smashingmagazine.com/2025/12/how-design-for-with-deaf-people/</id>
-        <link href="https://smashingmagazine.com/2025/12/how-design-for-with-deaf-people/"/>
-        <updated>2025-12-30T10:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Practical UX guidelines to keep in mind for 466 million people who experience hearing loss. More design patterns in Smart Interface Design Patterns, a **friendly video course on UX** and design patterns by Vitaly.]]></summary>
-        <author>
-            <name>hello@smashingmagazine.com (Vitaly Friedman)</name>
         </author>
     </entry>
 </feed>
