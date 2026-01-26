@@ -1,33 +1,56 @@
-name: Build site on schedule or main branch update
+name: Build and Deploy to GitHub Pages
 
 on:
   push:
     branches:
       - main
   schedule:
-    # Adjust refresh schedule here. By default, it runs once per day.
-    # Syntax reference: https://docs.github.com/en/actions/reference/events-that-trigger-workflows#schedule
-    # Recommended tool: https://crontab.guru/
-    - cron: "0 0 * * *"
+    # Daily at 6 AM UTC to fetch fresh feed data
+    - cron: "0 6 * * *"
   workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Cancel in-progress deployments for same branch
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2.1.4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: "16"
+          node-version: '20'
+          cache: 'npm'
+
       - name: Install dependencies
-        run: npm i
-      - name: Build the feed
+        run: npm ci
+
+      - name: Build site
         run: npm run build
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
