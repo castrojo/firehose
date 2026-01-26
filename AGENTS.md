@@ -6,6 +6,12 @@ This document provides guidelines for AI agents and AI-assisted development tool
 
 The Firehose is an RSS feed reader for CNCF and cloud native content. It is meant to summarize releases across the ecosystem
 
+## Guidance
+
+- @cncf/landscape is the single source of truth for all projects, it MUST always take priority
+- Use the github MCP server for interfacing with the @cncf/landscape, do not use the web search
+- Keep this site as simple and straightforward to maintain as possible. Be surgical and not verbose.
+
 ## Attribution Requirements
 
 AI agents must disclose what tool and model they are using in the "Assisted-by" commit footer:
