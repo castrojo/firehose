@@ -1,0 +1,124 @@
+---
+interface Props {
+  projects: string[];
+  statuses: string[];
+  totalCount: number;
+}
+
+const { projects, statuses, totalCount } = Astro.props;
+---
+
+<div class="filter-bar">
+  <div class="filter-controls">
+    <select id="filter-project" aria-label="Filter by project">
+      <option value="">All Projects</option>
+      {projects.map(p => <option value={p}>{p}</option>)}
+    </select>
+    
+    <select id="filter-status" aria-label="Filter by status">
+      <option value="">All Statuses</option>
+      {statuses.map(s => <option value={s}>{s}</option>)}
+    </select>
+    
+    <div class="date-range-buttons" role="radiogroup" aria-label="Filter by date range">
+      <button data-days="all" class="active">All</button>
+      <button data-days="7">7 days</button>
+      <button data-days="30">30 days</button>
+      <button data-days="90">90 days</button>
+    </div>
+    
+    <button id="clear-filters" aria-label="Clear all filters">Clear Filters</button>
+  </div>
+  
+  <div class="filter-results">
+    <span id="result-count" aria-live="polite" aria-atomic="true">
+      Showing {totalCount} of {totalCount} releases
+    </span>
+  </div>
+</div>
+
+<script>
+  let activeDateRange = 'all';
+
+  function applyFilters() {
+    const projectFilter = (document.getElementById('filter-project') as HTMLSelectElement)?.value || '';
+    const statusFilter = (document.getElementById('filter-status') as HTMLSelectElement)?.value || '';
+    
+    const releases = document.querySelectorAll('.release-card');
+    let visibleCount = 0;
+    
+    // Calculate date threshold for date range filter
+    const now = new Date();
+    const dateThreshold = activeDateRange === 'all' ? null : 
+      new Date(now.getTime() - parseInt(activeDateRange) * 24 * 60 * 60 * 1000);
+    
+    releases.forEach((release) => {
+      const card = release as HTMLElement;
+      const project = card.dataset.project || '';
+      const status = card.dataset.status || '';
+      const dateStr = card.dataset.date || '';
+      const releaseDate = dateStr ? new Date(dateStr) : null;
+      
+      // Match logic
+      const matchesProject = !projectFilter || project === projectFilter;
+      const matchesStatus = !statusFilter || status === statusFilter;
+      const matchesDate = !dateThreshold || (releaseDate && releaseDate >= dateThreshold);
+      
+      const visible = matchesProject && matchesStatus && matchesDate;
+      
+      card.style.display = visible ? '' : 'none';
+      if (visible) visibleCount++;
+    });
+    
+    // Update result count
+    const totalCount = releases.length;
+    const resultCount = document.getElementById('result-count');
+    if (resultCount) {
+      resultCount.textContent = `Showing ${visibleCount} of ${totalCount} releases`;
+    }
+  }
+
+  function clearFilters() {
+    // Reset dropdowns
+    const projectSelect = document.getElementById('filter-project') as HTMLSelectElement;
+    const statusSelect = document.getElementById('filter-status') as HTMLSelectElement;
+    if (projectSelect) projectSelect.value = '';
+    if (statusSelect) statusSelect.value = '';
+    
+    // Reset date range buttons
+    document.querySelectorAll('.date-range-buttons button').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    const allButton = document.querySelector('[data-days="all"]');
+    allButton?.classList.add('active');
+    activeDateRange = 'all';
+    
+    applyFilters();
+  }
+
+  // Attach event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('filter-project')?.addEventListener('change', applyFilters);
+    document.getElementById('filter-status')?.addEventListener('change', applyFilters);
+    document.getElementById('clear-filters')?.addEventListener('click', clearFilters);
+    
+    // Date range button listeners
+    document.querySelectorAll('.date-range-buttons button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        const days = target.dataset.days || 'all';
+        
+        // Update active state
+        document.querySelectorAll('.date-range-buttons button').forEach(b => b.classList.remove('active'));
+        target.classList.add('active');
+        
+        activeDateRange = days;
+        applyFilters();
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Filter bar will be styled in index.astro for consistency with page theme */
+</style>
