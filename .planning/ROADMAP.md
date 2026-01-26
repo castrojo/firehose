@@ -156,10 +156,12 @@ Plans:
 7. Developer can add new feed by editing single config file (no code changes)
 8. Build output shows progress indicators and final statistics (X feeds succeeded, Y failed, Z items processed)
 
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] TBD during phase planning
+- [ ] 05-01-PLAN.md — Astro configuration and dependencies for GitHub Pages
+- [ ] 05-02-PLAN.md — GitHub Actions workflow with Node.js 20 and daily schedule
+- [ ] 05-03-PLAN.md — Build progress indicators and statistics output
 
 ---
 
