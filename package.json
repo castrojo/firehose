@@ -13,7 +13,13 @@
     "type": "git",
     "url": "git+https://github.com/castrojo/firehose.git"
   },
-  "keywords": ["rss", "feed-reader", "cncf", "cloud-native", "astro"],
+  "keywords": [
+    "rss",
+    "feed-reader",
+    "cncf",
+    "cloud-native",
+    "astro"
+  ],
   "author": "castrojo",
   "license": "MIT",
   "bugs": {
@@ -21,6 +27,11 @@
   },
   "homepage": "https://github.com/castrojo/firehose#readme",
   "dependencies": {
-    "astro": "^5.16.15"
+    "astro": "^5.16.15",
+    "js-yaml": "^4.1.1",
+    "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9"
   }
 }
