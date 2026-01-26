@@ -1,15 +1,26 @@
 ---
 import { getCollection } from 'astro:content';
+import ReleaseCard from '../components/ReleaseCard.astro';
 
 // Fetch all releases from the content collection
 const releases = await getCollection('releases');
 
+// Filter out error entries (feedStatus === 'error')
+const validReleases = releases.filter(r => r.data.feedStatus !== 'error');
+
+// Count errors for error banner (will be used in Plan 03)
+const errorCount = releases.filter(r => r.data.feedStatus === 'error').length;
+
 // Sort by date (newest first)
-const sortedReleases = releases.sort((a, b) => {
+const sortedReleases = validReleases.sort((a, b) => {
   const dateA = a.data.isoDate ? new Date(a.data.isoDate).getTime() : 0;
   const dateB = b.data.isoDate ? new Date(b.data.isoDate).getTime() : 0;
   return dateB - dateA;
 });
+
+// Count by project status
+const graduatedCount = validReleases.filter(r => r.data.projectStatus === 'graduated').length;
+const incubatingCount = validReleases.filter(r => r.data.projectStatus === 'incubating').length;
 ---
 
 <!DOCTYPE html>
@@ -17,153 +28,193 @@ const sortedReleases = releases.sort((a, b) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CNCF project releases aggregated in one place">
   <title>The Firehose - CNCF Releases</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 2rem;
-      line-height: 1.6;
-      color: #24292f;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    .subtitle {
-      color: #57606a;
-      margin-bottom: 2rem;
-    }
-    .release {
-      border: 1px solid #d0d7de;
-      border-radius: 6px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .release-header {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-    .project-name {
-      font-weight: 600;
-      color: #0969da;
-    }
-    .project-status {
-      display: inline-block;
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-    .graduated { background: #dafbe1; color: #1a7f37; }
-    .incubating { background: #fff8c5; color: #9a6700; }
-    .release-title {
-      font-size: 1.25rem;
-      margin: 0.5rem 0;
-    }
-    .release-title a {
-      color: #0969da;
-      text-decoration: none;
-    }
-    .release-title a:hover {
-      text-decoration: underline;
-    }
-    .release-date {
-      color: #57606a;
-      font-size: 0.875rem;
-    }
-    .description {
-      color: #57606a;
-      margin: 0.5rem 0;
-    }
-    .content-snippet {
-      margin-top: 1rem;
-      color: #24292f;
-    }
-    .stats {
-      background: #f6f8fa;
-      border: 1px solid #d0d7de;
-      border-radius: 6px;
-      padding: 1rem;
-      margin-bottom: 2rem;
-      display: flex;
-      gap: 2rem;
-    }
-    .stat {
-      flex: 1;
-    }
-    .stat-value {
-      font-size: 2rem;
-      font-weight: 600;
-      color: #0969da;
-    }
-    .stat-label {
-      color: #57606a;
-      font-size: 0.875rem;
-    }
-  </style>
 </head>
 <body>
-  <h1>🔥 The Firehose</h1>
-  <p class="subtitle">CNCF Project Releases</p>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="site-title">🔥 The Firehose</h1>
+      <p class="site-subtitle">CNCF Project Releases</p>
+    </div>
+  </header>
   
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-value">{sortedReleases.length}</div>
-      <div class="stat-label">Total Releases</div>
-    </div>
-    <div class="stat">
-      <div class="stat-value">{sortedReleases.filter(r => r.data.projectStatus === 'graduated').length}</div>
-      <div class="stat-label">Graduated Projects</div>
-    </div>
-    <div class="stat">
-      <div class="stat-value">{sortedReleases.filter(r => r.data.projectStatus === 'incubating').length}</div>
-      <div class="stat-label">Incubating Projects</div>
-    </div>
-  </div>
-  
-  {sortedReleases.map((release) => (
-    <article class="release">
-      <div class="release-header">
-        <span class="project-name">{release.data.projectName || release.data.feedTitle || 'Unknown Project'}</span>
-        {release.data.projectStatus && (
-          <span class={`project-status ${release.data.projectStatus}`}>
-            {release.data.projectStatus}
-          </span>
-        )}
+  <main class="container">
+    <!-- Stats bar -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">{sortedReleases.length}</div>
+        <div class="stat-label">Total Releases</div>
       </div>
-      
-      {release.data.projectDescription && (
-        <p class="description">{release.data.projectDescription}</p>
-      )}
-      
-      <h2 class="release-title">
-        <a href={release.data.link} target="_blank" rel="noopener noreferrer">
-          {release.data.title}
-        </a>
-      </h2>
-      
-      {release.data.isoDate && (
-        <div class="release-date">
-          {new Date(release.data.isoDate).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
+      <div class="stat">
+        <div class="stat-value">{graduatedCount}</div>
+        <div class="stat-label">Graduated Projects</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{incubatingCount}</div>
+        <div class="stat-label">Incubating Projects</div>
+      </div>
+      {errorCount > 0 && (
+        <div class="stat stat-error">
+          <div class="stat-value">{errorCount}</div>
+          <div class="stat-label">Failed Feeds</div>
         </div>
       )}
-      
-      {release.data.contentSnippet && (
-        <div class="content-snippet">
-          {release.data.contentSnippet.substring(0, 300)}
-          {release.data.contentSnippet.length > 300 ? '...' : ''}
-        </div>
-      )}
-    </article>
-  ))}
+    </div>
+    
+    <!-- Release list -->
+    <div class="releases">
+      {sortedReleases.map((release) => (
+        <ReleaseCard release={release} />
+      ))}
+    </div>
+  </main>
+  
+  <footer class="site-footer">
+    <div class="container">
+      <p>Aggregating {sortedReleases.length} releases from {new Set(sortedReleases.map(r => r.data.projectName)).size} CNCF projects</p>
+      <p>Updated daily • <a href="https://github.com/castrojo/firehose" target="_blank" rel="noopener noreferrer">View on GitHub</a></p>
+    </div>
+  </footer>
 </body>
 </html>
+
+<style>
+  :root {
+    /* Colors - GitHub Primer inspired */
+    --color-bg-default: #ffffff;
+    --color-bg-secondary: #f6f8fa;
+    --color-border-default: #d0d7de;
+    --color-text-primary: #24292f;
+    --color-text-secondary: #57606a;
+    --color-text-tertiary: #6e7781;
+    --color-text-link: #0969da;
+    --color-accent-emphasis: #0969da;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--color-text-primary);
+    background: var(--color-bg-secondary);
+  }
+  
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  .site-header {
+    background: var(--color-bg-default);
+    border-bottom: 1px solid var(--color-border-default);
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+  }
+  
+  .site-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .site-subtitle {
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+  }
+  
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    padding: 1.5rem;
+  }
+  
+  .stat {
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-accent-emphasis);
+  }
+  
+  .stat-error .stat-value {
+    color: #cf222e;
+  }
+  
+  .stat-label {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  .releases {
+    margin-bottom: 3rem;
+  }
+  
+  .site-footer {
+    background: var(--color-bg-default);
+    border-top: 1px solid var(--color-border-default);
+    padding: 2rem 0;
+    margin-top: 3rem;
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+  }
+  
+  .site-footer p {
+    margin-bottom: 0.5rem;
+  }
+  
+  .site-footer a {
+    color: var(--color-text-link);
+    text-decoration: none;
+  }
+  
+  .site-footer a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .site-title {
+      font-size: 1.5rem;
+    }
+    
+    .stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .container {
+      padding: 0 0.75rem;
+    }
+    
+    .site-header {
+      padding: 1.5rem 0;
+    }
+    
+    .stats {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      padding: 1rem;
+    }
+  }
+</style>
