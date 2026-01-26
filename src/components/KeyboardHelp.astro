@@ -1,0 +1,227 @@
+---
+// src/components/KeyboardHelp.astro
+// No props needed - static content
+---
+
+<!-- Backdrop -->
+<div id="keyboard-help-backdrop" class="keyboard-help-backdrop"></div>
+
+<!-- Modal -->
+<div id="keyboard-help-modal" class="keyboard-help-modal" role="dialog" aria-labelledby="help-title" aria-modal="true">
+  <div class="help-header">
+    <h2 id="help-title">Keyboard Shortcuts</h2>
+    <button id="close-help" aria-label="Close help" class="close-button">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  
+  <div class="help-content">
+    <table class="shortcuts-table">
+      <tbody>
+        <tr>
+          <td class="shortcut-key"><kbd>j</kbd></td>
+          <td class="shortcut-description">Next release</td>
+        </tr>
+        <tr>
+          <td class="shortcut-key"><kbd>k</kbd></td>
+          <td class="shortcut-description">Previous release</td>
+        </tr>
+        <tr>
+          <td class="shortcut-key"><kbd>o</kbd> or <kbd>Enter</kbd></td>
+          <td class="shortcut-description">Open focused release in new tab</td>
+        </tr>
+        <tr>
+          <td class="shortcut-key"><kbd>/</kbd></td>
+          <td class="shortcut-description">Focus search input</td>
+        </tr>
+        <tr>
+          <td class="shortcut-key"><kbd>?</kbd></td>
+          <td class="shortcut-description">Show this help</td>
+        </tr>
+        <tr>
+          <td class="shortcut-key"><kbd>Esc</kbd></td>
+          <td class="shortcut-description">Close help / Blur search / Clear focus</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <p class="help-note">
+      <strong>Tip:</strong> Keyboard shortcuts work when you're not typing in an input field.
+    </p>
+  </div>
+</div>
+
+<script>
+  // Close button handler
+  document.getElementById('close-help')?.addEventListener('click', () => {
+    document.getElementById('keyboard-help-modal')?.classList.remove('visible');
+    document.getElementById('keyboard-help-backdrop')?.classList.remove('visible');
+  });
+  
+  // Close on backdrop click
+  document.getElementById('keyboard-help-backdrop')?.addEventListener('click', () => {
+    document.getElementById('keyboard-help-modal')?.classList.remove('visible');
+    document.getElementById('keyboard-help-backdrop')?.classList.remove('visible');
+  });
+</script>
+
+<style>
+  .keyboard-help-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    backdrop-filter: blur(2px);
+  }
+  
+  .keyboard-help-backdrop.visible {
+    display: block;
+  }
+  
+  .keyboard-help-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--color-bg-default, #ffffff);
+    border: 1px solid var(--color-border-default, #d0d7de);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow: auto;
+  }
+  
+  .keyboard-help-modal.visible {
+    display: block;
+    animation: modalSlideIn 0.2s ease-out;
+  }
+  
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -48%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+  
+  .help-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--color-border-default, #d0d7de);
+  }
+  
+  .help-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-primary, #24292f);
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--color-text-secondary, #57606a);
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+  }
+  
+  .close-button:hover {
+    background: var(--color-bg-secondary, #f6f8fa);
+    color: var(--color-text-primary, #24292f);
+  }
+  
+  .help-content {
+    padding: 1.5rem;
+  }
+  
+  .shortcuts-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .shortcuts-table tr {
+    border-bottom: 1px solid var(--color-border-default, #d0d7de);
+  }
+  
+  .shortcuts-table tr:last-child {
+    border-bottom: none;
+  }
+  
+  .shortcuts-table td {
+    padding: 0.75rem 0;
+  }
+  
+  .shortcut-key {
+    width: 40%;
+    font-weight: 500;
+  }
+  
+  .shortcuts-table kbd {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    font-family: ui-monospace, 'Cascadia Code', monospace;
+    background: var(--color-bg-secondary, #f6f8fa);
+    border: 1px solid var(--color-border-default, #d0d7de);
+    border-radius: 4px;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    margin: 0 0.25rem;
+  }
+  
+  .shortcut-description {
+    color: var(--color-text-secondary, #57606a);
+  }
+  
+  .help-note {
+    margin-top: 1.5rem;
+    padding: 0.75rem;
+    background: var(--color-bg-secondary, #f6f8fa);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary, #57606a);
+    line-height: 1.5;
+  }
+  
+  .help-note strong {
+    color: var(--color-text-primary, #24292f);
+  }
+  
+  /* Mobile responsive */
+  @media (max-width: 480px) {
+    .keyboard-help-modal {
+      width: 95%;
+      max-height: 90vh;
+    }
+    
+    .help-header,
+    .help-content {
+      padding: 1rem;
+    }
+    
+    .shortcuts-table kbd {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.4rem;
+    }
+  }
+</style>
