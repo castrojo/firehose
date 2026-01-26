@@ -1,8 +1,3083 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>urn:2026-01-26T17:47:02.226Z</id>
+    <id>https://castrojo.github.io/firehose/index.html</id>
     <title>osmos::feed</title>
-    <updated>2026-01-26T17:47:02.226Z</updated>
+    <updated>2026-01-26T17:49:06.844Z</updated>
     <generator>osmosfeed 1.15.1</generator>
-    <link rel="alternate" href="index.html"/>
+    <link rel="alternate" href="https://castrojo.github.io/firehose/index.html"/>
+    <link rel="self" href="https://castrojo.github.io/firehose/feed.atom"/>
+    <entry>
+        <title type="html"><![CDATA[Dapr Runtime v1.16.8]]></title>
+        <id>https://github.com/dapr/dapr/releases/tag/v1.16.8</id>
+        <link href="https://github.com/dapr/dapr/releases/tag/v1.16.8"/>
+        <updated>2026-01-26T16:03:28.000Z</updated>
+        <summary type="html"><![CDATA[Dapr 1.16.8
+This update includes bug fixes:
+RabbitMQ PubSub concurrent map writes panic
+Pulsar: optional issuer file credential
+RabbitMQ PubSub concurrent map writes panic
+Problem
+After upgrading to Dapr v1.16, applications using RabbitMQ PubSub started experiencing panics with the message "fatal error: concurrent map writes". The error occurred during subscription management in the RabbitMQ PubSub component.
+Impact
+The Dapr sidecar would panic and crash when using RabbitMQ PubSub components, potentially causing service disruption.
+Root Cause
+The subscription code was incorrectly using read locks (RLock/RUnlock) when writing to a shared map, causing concurrent map writes and panics.
+Solution
+Fixed the mutex usage by changing from read locks to write locks (Lock/Unlock) in the subscription management code to ensure thread-safe access to shared data.
+Pulsar: optional issuer file credential
+Problem
+The Pulsar OAuth2 credentials file required issuer_url in addition to client_id and client_secret, which does not match the Pulsar documentation for credentials files.
+Impact
+Users with credentials files that only include client_id and client_secret could not load credentials and had to add an issuer_url even when it was not needed or was provided via metadata.
+Root Cause
+The credentials file validation treated issuer_url as mandatory instead of optional, causing validation failures when it was omitted.
+Solution
+Only require client_id and client_secret. issuer_url is now optional and is used only when present in the file and not overridden by metadata.]]></summary>
+        <author>
+            <name>Release notes from dapr</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[k0s in 2025: A year of community growth, governance, and Kubernetes innovation]]></title>
+        <id>https://www.cncf.io/?p=155760</id>
+        <link href="https://www.cncf.io/blog/2026/01/26/k0s-in-2025-a-year-of-community-growth-governance-and-kubernetes-innovation/"/>
+        <updated>2026-01-26T11:52:00.000Z</updated>
+        <summary type="html"><![CDATA[As we begin 2026, it’s worth reflecting on the remarkable progress we made with k0s as a project and as a community during 2025. Last year brought exciting advancements, adoption, and stronger community engagement.  k0s is...]]></summary>
+        <author>
+            <name>Prithvi Raj, CNCF Ambassador</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[pack v0.40.0-rc1]]></title>
+        <id>https://github.com/buildpacks/pack/releases/tag/v0.40.0-rc1</id>
+        <link href="https://github.com/buildpacks/pack/releases/tag/v0.40.0-rc1"/>
+        <updated>2026-01-25T18:29:33.000Z</updated>
+        <summary type="html"><![CDATA[Prerequisites
+A container runtime such as Docker or podman must be available to execute builds.
+Install
+Linux
+AMD64
+(curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.40.0-rc1/pack-v0.40.0-rc1-linux.tgz" | sudo tar -C /usr/local/bin/ --no-same-owner -xzv pack)
+
+ARM64
+(curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.40.0-rc1/pack-v0.40.0-rc1-linux-arm64.tgz" | sudo tar -C /usr/local/bin/ --no-same-owner -xzv pack)
+
+S390X
+(curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.40.0-rc1/pack-v0.40.0-rc1-linux-s390x.tgz" | sudo tar -C /usr/local/bin/ --no-same-owner -xzv pack)
+
+PPC64LE
+(curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.40.0-rc1/pack-v0.40.0-rc1-linux-ppc64le.tgz" | sudo tar -C /usr/local/bin/ --no-same-owner -xzv…]]></summary>
+        <author>
+            <name>Release notes from pack</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[kruise 1.9.0 alpha3]]></title>
+        <id>https://github.com/openkruise/kruise/releases/tag/v1.9.0-alpha3</id>
+        <link href="https://github.com/openkruise/kruise/releases/tag/v1.9.0-alpha3"/>
+        <updated>2026-01-25T07:52:46.000Z</updated>
+        <summary type="html"><![CDATA[Change since release v1.9.0 alpha2
+Optimize imagePullJob to clean up un-used pull secrets reference, #2301
+allow setting client qps and burst for kruise daemon #2298
+restrict host field in probe #2309]]></summary>
+        <author>
+            <name>Release notes from kruise</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[nightly]]></title>
+        <id>https://github.com/keycloak/keycloak/releases/tag/nightly</id>
+        <link href="https://github.com/keycloak/keycloak/releases/tag/nightly"/>
+        <updated>2026-01-25T03:58:38.000Z</updated>
+        <summary type="html"><![CDATA[Improve client creation with PKCE in admin console (#44365)
+Closes #44364
+Signed-off-by: Martin Bartoš <mabartos@redhat.com>]]></summary>
+        <author>
+            <name>Release notes from keycloak</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Istio 1.29.0-beta.0]]></title>
+        <id>https://github.com/istio/istio/releases/tag/1.29.0-beta.0</id>
+        <link href="https://github.com/istio/istio/releases/tag/1.29.0-beta.0"/>
+        <updated>2026-01-23T18:11:04.000Z</updated>
+        <summary type="html"><![CDATA[Artifacts]]></summary>
+        <author>
+            <name>Release notes from istio</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[0.43.0-rc3]]></title>
+        <id>https://github.com/falcosecurity/falco/releases/tag/0.43.0-rc3</id>
+        <link href="https://github.com/falcosecurity/falco/releases/tag/0.43.0-rc3"/>
+        <updated>2026-01-23T15:59:21.000Z</updated>
+        <summary type="html"><![CDATA[fix(userspace)!: show source config path only in debug builds
+  Starting from Falco 0.40, the `falco --help` output incorrectly showed
+  the source config path (e.g., /home/runner/work/falco/falco/falco.yaml)
+  in release packages. This path was intended only for local development.
+  The issue was introduced when RelWithDebInfo build type support was
+  added (commit 6bf33ff). The existing code checked for BUILD_TYPE_RELEASE
+  to determine release behavior, but RelWithDebInfo builds defined
+  BUILD_TYPE_RELWITHDEBINFO instead, causing them to fall into the
+  debug code path.
+  This fix introduces BUILD_TYPE_DEBUG and changes the conditionals to
+  enable dev features only when CMAKE_BUILD_TYPE is explicitly "debug".
+  Both Release and RelWithDebInfo builds now correctly show only
+  /etc/falco/falco.yaml.
+  Fixes the regression introduced in 0.40.0
+Signed-off-by: Leonardo Grasso <me@leonardograsso.com>
+Signed-off-by: Leonardo Di Giovanna <leonardodigiovanna1@gmail.com>]]></summary>
+        <author>
+            <name>Release notes from falco</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[26.5.2]]></title>
+        <id>https://github.com/keycloak/keycloak/releases/tag/26.5.2</id>
+        <link href="https://github.com/keycloak/keycloak/releases/tag/26.5.2"/>
+        <updated>2026-01-23T14:49:35.000Z</updated>
+        <summary type="html"><![CDATA[Upgrading
+Before upgrading refer to the migration guide for a complete list of changes.
+All resolved issues
+Security fixes
+#44994 CVE-2025-67735 - netty-codec-http: Request Smuggling via CRLF Injection dependencies
+Enhancements
+#43443 Keycloak should warn when ISPN or JGROUPS is running in debug level logging 
+#45498 Ignore OpenAPI artifacts when disabled dist/quarkus
+Bugs
+#44785 Can not get through SSO login if using a custom attribute with default value user-profile
+#45015 Deadlock in Infinispan virtual threads infinispan
+#45250 IDToken contains duplicate address claims oidc
+#45333 User admin events don't show role, group mapping, reset password like events admin/ui
+#45396 Database Migration fails when updating to 26.5.0 on MS SQL core
+#45415 cache-remote-host becomes mandatory at build time when using clusterless feature infinispan
+#45417 Unmanaged Attributes Type (Only administrators can view) allows admin API to set Unmanaged Attributes user-profile
+#45474 Admin REST API document is not up to date docs
+#45526 Regression (26.5.1): Organizations domain resolution fails on MariaDB/MySQL due to ORG/ORG_DOMAIN collation mismatch organizations
+#45533 Keycloak should not allow matrix parameters in URLs as we don't use them dist/quarkus
+#45570 CVE-2025-66560 - io.quarkus/quarkus-rest: Quarkus REST Worker Thread Exhaustion Vulnerability 
+#45584 Keycloak supported specs should list DPoP as supported oidc
+#45590 OIDCIdentityProviderConfig issuer configuration token-exchange
+#45597 Possible mismatch of charset/collation between columns on mysql/mariadb organizations
+#45651 CVE-2025-14559 keycloak-services: Keycloak keycloak-services: Business logic flaw allows unauthorized token issuance for disabled users]]></summary>
+        <author>
+            <name>Release notes from keycloak</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[The autonomous enterprise and the four pillars of platform control: 2026 forecast]]></title>
+        <id>https://www.cncf.io/?p=155699</id>
+        <link href="https://www.cncf.io/blog/2026/01/23/the-autonomous-enterprise-and-the-four-pillars-of-platform-control-2026-forecast/"/>
+        <updated>2026-01-23T12:03:00.000Z</updated>
+        <summary type="html"><![CDATA[The promise of DevOps and Platform Engineering is to balance developer velocity with enterprise governance. In 2026, AI Agents move from being simple assistance tools to the core mechanisms that automate this balance. Recent publications, such...]]></summary>
+        <author>
+            <name>Asif Awan, Chief Product Officer and co-founder, Stackgen</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.4.1]]></title>
+        <id>https://github.com/dragonflyoss/dragonfly/releases/tag/v2.4.1</id>
+        <link href="https://github.com/dragonflyoss/dragonfly/releases/tag/v2.4.1"/>
+        <updated>2026-01-23T03:32:40.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Bug Fixes
+e2cae46 fix(security): Dragonfly manager job API unauthenticated access  (#4575)
+Contributors
+Thanks to all the contributors! ❤️]]></summary>
+        <author>
+            <name>Release notes from dragonfly</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.4.1-rc.1]]></title>
+        <id>https://github.com/dragonflyoss/dragonfly/releases/tag/v2.4.1-rc.1</id>
+        <link href="https://github.com/dragonflyoss/dragonfly/releases/tag/v2.4.1-rc.1"/>
+        <updated>2026-01-23T02:41:28.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Features
+a0240e2 feat(router): remove deprecated preheat API endpoints
+Bug Fixes
+9fb9a2d fix(security): Dragonfly manager job API unauthenticated access
+Chores
+17d4c2c ci(workflows): add ipv6 e2e testing (#4572)
+Contributors
+Thanks to all the contributors! ❤️]]></summary>
+        <author>
+            <name>Release notes from dragonfly</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[edge-26.1.3]]></title>
+        <id>https://github.com/linkerd/linkerd2/releases/tag/edge-26.1.3</id>
+        <link href="https://github.com/linkerd/linkerd2/releases/tag/edge-26.1.3"/>
+        <updated>2026-01-23T00:37:07.000Z</updated>
+        <summary type="html"><![CDATA[What's Changed
+build(deps): bump zerocopy from 0.8.27 to 0.8.31 by @dependabot[bot] in #14820
+build(deps): bump mio from 1.1.0 to 1.1.1 by @dependabot[bot] in #14819
+build(deps): bump libc from 0.2.177 to 0.2.178 by @dependabot[bot] in #14818
+build(deps): bump cc from 1.2.46 to 1.2.49 by @dependabot[bot] in #14788
+build(deps): bump helm.sh/helm/v3 from 3.19.4 to 3.19.5 by @dependabot[bot] in #14853
+chore(policy-controller): remove unused hyper dependency by @cratelyn in #14852
+build(deps): bump the clap group with 3 updates by @dependabot[bot] in #14854
+build(deps): bump the grpc group with 3 updates by @dependabot[bot] in #14855
+build(deps): bump the tracing group with 2 updates by @dependabot[bot] in #14856
+build(deps): bump serde_json from 1.0.145 to 1.0.149 in the serde group by @depen…]]></summary>
+        <author>
+            <name>Release notes from linkerd2</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v3.0.23]]></title>
+        <id>https://github.com/argoproj/argo-cd/releases/tag/v3.0.23</id>
+        <link href="https://github.com/argoproj/argo-cd/releases/tag/v3.0.23"/>
+        <updated>2026-01-22T20:28:52.000Z</updated>
+        <summary type="html"><![CDATA[Quick Start
+Non-HA:
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.0.23/manifests/install.yaml
+
+HA:
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.0.23/manifests/ha/install.yaml
+
+Release Signatures and Provenance
+All Argo CD container images are signed by cosign.  A Provenance is generated for container images and CLI binaries which meet the SLSA Level 3 specifications. See the documentation on how to verify.
+Release Notes Blog Post
+For a detailed breakdown of the key changes and improvements in this release, check out the official blog post
+Upgrading
+If upgrading from a different minor version, be sure to read the upgrading documentation.
+Changelog
+Bug fixes
+6c9b1cb: fix(hydrator): empty links for failed operation (#25025) (cherry-pick #26014 for 3.0) (#26015) (@argo-cd-cherry-pick-bot[bot])
+5f9dc64: fix: cherry pick #25516 to release-3.0 (#26107) (@FourFifthsCode)
+9a49562: fix: invalid error message on health check failure (#26040) (cherry pick #26039 for 3.0) (#26073) (@dudinea)
+Full Changelog: v3.0.22...v3.0.23]]></summary>
+        <author>
+            <name>Release notes from argo-cd</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v3.3.0-rc4]]></title>
+        <id>https://github.com/argoproj/argo-cd/releases/tag/v3.3.0-rc4</id>
+        <link href="https://github.com/argoproj/argo-cd/releases/tag/v3.3.0-rc4"/>
+        <updated>2026-01-22T20:27:31.000Z</updated>
+        <summary type="html"><![CDATA[Quick Start
+Non-HA:
+kubectl create namespace argocd
+kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.3.0-rc4/manifests/install.yaml
+
+HA:
+kubectl create namespace argocd
+kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.3.0-rc4/manifests/ha/install.yaml
+
+Release Signatures and Provenance
+All Argo CD container images are signed by cosign.  A Provenance is generated for container images and CLI binaries which meet the SLSA Level 3 specifications. See the documentation on how to verify.
+Release Notes Blog Post
+For a detailed breakdown of the key changes and improvements in this release, check out the official blog post
+Upgrading
+If upgrading from a different minor vers…]]></summary>
+        <author>
+            <name>Release notes from argo-cd</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v3.1.12]]></title>
+        <id>https://github.com/argoproj/argo-cd/releases/tag/v3.1.12</id>
+        <link href="https://github.com/argoproj/argo-cd/releases/tag/v3.1.12"/>
+        <updated>2026-01-22T20:27:31.000Z</updated>
+        <summary type="html"><![CDATA[Quick Start
+Non-HA:
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.12/manifests/install.yaml
+
+HA:
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.12/manifests/ha/install.yaml
+
+Release Signatures and Provenance
+All Argo CD container images are signed by cosign.  A Provenance is generated for container images and CLI binaries which meet the SLSA Level 3 specifications. See the documentation on how to verify.
+Release Notes Blog Post
+For a detailed breakdown of the key changes and improvements in this release, check out the official blog post
+Upgrading
+If upgrading from a different minor version, be sure to read the upgrading documentation.
+Changelog
+Bug fixes
+0262c8f: fix(hydrator): empty links for failed operation (#25025) (cherry-pick #26014 for 3.1) (#26017) (@argo-cd-cherry-pick-bot[bot])
+28b6187: fix: cherry pick #25516 to release-3.1 (#26116) (@FourFifthsCode)
+1b7cfc0: fix: invalid error message on health check failure (#26040) (cherry pick #26039 for 3.1) (#26071) (@dudinea)
+Full Changelog: v3.1.11...v3.1.12]]></summary>
+        <author>
+            <name>Release notes from argo-cd</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v3.2.6]]></title>
+        <id>https://github.com/argoproj/argo-cd/releases/tag/v3.2.6</id>
+        <link href="https://github.com/argoproj/argo-cd/releases/tag/v3.2.6"/>
+        <updated>2026-01-22T20:26:47.000Z</updated>
+        <summary type="html"><![CDATA[Quick Start
+Non-HA:
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.2.6/manifests/install.yaml
+
+HA:
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.2.6/manifests/ha/install.yaml
+
+Release Signatures and Provenance
+All Argo CD container images are signed by cosign.  A Provenance is generated for container images and CLI binaries which meet the SLSA Level 3 specifications. See the documentation on how to verify.
+Release Notes Blog Post
+For a detailed breakdown of the key changes and improvements in this release, check out the official blog post
+Upgrading
+If upgrading from a different minor version, be sure to read the upgrading documentation.
+Changelog
+Bug fixes
+20866f4: fix(hydrator): .gitattributes include deeply nested files (#25870) (cherry-pick #26011 for 3.2) (#26012) (@argo-cd-cherry-pick-bot[bot])
+508da9c: fix(hydrator): empty links for failed operation (#25025) (cherry-pick #26014 for 3.2) (#26016) (@argo-cd-cherry-pick-bot[bot])
+2ff406a: fix: cherry pick #25516 to release-3.2 (#26115) (@FourFifthsCode)
+e3b108b: fix: close response body on error paths to prevent connection leak (cherry-pick #25824 for 3.2) (#26006) (@argo-cd-cherry-pick-bot[bot])
+ad117b8: fix: invalid error message on health check failure (#26040) (cherry pick #26039 for 3.2) (#26070) (@dudinea)
+Dependency updates
+76fc92f: chore(deps): update notifications-engine to fix GitHub PR comments nil panic (cherry-pick #26065 for 3.2) (#26074) (@soutar)
+Full Changelog: v3.2.5...v3.2.6]]></summary>
+        <author>
+            <name>Release notes from argo-cd</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[stable: Bump version to 3.2.6 on release-3.2 branch (#26120)]]></title>
+        <id>https://github.com/argoproj/argo-cd/releases/tag/stable</id>
+        <link href="https://github.com/argoproj/argo-cd/releases/tag/stable"/>
+        <updated>2026-01-22T19:34:29.000Z</updated>
+        <summary type="html"><![CDATA[Signed-off-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+350466+crenshaw-dev@users.noreply.github.com]]></summary>
+        <author>
+            <name>Release notes from argo-cd</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[LitmusChaos Q4 2025 update: community, contributions, and project progress]]></title>
+        <id>https://www.cncf.io/?p=154920</id>
+        <link href="https://www.cncf.io/blog/2026/01/22/litmuschaos-q4-2025-update-community-contributions-and-project-progress/"/>
+        <updated>2026-01-22T15:00:00.000Z</updated>
+        <summary type="html"><![CDATA[As we enter the new year, we’re excited to share the Q4 updates from the LitmusChaos community. Over the past few months, the chaos engineering ecosystem and the LitmusChaos community have continued to grow steadily, driven...]]></summary>
+        <author>
+            <name>Pritesh Kiri, Community Manager for LitmusChaos</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.4.1-rc.0]]></title>
+        <id>https://github.com/dragonflyoss/dragonfly/releases/tag/v2.4.1-rc.0</id>
+        <link href="https://github.com/dragonflyoss/dragonfly/releases/tag/v2.4.1-rc.0"/>
+        <updated>2026-01-22T14:54:26.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Features
+05a2137 feat(router): remove deprecated preheat API endpoints (#4574)
+Chores
+17d4c2c ci(workflows): add ipv6 e2e testing (#4572)
+Contributors
+Thanks to all the contributors! ❤️]]></summary>
+        <author>
+            <name>Release notes from dragonfly</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[3.5.1 / 2026-01-07]]></title>
+        <id>https://github.com/prometheus/prometheus/releases/tag/v3.5.1</id>
+        <link href="https://github.com/prometheus/prometheus/releases/tag/v3.5.1"/>
+        <updated>2026-01-22T13:50:29.000Z</updated>
+        <summary type="html"><![CDATA[This is the current "Long Term Support" release.
+Docker library updated from 28.2.2 to 28.5.2. #17821
+Built with Go 1.24.11.]]></summary>
+        <author>
+            <name>Release notes from prometheus</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[0.43.0-rc2]]></title>
+        <id>https://github.com/falcosecurity/falco/releases/tag/0.43.0-rc2</id>
+        <link href="https://github.com/falcosecurity/falco/releases/tag/0.43.0-rc2"/>
+        <updated>2026-01-22T12:28:19.000Z</updated>
+        <summary type="html"><![CDATA[ci: disable `build-win32-package`
+Chocolatey registries are currently unavailable, and this is blocking
+the release process. Disable the win32 build in CI, in the release
+branch, to allow to move forward.
+Signed-off-by: Leonardo Di Giovanna <leonardodigiovanna1@gmail.com>]]></summary>
+        <author>
+            <name>Release notes from falco</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.12.0-dev-20260125: fix(upgrade-responder): need "latest" label]]></title>
+        <id>https://github.com/longhorn/longhorn/releases/tag/v1.12.0-dev-20260125</id>
+        <link href="https://github.com/longhorn/longhorn/releases/tag/v1.12.0-dev-20260125"/>
+        <updated>2026-01-22T12:11:43.000Z</updated>
+        <summary type="html"><![CDATA[for versions in responseConfig.
+Signed-off-by: James Lu james.lu@suse.com]]></summary>
+        <author>
+            <name>Release notes from longhorn</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.47.0]]></title>
+        <id>https://github.com/backstage/backstage/releases/tag/v1.47.0</id>
+        <link href="https://github.com/backstage/backstage/releases/tag/v1.47.0"/>
+        <updated>2026-01-22T12:04:49.000Z</updated>
+        <summary type="html"><![CDATA[These are the release notes for the v1.47.0 release of Backstage.
+A huge thanks to the whole team of maintainers and contributors as well as the amazing Backstage Community for the hard work in getting this release developed and done.
+Highlights
+BREAKING: Redesigned Table and useTable in @backstage/ui
+The Table component and accompanying useTable hook have been redesigned. The low-level React Aria wrapper Table is now TableRoot, while a higher level Table component now handles pagination, sorting, selection, and data display. The useTable also has a new API, that supports 3 pagination modes: complete, offset, and cursor.
+More information along with a migration guide can be found in the BUI Changelog.
+BREAKING: Updated color tokens in @backstage/ui
+UI color tokens have been updated to align…]]></summary>
+        <author>
+            <name>Release notes from backstage</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Longhorn v1.11.0-rc3]]></title>
+        <id>https://github.com/longhorn/longhorn/releases/tag/v1.11.0-rc3</id>
+        <link href="https://github.com/longhorn/longhorn/releases/tag/v1.11.0-rc3"/>
+        <updated>2026-01-22T08:51:32.000Z</updated>
+        <summary type="html"><![CDATA[DON'T UPGRADE from/to any RC/Preview/Sprint releases because the operation is not supported.
+Resolved Issues in this release
+Highlight
+[FEATURE] Add support for ReadWriteOncePod access mode 9727 - @derekbit @shikanime @chriscchien @Copilot
+[FEATURE] Scale replica rebuilding speed form multiple healthy replicas 11331 - @derekbit @shuo-wu @roger-ryao @Copilot
+[FEATURE] Support StorageClass allowedTopologies for Longhorn volumes 12261 - @yangchiu @derekbit @hookak @Copilot
+[FEATURE] Support extra network interface (not only storage network) on the share manager pod 10269 - @yangchiu @c3y1huang
+[FEATURE] Monitor Node Disk Health 12016 - @c3y1huang @roger-ryao
+[FEATURE] Replica Auto Balance Across Nodes based on Node Disk Space Consumption 10512 - @davidcheng0922 @chriscchien
+Feature
+[FEATURE] …]]></summary>
+        <author>
+            <name>Release notes from longhorn</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Longhorn v1.10.2-rc1]]></title>
+        <id>https://github.com/longhorn/longhorn/releases/tag/v1.10.2-rc1</id>
+        <link href="https://github.com/longhorn/longhorn/releases/tag/v1.10.2-rc1"/>
+        <updated>2026-01-22T02:46:17.000Z</updated>
+        <summary type="html"><![CDATA[DON'T UPGRADE from/to any RC/Preview/Sprint releases because the operation is not supported.
+Resolved Issues in this release
+Feature
+[BACKPORT][v1.10.2][FEATURE] Inherit namespace for longhorn-share-manager in FastFailover mode 12245 - @yangchiu
+[BACKPORT][v1.10.2][FEATURE] [Dependency] aws-sdk-go v1.55.7 is EOL as of 2025-07-31 — plan to migrate to v2? 12181 - @mantissahz @roger-ryao
+Improvement
+[BACKPORT][v1.10.2][IMPROVEMENT] Fix V2 Volume CSI Clone Slowness Caused by VolumeAttachment Webhook Blocking 12329 - @PhanLe1010 @roger-ryao
+Bug
+[BACKPORT] Replica rebuild, clone and restore fail, traffic being sent to HTTP proxy 12518 - @yangchiu @derekbit
+[BACKPORT][v1.10.2][BUG] Healthy replica could be deleted unexpectedly after reducing volume's number of replicas 12512 - @yangchiu @shuo-wu
+…]]></summary>
+        <author>
+            <name>Release notes from longhorn</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.11.0-dev-20260125: release: v1.11.0-rc3]]></title>
+        <id>https://github.com/longhorn/longhorn/releases/tag/v1.11.0-dev-20260125</id>
+        <link href="https://github.com/longhorn/longhorn/releases/tag/v1.11.0-dev-20260125"/>
+        <updated>2026-01-22T01:23:24.000Z</updated>
+        <summary type="html"><![CDATA[Signed-off-by: David Ko dko@suse.com]]></summary>
+        <author>
+            <name>Release notes from longhorn</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.10.2-dev-20260125: release: v1.10.2-rc1]]></title>
+        <id>https://github.com/longhorn/longhorn/releases/tag/v1.10.2-dev-20260125</id>
+        <link href="https://github.com/longhorn/longhorn/releases/tag/v1.10.2-dev-20260125"/>
+        <updated>2026-01-22T01:14:24.000Z</updated>
+        <summary type="html"><![CDATA[Signed-off-by: David Ko dko@suse.com]]></summary>
+        <author>
+            <name>Release notes from longhorn</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Helm v3.20.0]]></title>
+        <id>https://github.com/helm/helm/releases/tag/v3.20.0</id>
+        <link href="https://github.com/helm/helm/releases/tag/v3.20.0"/>
+        <updated>2026-01-21T23:27:45.000Z</updated>
+        <summary type="html"><![CDATA[Helm v3.20.0 is a feature release. Users are encouraged to upgrade for the best experience.
+The community keeps growing, and we'd love to see you there!
+Join the discussion in Kubernetes Slack:
+
+for questions and just to hang out
+for discussing PRs, code, and bugs
+Hang out at the Public Developer Call: Thursday, 9:30 Pacific via Zoom
+Test, debug, and contribute charts: ArtifactHub/packages
+Notable Changes
+SDK: bump k8s API versions to v0.35.0
+v3 backport: Fixed a bug where helm uninstall with --keep-history did not suspend previous deployed releases #12564
+v3 backport: Bump Go version to v1.25
+Installation and Upgrading
+Download Helm v3.20.0. The common platform binaries are here:
+MacOS amd64 (checksum / 724aef60f737ca73cfcc77924219dbfb229dde8492b2722cb372da617fd77367)
+MacOS arm64 (checksu…]]></summary>
+        <author>
+            <name>Release notes from helm</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Helm v4.1.0]]></title>
+        <id>https://github.com/helm/helm/releases/tag/v4.1.0</id>
+        <link href="https://github.com/helm/helm/releases/tag/v4.1.0"/>
+        <updated>2026-01-21T22:31:55.000Z</updated>
+        <summary type="html"><![CDATA[Helm v4.1.0 is a feature release. Users are encouraged to upgrade for the best experience.
+The community keeps growing, and we'd love to see you there!
+Join the discussion in Kubernetes Slack:
+
+for questions and just to hang out
+for discussing PRs, code, and bugs
+Hang out at the Public Developer Call: Thursday, 9:30 Pacific via Zoom
+Test, debug, and contribute charts: ArtifactHub/packages
+Notable Changes
+Feature: added chart name to dependency logs, namespace to resource waiting logs, and confirmation message when all resources are ready #31530
+Feature: improved plugin name validation error messages and field name detection #31491
+Feature: improved the --wait flag by allowing explicit strategy selection (including explicit --wait=hookOnly) and preventing SDK timeout errors when timeout is …]]></summary>
+        <author>
+            <name>Release notes from helm</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[kyverno-policies-chart-3.7.0-rc.1]]></title>
+        <id>https://github.com/kyverno/kyverno/releases/tag/kyverno-policies-chart-3.7.0-rc.1</id>
+        <link href="https://github.com/kyverno/kyverno/releases/tag/kyverno-policies-chart-3.7.0-rc.1"/>
+        <updated>2026-01-21T22:15:43.000Z</updated>
+        <summary type="html"><![CDATA[tag kyverno-policies-chart-3.7.0-rc.1]]></summary>
+        <author>
+            <name>Release notes from kyverno</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[kyverno-chart-3.7.0-rc.1]]></title>
+        <id>https://github.com/kyverno/kyverno/releases/tag/kyverno-chart-3.7.0-rc.1</id>
+        <link href="https://github.com/kyverno/kyverno/releases/tag/kyverno-chart-3.7.0-rc.1"/>
+        <updated>2026-01-21T22:09:57.000Z</updated>
+        <summary type="html"><![CDATA[tag kyverno-chart-3.7.0-rc.1]]></summary>
+        <author>
+            <name>Release notes from kyverno</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.17.0-rc.1]]></title>
+        <id>https://github.com/kyverno/kyverno/releases/tag/v1.17.0-rc.1</id>
+        <link href="https://github.com/kyverno/kyverno/releases/tag/v1.17.0-rc.1"/>
+        <updated>2026-01-21T18:55:45.000Z</updated>
+        <summary type="html"><![CDATA[No content.]]></summary>
+        <author>
+            <name>Release notes from kyverno</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.47.1]]></title>
+        <id>https://github.com/backstage/backstage/releases/tag/v1.47.1</id>
+        <link href="https://github.com/backstage/backstage/releases/tag/v1.47.1"/>
+        <updated>2026-01-21T16:41:35.000Z</updated>
+        <summary type="html"><![CDATA[This patch release fixes the following issues:
+Fixes a deprecation warning for Router extension in tests
+Restore React 17 compatibility for @backstage/ui]]></summary>
+        <author>
+            <name>Release notes from backstage</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.46.4]]></title>
+        <id>https://github.com/backstage/backstage/releases/tag/v1.46.4</id>
+        <link href="https://github.com/backstage/backstage/releases/tag/v1.46.4"/>
+        <updated>2026-01-21T15:23:34.000Z</updated>
+        <summary type="html"><![CDATA[This release contains backports of security fixes that were part of the 1.47 release.]]></summary>
+        <author>
+            <name>Release notes from backstage</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.45.4]]></title>
+        <id>https://github.com/backstage/backstage/releases/tag/v1.45.4</id>
+        <link href="https://github.com/backstage/backstage/releases/tag/v1.45.4"/>
+        <updated>2026-01-21T15:23:32.000Z</updated>
+        <summary type="html"><![CDATA[This release contains backports of security fixes that were part of the 1.47 release.]]></summary>
+        <author>
+            <name>Release notes from backstage</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.43.4]]></title>
+        <id>https://github.com/backstage/backstage/releases/tag/v1.43.4</id>
+        <link href="https://github.com/backstage/backstage/releases/tag/v1.43.4"/>
+        <updated>2026-01-21T15:23:26.000Z</updated>
+        <summary type="html"><![CDATA[This release contains backports of security fixes that were part of the 1.47 release.]]></summary>
+        <author>
+            <name>Release notes from backstage</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Platform engineering maintenance pitfalls and smart strategies to stay ahead]]></title>
+        <id>https://www.cncf.io/?p=155480</id>
+        <link href="https://www.cncf.io/blog/2026/01/21/platform-engineering-maintenance-pitfalls-and-smart-strategies-to-stay-ahead/"/>
+        <updated>2026-01-21T15:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Platform engineering is a discipline that aims to increase the productivity of software engineering teams by designing, building, and maintaining internal platforms that abstract underlying infrastructure complexity and provide self-service capabilities. Kubernetes-based platforms are often complex...]]></summary>
+        <author>
+            <name>Jehoszafat Zimnowoda, Senior Software Engineer, Akamai and Matthias Erll, Senior Software Engineer, Akamai</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v0.305.1]]></title>
+        <id>https://github.com/prometheus/prometheus/releases/tag/v0.305.1</id>
+        <link href="https://github.com/prometheus/prometheus/releases/tag/v0.305.1"/>
+        <updated>2026-01-21T13:29:19.000Z</updated>
+        <summary type="html"><![CDATA[v0.305.1]]></summary>
+        <author>
+            <name>Release notes from prometheus</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.4.1-beta.1]]></title>
+        <id>https://github.com/dragonflyoss/dragonfly/releases/tag/v2.4.1-beta.1</id>
+        <link href="https://github.com/dragonflyoss/dragonfly/releases/tag/v2.4.1-beta.1"/>
+        <updated>2026-01-21T02:59:06.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Bug Fixes
+49343a4 fix(manager,scheduler): IPv6-safe host:port formatting (#4555)
+Contributors
+Thanks to all the contributors! ❤️]]></summary>
+        <author>
+            <name>Release notes from dragonfly</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Dapr Runtime v1.17.0-rc.2]]></title>
+        <id>https://github.com/dapr/dapr/releases/tag/v1.17.0-rc.2</id>
+        <link href="https://github.com/dapr/dapr/releases/tag/v1.17.0-rc.2"/>
+        <updated>2026-01-20T23:59:52.000Z</updated>
+        <summary type="html"><![CDATA[This is the release candidate 1.17.0-rc.2]]></summary>
+        <author>
+            <name>Release notes from dapr</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Dapr Runtime v1.16.7]]></title>
+        <id>https://github.com/dapr/dapr/releases/tag/v1.16.7</id>
+        <link href="https://github.com/dapr/dapr/releases/tag/v1.16.7"/>
+        <updated>2026-01-20T23:10:27.000Z</updated>
+        <summary type="html"><![CDATA[Dapr 1.16.7
+This update includes bug fixes:
+Trace information not populated in pubsub component using GPRC and raw payloads
+Pulsar pubsub component fails to initialize when using oauth2ClientSecretPath
+Fix HTTPEndpoint ClientTLS parsing of only root CA
+Trace information not populated in pubsub component using GPRC and raw payloads
+Problem
+The pubsub component did not correctly propagate tracing information when delivering messages over gRPC using raw payloads
+Impact
+Distributed traces were incomplete or missing links between publishers and subscribers. This prevented users from reliably correlating pubsub messages with their originating requests and spans.
+Root Cause
+The trace context from the incoming gRPC call was not correctly applied to the context used for the pubsub publish call, esp…]]></summary>
+        <author>
+            <name>Release notes from dapr</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Rook v1.19 Storage Enhancements]]></title>
+        <id>https://medium.com/p/0a71eac8ff49</id>
+        <link href="https://blog.rook.io/rook-v1-19-storage-enhancements-0a71eac8ff49?source=rss----5a39d4df2403---4"/>
+        <updated>2026-01-20T19:51:01.000Z</updated>
+        <author>
+            <name>Travis Nielsen</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.19.0]]></title>
+        <id>https://github.com/rook/rook/releases/tag/v1.19.0</id>
+        <link href="https://github.com/rook/rook/releases/tag/v1.19.0"/>
+        <updated>2026-01-20T19:49:24.000Z</updated>
+        <summary type="html"><![CDATA[Upgrade Guide
+To upgrade from previous versions of Rook, see the Rook upgrade guide.
+Breaking Changes
+The supported Kubernetes versions are v1.30 - v1.35
+The minimum supported Ceph version is v19.2.0. Rook v1.18 clusters running Ceph v18 must upgrade
+The behavior of the activeStandby property in the CephFilesystem CRD has changed. When set to false, the standby MDS daemon deployment will be scaled down and removed, rather than only disabling the standby cache while the daemon remains running.
+Helm: The rook-ceph-cluster chart has changed where the Ceph image is defined, to allow separate settings for the repository and tag. For more details, see the Rook upgrade guide.
+In external mode, when users provide a Ceph admin keyring to Rook, Rook will no longer create CSI Ceph clients automatically. This approach will provide more consistency to configure external mode clusters via the same external Python script.
+Features
+Experimental: NVMe over Fabrics (NVMe-oF) allows RBD volumes to be exposed and accessed via the NVMe/TCP protocol. This enables both Kubernetes pods within the cluster and external clients outside the cluster to connect to Ceph block storage using standard NVMe-oF initiators, providing high-performance block storage access over the network. See the NVMe-oF Configuration Guide to get started.
+CephCSI v3.16 Integration:
+
+NVMe-oF CSI driver for provisioning and mounting volumes over the NVMe over Fabrics protocol
+Improved fencing for RBD and CephFS volumes during node failure
+Block volume usage statistics
+Configurable block encryption cipher
+Experimental: Allow concurrent reconciles of the CephCluster CR when there multiple clusters being managed by the same Rook operator. Concurrency is enabled by increasing the operator setting ROOK_RECONCILE_CONCURRENT_CLUSTERS to a value greater than 1.
+Improved logging with namespaced names for the controllers for more consistency in troubleshooting the rook operator log.]]></summary>
+        <author>
+            <name>Release notes from rook</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Kubernetes Fuels AI Growth; Organizational Culture Remains the Decisive Factor]]></title>
+        <id>https://www.cncf.io/?p=155415</id>
+        <link href="https://www.cncf.io/blog/2026/01/20/kubernetes-fuels-ai-growth-organizational-culture-remains-the-decisive-factor/"/>
+        <updated>2026-01-20T17:00:00.000Z</updated>
+        <summary type="html"><![CDATA[The CNCF Annual Cloud Native Survey confirms a long-developing trend: Kubernetes has moved from container orchestration to becoming the backbone of modern infrastructure—including AI. Production usage of Kubernetes now stands at 82% among container users, and...]]></summary>
+        <author>
+            <name>Chris Aniszczyk, CTO, CNCF</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Kubernetes Established as the De Facto ‘Operating System’ for AI as Production Use Hits 82% in 2025 CNCF Annual Cloud Native Survey]]></title>
+        <id>https://www.cncf.io/?p=155432</id>
+        <link href="https://www.cncf.io/announcements/2026/01/20/kubernetes-established-as-the-de-facto-operating-system-for-ai-as-production-use-hits-82-in-2025-cncf-annual-cloud-native-survey/"/>
+        <updated>2026-01-20T17:00:00.000Z</updated>
+        <summary type="html"><![CDATA[New CNCF Annual Cloud Native Survey reveals near-universal adoption of Kubernetes Key highlights: SAN FRANCISCO, CA, January 20, 2026 —The Cloud Native Computing Foundation® (CNCF®), which builds sustainable ecosystems for cloud native software, today released its...]]></summary>
+        <author>
+            <name>kthornhill</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Release v2.12.4-RC.4]]></title>
+        <id>https://github.com/nats-io/nats-server/releases/tag/v2.12.4-RC.4</id>
+        <link href="https://github.com/nats-io/nats-server/releases/tag/v2.12.4-RC.4"/>
+        <updated>2026-01-20T14:58:16.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Refer to the 2.12 Upgrade Guide for backwards compatibility notes with 2.11.x.
+Go Version
+1.25.6
+Fixed
+JetStream
+Subject intersection no longer misses certain subjects with specific patterns of overlapping filters, which could affect consumers, num pending calculations etc (#7745)
+Complete Changes
+v2.12.4-RC.3...v2.12.4-RC.4]]></summary>
+        <author>
+            <name>Release notes from nats-server</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Release v2.11.12-RC.5]]></title>
+        <id>https://github.com/nats-io/nats-server/releases/tag/v2.11.12-RC.5</id>
+        <link href="https://github.com/nats-io/nats-server/releases/tag/v2.11.12-RC.5"/>
+        <updated>2026-01-20T14:57:15.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Refer to the 2.11 Upgrade Guide for backwards compatibility notes with 2.10.x.
+Go Version
+1.25.6
+Fixed
+JetStream
+Subject intersection no longer misses certain subjects with specific patterns of overlapping filters, which could affect consumers, num pending calculations etc (#7745)
+Complete Changes
+v2.11.12-RC.4...v2.11.12-RC.5]]></summary>
+        <author>
+            <name>Release notes from nats-server</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.4.1-beta.0]]></title>
+        <id>https://github.com/dragonflyoss/dragonfly/releases/tag/v2.4.1-beta.0</id>
+        <link href="https://github.com/dragonflyoss/dragonfly/releases/tag/v2.4.1-beta.0"/>
+        <updated>2026-01-20T14:43:44.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Features
+a9301ea feat(scheduler): add Name field to Host struct (#4570)
+Dependency updates
+4dadc8d chore(deps): bump actions/cache from 5.0.1 to 5.0.2 (#4569)
+0c9bc03 chore(deps): bump actions/setup-go from 5.5.0 to 6.2.0 (#4565)
+e5872f4 chore(deps): bump anchore/sbom-action from 0.21.0 to 0.21.1 (#4560)
+95ac2a9 chore(deps): bump github.com/onsi/ginkgo/v2 from 2.27.2 to 2.27.4 (#4561)
+4edc8e6 chore(deps): bump github.com/onsi/ginkgo/v2 from 2.27.4 to 2.27.5 (#4564)
+7dc356a chore(deps): bump github.com/onsi/gomega from 1.38.3 to 1.39.0 (#4559)
+9ec3fcf chore(deps): bump github/codeql-action from 4.31.9 to 4.31.10 (#4562)
+fcafee6 chore(deps): bump golang.org/x/crypto from 0.44.0 to 0.47.0 (#4558)
+6579448 chore(deps): bump google.golang.org/api from 0.248.0 to 0.260.0 (#4566)
+Contributors
+Thanks to all the contributors! ❤️]]></summary>
+        <author>
+            <name>Release notes from dragonfly</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Release v2.12.4-RC.3]]></title>
+        <id>https://github.com/nats-io/nats-server/releases/tag/v2.12.4-RC.3</id>
+        <link href="https://github.com/nats-io/nats-server/releases/tag/v2.12.4-RC.3"/>
+        <updated>2026-01-20T12:57:09.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Refer to the 2.12 Upgrade Guide for backwards compatibility notes with 2.11.x.
+Go Version
+1.25.6 (#7736)
+Dependencies
+github.com/klauspost/compress v1.18.3 (#7736)
+golang.org/x/crypto v0.47.0 (#7736)
+golang.org/x/sys v0.40.0 (#7736)
+Fixed
+General
+The config parser now correctly detects and errors on self-referencing environment variables (#7737)
+JetStream
+Subject intersection no longer misses certain subjects with specific patterns of overlapping filters, which could affect consumers, num pending calculations etc (#7741, #7744)
+Complete Changes
+v2.12.4-RC.2...v2.12.4-RC.3]]></summary>
+        <author>
+            <name>Release notes from nats-server</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Release v2.11.12-RC.4]]></title>
+        <id>https://github.com/nats-io/nats-server/releases/tag/v2.11.12-RC.4</id>
+        <link href="https://github.com/nats-io/nats-server/releases/tag/v2.11.12-RC.4"/>
+        <updated>2026-01-20T12:56:31.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Refer to the 2.11 Upgrade Guide for backwards compatibility notes with 2.10.x.
+Go Version
+1.25.6 (#7736)
+Dependencies
+github.com/klauspost/compress v1.18.3 (#7736)
+golang.org/x/crypto v0.47.0 (#7736)
+golang.org/x/sys v0.40.0 (#7736)
+Fixed
+General
+The config parser now correctly detects and errors on self-referencing environment variables (#7737)
+JetStream
+Subject intersection no longer misses certain subjects with specific patterns of overlapping filters, which could affect consumers, num pending calculations etc (#7741, #7744)
+Complete Changes
+v2.11.12-RC.3...v2.11.12-RC.4]]></summary>
+        <author>
+            <name>Release notes from nats-server</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Reclaiming underutilized GPUs in Kubernetes using scheduler plugins]]></title>
+        <id>https://www.cncf.io/?p=155693</id>
+        <link href="https://www.cncf.io/blog/2026/01/20/reclaiming-underutilized-gpus-in-kubernetes-using-scheduler-plugins/"/>
+        <updated>2026-01-20T12:00:00.000Z</updated>
+        <summary type="html"><![CDATA[The problem nobody talks about GPUs are expensive; and yours are probably sitting idle right now. High-end GPUs (for example, NVIDIA A100-class devices) can cost $10,000+, and in a Kubernetes cluster running AI workloads, you might...]]></summary>
+        <author>
+            <name>Lalit Somavarapha, Gernot Seidler and Srujana Reddy Attunuri, Principal Engineers at HPE</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Istio 1.28.3]]></title>
+        <id>https://github.com/istio/istio/releases/tag/1.28.3</id>
+        <link href="https://github.com/istio/istio/releases/tag/1.28.3"/>
+        <updated>2026-01-20T10:27:13.000Z</updated>
+        <summary type="html"><![CDATA[Artifacts
+Release Notes]]></summary>
+        <author>
+            <name>Release notes from istio</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.50.0/v0.144.0]]></title>
+        <id>https://github.com/open-telemetry/opentelemetry-collector/releases/tag/v0.144.0</id>
+        <link href="https://github.com/open-telemetry/opentelemetry-collector/releases/tag/v0.144.0"/>
+        <updated>2026-01-20T09:41:37.000Z</updated>
+        <summary type="html"><![CDATA[Images and binaries here: https://github.com/open-telemetry/opentelemetry-collector-releases/releases/tag/v0.144.0
+End User Changelog
+🛑 Breaking changes 🛑
+pkg/exporterhelper: Change verbosity level for otelcol_exporter_queue_batch_send_size metric to detailed. (#14278)
+pkg/service: Remove deprecated telemetry.disableHighCardinalityMetrics feature gate. (#14373)
+pkg/service: Remove deprecated service.noopTracerProvider feature gate. (#14374)
+🚩 Deprecations 🚩
+exporter/otlp_grpc: Rename otlp exporter to otlp_grpc exporter and add deprecated alias otlp. (#14403)
+exporter/otlp_http: Rename otlphttp exporter to otlp_http exporter and add deprecated alias otlphttp. (#14396)
+💡 Enhancements 💡
+cmd/builder: Avoid duplicate CLI error logging in generated collector binaries by relying on cobra's …]]></summary>
+        <author>
+            <name>Release notes from opentelemetry-collector</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[service/telemetry/telemetrytest/v0.144.0]]></title>
+        <id>https://github.com/open-telemetry/opentelemetry-collector/releases/tag/service%2Ftelemetry%2Ftelemetrytest%2Fv0.144.0</id>
+        <link href="https://github.com/open-telemetry/opentelemetry-collector/releases/tag/service%2Ftelemetry%2Ftelemetrytest%2Fv0.144.0"/>
+        <updated>2026-01-20T09:41:23.000Z</updated>
+        <summary type="html"><![CDATA[Module set beta, Version v0.144.0]]></summary>
+        <author>
+            <name>Release notes from opentelemetry-collector</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[service/v0.144.0]]></title>
+        <id>https://github.com/open-telemetry/opentelemetry-collector/releases/tag/service%2Fv0.144.0</id>
+        <link href="https://github.com/open-telemetry/opentelemetry-collector/releases/tag/service%2Fv0.144.0"/>
+        <updated>2026-01-20T09:41:22.000Z</updated>
+        <summary type="html"><![CDATA[Module set beta, Version v0.144.0]]></summary>
+        <author>
+            <name>Release notes from opentelemetry-collector</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[service/hostcapabilities/v0.144.0]]></title>
+        <id>https://github.com/open-telemetry/opentelemetry-collector/releases/tag/service%2Fhostcapabilities%2Fv0.144.0</id>
+        <link href="https://github.com/open-telemetry/opentelemetry-collector/releases/tag/service%2Fhostcapabilities%2Fv0.144.0"/>
+        <updated>2026-01-20T09:41:22.000Z</updated>
+        <summary type="html"><![CDATA[Module set beta, Version v0.144.0]]></summary>
+        <author>
+            <name>Release notes from opentelemetry-collector</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[scraper/xscraper/v0.144.0]]></title>
+        <id>https://github.com/open-telemetry/opentelemetry-collector/releases/tag/scraper%2Fxscraper%2Fv0.144.0</id>
+        <link href="https://github.com/open-telemetry/opentelemetry-collector/releases/tag/scraper%2Fxscraper%2Fv0.144.0"/>
+        <updated>2026-01-20T09:41:22.000Z</updated>
+        <summary type="html"><![CDATA[Module set beta, Version v0.144.0]]></summary>
+        <author>
+            <name>Release notes from opentelemetry-collector</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[scraper/scrapertest/v0.144.0]]></title>
+        <id>https://github.com/open-telemetry/opentelemetry-collector/releases/tag/scraper%2Fscrapertest%2Fv0.144.0</id>
+        <link href="https://github.com/open-telemetry/opentelemetry-collector/releases/tag/scraper%2Fscrapertest%2Fv0.144.0"/>
+        <updated>2026-01-20T09:41:21.000Z</updated>
+        <summary type="html"><![CDATA[Module set beta, Version v0.144.0]]></summary>
+        <author>
+            <name>Release notes from opentelemetry-collector</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[scraper/scraperhelper/xscraperhelper/v0.144.0]]></title>
+        <id>https://github.com/open-telemetry/opentelemetry-collector/releases/tag/scraper%2Fscraperhelper%2Fxscraperhelper%2Fv0.144.0</id>
+        <link href="https://github.com/open-telemetry/opentelemetry-collector/releases/tag/scraper%2Fscraperhelper%2Fxscraperhelper%2Fv0.144.0"/>
+        <updated>2026-01-20T09:41:21.000Z</updated>
+        <summary type="html"><![CDATA[Module set beta, Version v0.144.0]]></summary>
+        <author>
+            <name>Release notes from opentelemetry-collector</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[scraper/v0.144.0]]></title>
+        <id>https://github.com/open-telemetry/opentelemetry-collector/releases/tag/scraper%2Fv0.144.0</id>
+        <link href="https://github.com/open-telemetry/opentelemetry-collector/releases/tag/scraper%2Fv0.144.0"/>
+        <updated>2026-01-20T09:41:20.000Z</updated>
+        <summary type="html"><![CDATA[Module set beta, Version v0.144.0]]></summary>
+        <author>
+            <name>Release notes from opentelemetry-collector</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[scraper/scraperhelper/v0.144.0]]></title>
+        <id>https://github.com/open-telemetry/opentelemetry-collector/releases/tag/scraper%2Fscraperhelper%2Fv0.144.0</id>
+        <link href="https://github.com/open-telemetry/opentelemetry-collector/releases/tag/scraper%2Fscraperhelper%2Fv0.144.0"/>
+        <updated>2026-01-20T09:41:20.000Z</updated>
+        <summary type="html"><![CDATA[Module set beta, Version v0.144.0]]></summary>
+        <author>
+            <name>Release notes from opentelemetry-collector</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[receiver/xreceiver/v0.144.0]]></title>
+        <id>https://github.com/open-telemetry/opentelemetry-collector/releases/tag/receiver%2Fxreceiver%2Fv0.144.0</id>
+        <link href="https://github.com/open-telemetry/opentelemetry-collector/releases/tag/receiver%2Fxreceiver%2Fv0.144.0"/>
+        <updated>2026-01-20T09:41:19.000Z</updated>
+        <summary type="html"><![CDATA[Module set beta, Version v0.144.0]]></summary>
+        <author>
+            <name>Release notes from opentelemetry-collector</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v8.5.4-20260120-d25f155: crossbeam-skiplist: fix RefRange iterator memory leak (#19284) (#19293)]]></title>
+        <id>https://github.com/tikv/tikv/releases/tag/v8.5.4-20260120-d25f155</id>
+        <link href="https://github.com/tikv/tikv/releases/tag/v8.5.4-20260120-d25f155"/>
+        <updated>2026-01-20T01:47:46.000Z</updated>
+        <summary type="html"><![CDATA[close #19285
+Fix RefRange::next() and next_back() to properly decrement old self.head/self.tail refcount.
+Signed-off-by: ekexium eke@fastmail.com
+nkcs_lykx@hotmail.com
+you1474600@gmail.com
+Co-authored-by: ekexium eke@fastmail.com
+nkcs_lykx@hotmail.com
+you1474600@gmail.com]]></summary>
+        <author>
+            <name>Release notes from tikv</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Top 28 Kubernetes resources for 2026: Learn and stay up-to-date]]></title>
+        <id>https://www.cncf.io/?p=155352</id>
+        <link href="https://www.cncf.io/blog/2026/01/19/top-28-kubernetes-resources-for-2026-learn-and-stay-up-to-date/"/>
+        <updated>2026-01-19T12:00:00.000Z</updated>
+        <summary type="html"><![CDATA[The cloud native community is thriving and Kubernetes has a lot to do with it. In this open source ecosystem, practitioners are continually sharing knowledge, tools, and lessons learned from first-hand experience to help others succeed....]]></summary>
+        <author>
+            <name>Nick Haven, Fairwinds</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v0.12.1]]></title>
+        <id>https://github.com/metal3-io/baremetal-operator/releases/tag/v0.12.1</id>
+        <link href="https://github.com/metal3-io/baremetal-operator/releases/tag/v0.12.1"/>
+        <updated>2026-01-19T10:04:39.000Z</updated>
+        <summary type="html"><![CDATA[Changes since v0.12.0
+🌱 Others
+Bump github.com/onsi/ginkgo/v2 from 2.27.4 to 2.27.5 in /test (#2921)
+Bump golang version to 1.24.12 (#2913)
+Bump github.com/onsi/ginkgo/v2 from 2.27.3 to 2.27.4 in /test (#2900)
+Pin ironic version to release-33.0 (#2891)
+Bump go.etcd.io/etcd/client/pkg/v3 from 3.6.6 to 3.6.7 (#2886)
+Bump capi to v1.12.1 (#2885)
+The image for this release is: v0.12.1
+Thanks to all our contributors! 😊]]></summary>
+        <author>
+            <name>Release notes from baremetal-operator</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v0.11.4]]></title>
+        <id>https://github.com/metal3-io/baremetal-operator/releases/tag/v0.11.4</id>
+        <link href="https://github.com/metal3-io/baremetal-operator/releases/tag/v0.11.4"/>
+        <updated>2026-01-19T10:01:41.000Z</updated>
+        <summary type="html"><![CDATA[Changes since v0.11.3
+🌱 Others
+Bump golang version to 1.24.12 (#2914)
+Bump go.etcd.io/etcd/client/pkg/v3 from 3.6.6 to 3.6.7 (#2887)
+The image for this release is: v0.11.4
+Thanks to all our contributors! 😊]]></summary>
+        <author>
+            <name>Release notes from baremetal-operator</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[test/v0.12.1]]></title>
+        <id>https://github.com/metal3-io/baremetal-operator/releases/tag/test%2Fv0.12.1</id>
+        <link href="https://github.com/metal3-io/baremetal-operator/releases/tag/test%2Fv0.12.1"/>
+        <updated>2026-01-19T06:48:30.000Z</updated>
+        <summary type="html"><![CDATA[Merge pull request #2921 from metal3-io/dependabot/go_modules/test/re…]]></summary>
+        <author>
+            <name>Release notes from baremetal-operator</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[pkg/hardwareutils/v0.12.1]]></title>
+        <id>https://github.com/metal3-io/baremetal-operator/releases/tag/pkg%2Fhardwareutils%2Fv0.12.1</id>
+        <link href="https://github.com/metal3-io/baremetal-operator/releases/tag/pkg%2Fhardwareutils%2Fv0.12.1"/>
+        <updated>2026-01-19T06:48:30.000Z</updated>
+        <summary type="html"><![CDATA[Merge pull request #2921 from metal3-io/dependabot/go_modules/test/re…]]></summary>
+        <author>
+            <name>Release notes from baremetal-operator</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[apis/v0.12.1]]></title>
+        <id>https://github.com/metal3-io/baremetal-operator/releases/tag/apis%2Fv0.12.1</id>
+        <link href="https://github.com/metal3-io/baremetal-operator/releases/tag/apis%2Fv0.12.1"/>
+        <updated>2026-01-19T06:48:30.000Z</updated>
+        <summary type="html"><![CDATA[Merge pull request #2921 from metal3-io/dependabot/go_modules/test/re…]]></summary>
+        <author>
+            <name>Release notes from baremetal-operator</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[0.50.0]]></title>
+        <id>https://github.com/strimzi/strimzi-kafka-operator/releases/tag/0.50.0</id>
+        <link href="https://github.com/strimzi/strimzi-kafka-operator/releases/tag/0.50.0"/>
+        <updated>2026-01-18T20:34:58.000Z</updated>
+        <summary type="html"><![CDATA[⚠️ IMPORTANT: Strimzi 0.49 introduced new API version v1 to all Strimzi custom resources.
+Make sure to Upgrade the CRDs) as part of the Strimzi upgrade as well (especially when using Helm).
+The old API versions (v1alpha1, v1beta1, and v1beta2) will continue to be supported until Strimzi 1.0.0 / 0.52.0.
+Before upgrading to Strimzi 0.50.0, make sure that you update your KafkaUser resources to use the .spec.authorization.acls[]operations field instead of the deprecated .spec.authorization.acls[]operation.
+For more details about the migration to the v1 API and CRD upgrades, see the documentation.
+Main changes since 0.49
+This release contains the following new features and improvements:
+Use Java 21 as the runtime and language level
+Support for Linux user namespaces in Strimzi Pods through the h…]]></summary>
+        <author>
+            <name>Release notes from strimzi-kafka-operator</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.12.3]]></title>
+        <id>https://github.com/volcano-sh/volcano/releases/tag/v1.12.3</id>
+        <link href="https://github.com/volcano-sh/volcano/releases/tag/v1.12.3"/>
+        <updated>2026-01-18T08:34:15.000Z</updated>
+        <summary type="html"><![CDATA[What's Changed
+Bug fixes
+[Cherry-pick v1.12] add hcclrank job plugin by @wangdongyang1 in #4555
+Automated cherry pick of #4347: When some scalar resources are 0 in deserved, hierarychical queues validation can not pass by @wuxiaobao in #4586
+Automated cherry pick of #4590: add permissions for managing namespaces in admission rules by @suyiiyii in #4594
+[Cherry-pick v1.12] fix mpi job plugin panic when mpi job only has master task by @wangdongyang1 in #4619
+[Cherry-pick v1.12]Sync kube-scheduler:Improve CSILimits plugin accuracy by using VolumeAttachments by @guoqinwill in #4627
+Automated cherry pick of #4599: fix: report all scalar metrics for each queue by @hajnalmt in #4651
+[Cherry-pick 1.12] fix: Initialize realCapability field in newQueueAttr by @dafu-wu in #4695
+[cherry-pick 1.12]Scheduling main loop blocked and timeout due to un-released PreBind lock in Volcano by @guoqinwill in #4699
+[release-1.12] Cherry-pick #4786 and #4792: fix replicaset KubeGroupNameAnnotation handling and replicaSet podgroup update synchronization by @hajnalmt in #4843
+Automated cherry pick of #4829: keep terminating pod in job by @wangdongyang1 in #4861
+[release-1.12] fix potential panic on numa resources info updating in snapshot by @qi-min in #4898
+[release-1.12] Fix gpu resource error by @ChenW66 in #4915
+[release-1.12] Fix: Changes to task members in a PodGroup caused task validity checks to fail during scheduling by @ouyangshengjia in #4920
+[release-1.12] Fix scheduler panic when metrics are disabled by @Copilot in #4921
+[release-1.12] Update metrics_client_prometheus.go by @nitindhiman314e in #4932
+Maintenance
+[release-1.12] Add Free Disk Space step to E2E workflows by @Copilot in #4851
+Full Changelog: v1.12.2...v1.12.3]]></summary>
+        <author>
+            <name>Release notes from volcano</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[0.9.49.0]]></title>
+        <id>https://github.com/cloud-custodian/cloud-custodian/releases/tag/0.9.49.0</id>
+        <link href="https://github.com/cloud-custodian/cloud-custodian/releases/tag/0.9.49.0"/>
+        <updated>2026-01-16T21:26:22.000Z</updated>
+        <summary type="html"><![CDATA[What's Changed
+aws
+aws - add 'resolver-rule' resource (#10419)
+aws - appelb - add listener-rule filter for inspecting routing rules (#10432)
+aws - cloudfront/shield - gracefully handle pricing plan distributions (#10477)
+aws - quicksight - gracefully handle missing or standard edition configurations (#10452)
+aws - quicksight - handle exception in list tags (#10501)
+aws - rds - skip cluster members in start/stop action (#10497)
+aws - service-quota - updated account-service-limits example usage policy (#10439)
+aws - vpc - extend the dhcp-options filter to support an 'amazon' synthetic value (#10448)
+aws - vpc - skip regional NAT Gateways in cross-az-nat-gateway-route filter (#10461)
+azure
+azure - add entraid-group resource (#10424)
+azure - add the entraid-organization resource (#10426)
+azure - testing - use unittest.mock instead of a backported package (#10420)
+releng
+releng - prepare 0.9.49 release, update dependencies (#10516)
+Data Update 2025-12-17 (#10484)
+shift-left
+c7n-left - allow HCL errors to fail runs (#10414)
+schema changes
+aws.resolver-rule added
+azure.entraid-group added
+azure.entraid-organization added
+aws.app-elb
+
+added filters: listener-rule
+aws.app-elb-target-group
+
+added filters: json-diff
+aws.artifact-domain
+
+added filters: json-diff
+aws.comprehend-flywheel
+
+added filters: config-compliance, json-diff
+aws.datasync-agent
+
+added filters: json-diff
+aws.glue-database
+
+added filters: json-diff
+aws.sagemaker-data-quality-job-definition
+
+added filters: json-diff
+aws.sagemaker-model-bias-job-definition
+
+added filters: config-compliance, json-diff
+aws.sagemaker-model-explainability-job-definition
+
+added filters: json-diff
+aws.sagemaker-model-quality-job-definition
+
+added filters: json-diff
+aws.ses-dedicated-ip-pool
+
+added filters: config-compliance, json-diff
+aws.transfer-server
+
+added filters: json-diff
+Full Changelog: 0.9.48.0...0.9.49.0]]></summary>
+        <author>
+            <name>Release notes from cloud-custodian</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Dapr Runtime v1.16.7-rc.1]]></title>
+        <id>https://github.com/dapr/dapr/releases/tag/v1.16.7-rc.1</id>
+        <link href="https://github.com/dapr/dapr/releases/tag/v1.16.7-rc.1"/>
+        <updated>2026-01-16T14:56:12.000Z</updated>
+        <summary type="html"><![CDATA[This is the release candidate 1.16.7-rc.1]]></summary>
+        <author>
+            <name>Release notes from dapr</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[CRI-O completes second OSTIF audit]]></title>
+        <id>https://www.cncf.io/?p=155392</id>
+        <link href="https://www.cncf.io/blog/2026/01/16/cri-o-completes-second-ostif-audit/"/>
+        <updated>2026-01-16T12:00:00.000Z</updated>
+        <summary type="html"><![CDATA[The Open Source Technology Improvement Fund is proud to share the results of our security audit of CRI-O. CRI-O is an implementation of the Kubernetes Container Runtime Interface (CRI) that is OCI-compliant (-O) that provides the...]]></summary>
+        <author>
+            <name>Helen Woeste, Communications and Operations at OSTIF</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Karmada v1.17.0-alpha.2 release]]></title>
+        <id>https://github.com/karmada-io/karmada/releases/tag/v1.17.0-alpha.2</id>
+        <link href="https://github.com/karmada-io/karmada/releases/tag/v1.17.0-alpha.2"/>
+        <updated>2026-01-16T09:35:44.000Z</updated>
+        <summary type="html"><![CDATA[See the CHANGELOG for details.
+Full Changelog: v1.17.0-alpha.1...v1.17.0-alpha.2]]></summary>
+        <author>
+            <name>Release notes from karmada</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Karmada v1.17.0-alpha.1 release]]></title>
+        <id>https://github.com/karmada-io/karmada/releases/tag/v1.17.0-alpha.1</id>
+        <link href="https://github.com/karmada-io/karmada/releases/tag/v1.17.0-alpha.1"/>
+        <updated>2026-01-16T09:32:52.000Z</updated>
+        <summary type="html"><![CDATA[See the CHANGELOG for details.
+Full Changelog: v1.16.0...v1.17.0-alpha.1]]></summary>
+        <author>
+            <name>Release notes from karmada</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[3.25.0]]></title>
+        <id>https://github.com/litmuschaos/litmus/releases/tag/3.25.0</id>
+        <link href="https://github.com/litmuschaos/litmus/releases/tag/3.25.0"/>
+        <updated>2026-01-16T09:19:34.000Z</updated>
+        <summary type="html"><![CDATA[What's Changed
+chore(3.24.0): Add the installation manifest for 3.24.0 version by @ispeakc0de in #5356
+fix: Add permission to clusterrole for event-tracker  by @khtee in #5349
+Add Intertech as an Adopter by @PriteshKiri in #5368
+Fix typos in documentation by @oglok in #5367
+fix(portal): persist projectID to prevent blank screen on refresh by @harshneyy in #5228
+Feat/setup script by @yashgoyal0110 in #5343
+Resolve DOM nesting warnings in dashboard table by @shovan-mondal in #5376
+Docker linter for CI by @yashgoyal0110 in #5352
+fix(server): ignore removed experiments during name uniqueness check by @xnaveenx in #5360
+test: add CreateChaosExperiment handler tests by @intojhanurag in #5373
+Fix formatting in community resources section by @akhilmukkara in #5362
+Added GitHub Action Workflow for ChaosCenter & generation of Release Artifacts by @Jonsy13 in #5401
+New Contributors
+@khtee made their first contribution in #5349
+@oglok made their first contribution in #5367
+@shovan-mondal made their first contribution in #5376
+@xnaveenx made their first contribution in #5360
+@intojhanurag made their first contribution in #5373
+@akhilmukkara made their first contribution in #5362
+Full Changelog: 3.24.0...3.25.0]]></summary>
+        <author>
+            <name>Release notes from litmus</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[test/v0.11.4]]></title>
+        <id>https://github.com/metal3-io/baremetal-operator/releases/tag/test%2Fv0.11.4</id>
+        <link href="https://github.com/metal3-io/baremetal-operator/releases/tag/test%2Fv0.11.4"/>
+        <updated>2026-01-16T08:40:27.000Z</updated>
+        <summary type="html"><![CDATA[Merge pull request #2914 from metal3-io-bot/cherry-pick-2912-to-relea…]]></summary>
+        <author>
+            <name>Release notes from baremetal-operator</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[pkg/hardwareutils/v0.11.4]]></title>
+        <id>https://github.com/metal3-io/baremetal-operator/releases/tag/pkg%2Fhardwareutils%2Fv0.11.4</id>
+        <link href="https://github.com/metal3-io/baremetal-operator/releases/tag/pkg%2Fhardwareutils%2Fv0.11.4"/>
+        <updated>2026-01-16T08:40:27.000Z</updated>
+        <summary type="html"><![CDATA[Merge pull request #2914 from metal3-io-bot/cherry-pick-2912-to-relea…]]></summary>
+        <author>
+            <name>Release notes from baremetal-operator</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[apis/v0.11.4]]></title>
+        <id>https://github.com/metal3-io/baremetal-operator/releases/tag/apis%2Fv0.11.4</id>
+        <link href="https://github.com/metal3-io/baremetal-operator/releases/tag/apis%2Fv0.11.4"/>
+        <updated>2026-01-16T08:40:27.000Z</updated>
+        <summary type="html"><![CDATA[Merge pull request #2914 from metal3-io-bot/cherry-pick-2912-to-relea…]]></summary>
+        <author>
+            <name>Release notes from baremetal-operator</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.14.1]]></title>
+        <id>https://github.com/coredns/coredns/releases/tag/v1.14.1</id>
+        <link href="https://github.com/coredns/coredns/releases/tag/v1.14.1"/>
+        <updated>2026-01-16T05:35:34.000Z</updated>
+        <summary type="html"><![CDATA[This release primarily addresses security vulnerabilities affecting Go versions prior to
+Brought to You By
+Alex Massy
+Noteworthy Changes
+plugin/proxy: Use mutex-based connection pool (#7790)]]></summary>
+        <author>
+            <name>Release notes from coredns</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.14.1]]></title>
+        <id>https://github.com/spiffe/spire/releases/tag/v1.14.1</id>
+        <link href="https://github.com/spiffe/spire/releases/tag/v1.14.1"/>
+        <updated>2026-01-15T19:01:56.000Z</updated>
+        <summary type="html"><![CDATA[Changed
+The uptime_in_ms gauge metric now uses float64 instead of integer (#6532)
+SPIRE Server on Windows can now accept persistent arguments in the service binPath for automatic startup (#6465)
+Fixed
+Incorrect logic for disposing keys in the aws_kms KeyManager plugin (#6525)
+JWT-SVID caching now uses the SPIFFE ID returned by the server to prevent stale cache entries when entry IDs change (#6501)
+Documentation fixes (#6488, #6521)]]></summary>
+        <author>
+            <name>Release notes from spire</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Release v1.78.0-pre2]]></title>
+        <id>https://github.com/grpc/grpc/releases/tag/v1.78.0-pre2</id>
+        <link href="https://github.com/grpc/grpc/releases/tag/v1.78.0-pre2"/>
+        <updated>2026-01-15T17:39:06.000Z</updated>
+        <summary type="html"><![CDATA[This is a prerelease of gRPC Core 1.78.0 (gutsy).
+For gRPC documentation, see grpc.io. For previous releases, see Releases.
+This prerelease contains refinements, improvements, and bug fixes.]]></summary>
+        <author>
+            <name>Release notes from grpc</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Release v2.12.4-RC.2]]></title>
+        <id>https://github.com/nats-io/nats-server/releases/tag/v2.12.4-RC.2</id>
+        <link href="https://github.com/nats-io/nats-server/releases/tag/v2.12.4-RC.2"/>
+        <updated>2026-01-15T17:21:31.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Refer to the 2.12 Upgrade Guide for backwards compatibility notes with 2.11.x.
+Go Version
+1.25.5
+Added
+Monitoring
+Added tls_cert_not_after to the varz monitoring endpoint for showing when TLS certificates are due to expire (#7709)
+Fixed
+JetStream
+Fixed an issue where a single truncated block could prevent storing new messages in the filestore (#7704)
+Fixed a concurrent map iteration/write panic that could occur on WorkQueue streams during partitioning (#7708)
+Fixed a deadlock that could occur on shutdown when adding streams (#7710)
+Required API level errors are now only returned after other checks, preventing unexpected replies from other servers (#7711)
+A data race on mirror consumers has been fixed (#7716)
+JetStream no longer leaks subscriptions in a cluster when a stream import/export is set up that overlaps the $JS.> namespace (#7720)
+The filestore will no longer waste CPU time rebuilding subject state for WALs (#7721)
+Configuring cluster_traffic in config mode has been fixed (#7723)
+A subject interest check bug that could exit early due to a partial wildcard has been fixed (#7728)
+Complete Changes
+v2.12.4-RC.1...v2.12.4-RC.2]]></summary>
+        <author>
+            <name>Release notes from nats-server</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Release v2.11.12-RC.3]]></title>
+        <id>https://github.com/nats-io/nats-server/releases/tag/v2.11.12-RC.3</id>
+        <link href="https://github.com/nats-io/nats-server/releases/tag/v2.11.12-RC.3"/>
+        <updated>2026-01-15T17:18:55.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Refer to the 2.11 Upgrade Guide for backwards compatibility notes with 2.10.x.
+Go Version
+1.25.5
+Added
+Monitoring
+Added tls_cert_not_after to the varz monitoring endpoint for showing when TLS certificates are due to expire (#7709)
+Fixed
+JetStream
+Fixed an issue where a single truncated block could prevent storing new messages in the filestore (#7704)
+Fixed a concurrent map iteration/write panic that could occur on WorkQueue streams during partitioning (#7708)
+Fixed a deadlock that could occur on shutdown when adding streams (#7710)
+A data race on mirror consumers has been fixed (#7716)
+JetStream no longer leaks subscriptions in a cluster when a stream import/export is set up that overlaps the $JS.> namespace (#7720)
+The filestore will no longer waste CPU time rebuilding subject state for WALs (#7721)
+Configuring cluster_traffic in config mode has been fixed (#7723)
+A subject interest check bug that could exit early due to a partial wildcard has been fixed (#7728)
+Complete Changes
+v2.11.12-RC.2...v2.11.12-RC.3]]></summary>
+        <author>
+            <name>Release notes from nats-server</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[26.5.1]]></title>
+        <id>https://github.com/keycloak/keycloak/releases/tag/26.5.1</id>
+        <link href="https://github.com/keycloak/keycloak/releases/tag/26.5.1"/>
+        <updated>2026-01-15T15:27:23.000Z</updated>
+        <summary type="html"><![CDATA[Upgrading
+Before upgrading refer to the migration guide for a complete list of changes.
+All resolved issues
+Enhancements
+#44863 x-robots HTTP header missing for static Keycloak resources, and REST endpoint responses 
+#45009 Performance improvement: Missing indexes on BROKER_LINK table columns 
+#45182 Allow full managing of realms from master realm without global admin role 
+Bugs
+#43975 Test Framework -> Embedded server -> Maven execution failure: Failed to read script file from: scripts/default-policy.js test-framework
+#44371 403 Forbidden when assigning realm-management client roles despite FGAP disabled (regression in 26.4.0+) admin/fine-grained-permissions
+#44417 Security issue with Organization feature exposes and fills the account name automatically in user/password form organizations
+#44783 Create Realm button is missing when user has create-realm role admin/ui
+#44860 Admin UI: slow response time listing second user page admin/ui
+#45003 Bug in JWTClientAuthenticator and JWTClientSecretAuthenticator causes NPE authentication
+#45093 Enable visibility of Role Mapping tab for users with view-users role admin/ui
+#45107 Failed upgrade to 26.4.7 - sql generated for manual database upgrade contains invalid statements storage
+#45116 Realm-level admininistrators can no longer use Admin Console since 26.3.0 (UI fails to render) admin/ui
+#45185 ExternalLinkTest fails due to missing _adding_context_for_log_messages anchor docs
+#45226 Failure when decrypting SAML Response since 26.5.0 saml
+#45239 Upgrade to 26.5.0 failing due to FK_ORG_INVITATION_ORG constraint organizations
+#45257 Creating IdentityProvider with latest java admin-client may fail against Keycloak server 26.4 or older admin/client-java
+#45307 UI Bug: WebAuthn passkey list is broken in keycloak v2 theme login/ui]]></summary>
+        <author>
+            <name>Release notes from keycloak</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[26.4.8]]></title>
+        <id>https://github.com/keycloak/keycloak/releases/tag/26.4.8</id>
+        <link href="https://github.com/keycloak/keycloak/releases/tag/26.4.8"/>
+        <updated>2026-01-15T13:52:29.000Z</updated>
+        <summary type="html"><![CDATA[Set version to 26.4.8]]></summary>
+        <author>
+            <name>Release notes from keycloak</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.46.3]]></title>
+        <id>https://github.com/backstage/backstage/releases/tag/v1.46.3</id>
+        <link href="https://github.com/backstage/backstage/releases/tag/v1.46.3"/>
+        <updated>2026-01-15T12:18:17.000Z</updated>
+        <summary type="html"><![CDATA[Fixed an issue causing the catalog-graph plugin to show an empty graph]]></summary>
+        <author>
+            <name>Release notes from backstage</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[KubeCon + CloudNativeCon NA: Top sessions from the CNCF End User TAB]]></title>
+        <id>https://www.cncf.io/?p=155355</id>
+        <link href="https://www.cncf.io/blog/2026/01/15/kubecon-cloudnativecon-na-top-sessions-from-the-cncf-end-user-tab/"/>
+        <updated>2026-01-15T12:00:00.000Z</updated>
+        <summary type="html"><![CDATA[2025 brought significant developments in the cloud native landscape, with a strong focus on AI but new projects and end user reports in many other areas. As always, KubeCon is one of the key places we...]]></summary>
+        <author>
+            <name>CNCF End User TAB</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[1.19.0-rc.0]]></title>
+        <id>https://github.com/cilium/cilium/releases/tag/v1.19.0-rc.0</id>
+        <link href="https://github.com/cilium/cilium/releases/tag/v1.19.0-rc.0"/>
+        <updated>2026-01-15T09:38:02.000Z</updated>
+        <summary type="html"><![CDATA[Summary of Changes
+Major Changes:
+Publish Helm charts to OCI registries (#43624, @aanm)
+Minor Changes:
+Add Strict Mode Ingress Encryption Support for Wireguard (#39239, @rgo3)
+helm: add SYSLOG capability for Cilium Agent (#43201, @marseel)
+policy: Mark FromRequires and ToRequires as deprecated (#43167, @TheBeeZee)
+Remove deprecated l2-pod-announcements-interface flag (#43063, @dylandreimerink)
+renovate: Allow cilium-envoy 1.35.x for v1.18 (#43623, @sayboras)
+Support BIG TCP in tunneling mode, provided that kernel supports BIG TCP for UDP tunnels. (#43416, @gentoo-root)
+Bugfixes:
+bpf:wireguard: delivery host packets to bpf_host for ingress policies (#42892, @smagnani96)
+Fix an issue in proxy NOTRACK iptables rule for aws-cni chaining mode which causes proxy->upstream(outside cluster) traffi…]]></summary>
+        <author>
+            <name>Release notes from cilium</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.14.2]]></title>
+        <id>https://github.com/goharbor/harbor/releases/tag/v2.14.2</id>
+        <link href="https://github.com/goharbor/harbor/releases/tag/v2.14.2"/>
+        <updated>2026-01-15T07:52:25.000Z</updated>
+        <summary type="html"><![CDATA[What's Changed
+Component updates ⬆️
+chore(deps): bump golang.org/x/sync from 0.16.0 to 0.18.0 in /src by @dependabot[bot] in #22603
+feat: bump UI version v2.14 by @bupd in #22646
+[CHERRY-PICK] fix(artifact): correct typo in artifact_type column definition by @chlins in #22658
+Bump up trivy and trivy adapter for v2.14.2 by @reasonerjt in #22689
+(cherry-pick) fix error related to search user and search groups by @stonezdj in #22705
+bump bases for v2.14.2 by @wy65701436 in #22712
+Other Changes
+(cherry-pick) Correct the log upload path and make sure it always run by @stonezdj in #22691
+Full Changelog: v2.14.1...v2.14.2]]></summary>
+        <author>
+            <name>Release notes from harbor</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[TiKV v8.5.5]]></title>
+        <id>https://github.com/tikv/tikv/releases/tag/v8.5.5</id>
+        <link href="https://github.com/tikv/tikv/releases/tag/v8.5.5"/>
+        <updated>2026-01-15T07:50:32.000Z</updated>
+        <summary type="html"><![CDATA[For new features, improvements, and bug fixes released in v8.5.5 for TiKV, see TiDB v8.5.5 release notes.
+See the difference from the issue perspective:
+#19140
+#18458
+#19158
+#18872
+#17221
+#18708
+#18797
+#19131
+pingcap/tidb#64866
+#18604
+#18206
+#19180
+#18464
+#19179
+#19070
+#18271
+#18233
+#19206
+#19208
+#18169
+#19006
+#19215
+#19220
+#19228
+#19269
+#19239
+#18300
+#19238
+#19196]]></summary>
+        <author>
+            <name>Release notes from tikv</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v3.2.5]]></title>
+        <id>https://github.com/argoproj/argo-cd/releases/tag/v3.2.5</id>
+        <link href="https://github.com/argoproj/argo-cd/releases/tag/v3.2.5"/>
+        <updated>2026-01-15T07:04:38.000Z</updated>
+        <summary type="html"><![CDATA[Quick Start
+Non-HA:
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.2.5/manifests/install.yaml
+
+HA:
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.2.5/manifests/ha/install.yaml
+
+Release Signatures and Provenance
+All Argo CD container images are signed by cosign.  A Provenance is generated for container images and CLI binaries which meet the SLSA Level 3 specifications. See the documentation on how to verify.
+Release Notes Blog Post
+For a detailed breakdown of the key changes and improvements in this release, check out the official blog post
+Upgrading
+If upgrading from a different minor version, be sure to read the upgrading documentation.
+Changelog
+Features
+fafbd44: feat: Cherry-pick to 3.2 update notifications engine to v0.5.1 0.20251223091026 8c0c96d8d530 (#25930) (@reggie-k)
+Bug fixes
+d7d9674: fix(appset): do not trigger reconciliation on appsets not part of allowed namespaces when updating a cluster secret (cherry-pick #25622 for 3.2) (#25911) (@argo-cd-cherry-pick-bot[bot])
+e6f5403: fix: Only show please update resource specification message when spec… (cherry-pick #25066 for 3.2) (#25895) (@argo-cd-cherry-pick-bot[bot])
+Documentation
+e9d03a6: docs: Run make codegen for notifications engine changes (#25958) (@reggie-k)
+b67eb40: docs: link to source hydrator (cherry-pick #25813 for 3.2) (#25814) (@argo-cd-cherry-pick-bot[bot])
+Dependency updates
+8a0633b: chore(deps): bump go to 1.25.5 (cherry-pick) (#25805) (@nitishfy)
+Other work
+b414696: chore(cherry-pick-3.2): bump expr to v1.17.7 (#25889) (@nitishfy)
+51c6375: ci: test against k8s 1.34.2 (cherry-pick #25856 for 3.2) (#25859) (@argo-cd-cherry-pick-bot[bot])
+Full Changelog: v3.2.3...v3.2.5]]></summary>
+        <author>
+            <name>Release notes from argo-cd</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v3.2.4]]></title>
+        <id>https://github.com/argoproj/argo-cd/releases/tag/v3.2.4</id>
+        <link href="https://github.com/argoproj/argo-cd/releases/tag/v3.2.4"/>
+        <updated>2026-01-15T07:03:24.000Z</updated>
+        <summary type="html"><![CDATA[Important notice about this release
+This release is invalid, please use the v3.2.5 instead.]]></summary>
+        <author>
+            <name>Release notes from argo-cd</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Longhorn v1.11.0-rc2]]></title>
+        <id>https://github.com/longhorn/longhorn/releases/tag/v1.11.0-rc2</id>
+        <link href="https://github.com/longhorn/longhorn/releases/tag/v1.11.0-rc2"/>
+        <updated>2026-01-15T06:56:33.000Z</updated>
+        <summary type="html"><![CDATA[DON'T UPGRADE from/to any RC/Preview/Sprint releases because the operation is not supported.
+Resolved Issues in this release
+Highlight
+[FEATURE] Scale replica rebuilding speed form multiple healthy replicas 11331 - @derekbit @shuo-wu @roger-ryao @Copilot
+[FEATURE] Support StorageClass allowedTopologies for Longhorn volumes 12261 - @yangchiu @derekbit @hookak @Copilot
+[FEATURE] Add support for ReadWriteOncePod access mode 9727 - @shikanime @chriscchien
+[FEATURE] Support extra network interface (not only storage network) on the share manager pod 10269 - @yangchiu @c3y1huang
+[FEATURE] Monitor Node Disk Health 12016 - @c3y1huang @roger-ryao
+[FEATURE] Replica Auto Balance Across Nodes based on Node Disk Space Consumption 10512 - @davidcheng0922 @chriscchien
+Feature
+[FEATURE] Guess Linux distro …]]></summary>
+        <author>
+            <name>Release notes from longhorn</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.13.4]]></title>
+        <id>https://github.com/goharbor/harbor/releases/tag/v2.13.4</id>
+        <link href="https://github.com/goharbor/harbor/releases/tag/v2.13.4"/>
+        <updated>2026-01-15T03:02:04.000Z</updated>
+        <summary type="html"><![CDATA[What's Changed
+Component updates ⬆️
+[CHERRY-PICK] fix(artifact): correct typo in artifact_type column definition by @chlins in #22657
+Bump up trivy and trivy adapter for v2.13.4 by @reasonerjt in #22693
+bump bases for v2.13.4 by @wy65701436 in #22711
+Full Changelog: v2.13.3...v2.13.4]]></summary>
+        <author>
+            <name>Release notes from harbor</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[1.19.0-rc.0]]></title>
+        <id>https://github.com/cilium/cilium/releases/tag/1.19.0-rc.0</id>
+        <link href="https://github.com/cilium/cilium/releases/tag/1.19.0-rc.0"/>
+        <updated>2026-01-15T00:44:31.000Z</updated>
+        <summary type="html"><![CDATA[Release v1.19.0-rc.0]]></summary>
+        <author>
+            <name>Release notes from cilium</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Helm v3.19.5]]></title>
+        <id>https://github.com/helm/helm/releases/tag/v3.19.5</id>
+        <link href="https://github.com/helm/helm/releases/tag/v3.19.5"/>
+        <updated>2026-01-15T00:30:06.000Z</updated>
+        <summary type="html"><![CDATA[Helm v3.19.5 is a patch release. Users are encouraged to upgrade for the best experience.
+The community keeps growing, and we'd love to see you there!
+Join the discussion in Kubernetes Slack:
+
+for questions and just to hang out
+for discussing PRs, code, and bugs
+Hang out at the Public Developer Call: Thursday, 9:30 Pacific via Zoom
+Test, debug, and contribute charts: ArtifactHub/packages
+Notable Changes
+Fixed bug where removing subchart value via override resulted in warning #31118
+Fixed bug where helm uninstall with --keep-history did not suspend previous deployed releases #12556
+Installation and Upgrading
+Download Helm v3.19.5. The common platform binaries are here:
+MacOS amd64 (checksum / 57f4a847c349382b7cc742a6434ef25f88f0928a113d8cf49084b464878ef0b9)
+MacOS arm64 (checksum / 195e24e58…]]></summary>
+        <author>
+            <name>Release notes from helm</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Helm v4.0.5]]></title>
+        <id>https://github.com/helm/helm/releases/tag/v4.0.5</id>
+        <link href="https://github.com/helm/helm/releases/tag/v4.0.5"/>
+        <updated>2026-01-15T00:20:11.000Z</updated>
+        <summary type="html"><![CDATA[Helm v4.0.5 is a patch release. Users are encouraged to upgrade for the best experience.
+The community keeps growing, and we'd love to see you there!
+Join the discussion in Kubernetes Slack:
+
+for questions and just to hang out
+for discussing PRs, code, and bugs
+Hang out at the Public Developer Call: Thursday, 9:30 Pacific via Zoom
+Test, debug, and contribute charts: ArtifactHub/packages
+Notable Changes
+Fixed bug where helm uninstall with --keep-history did not suspend previous deployed releases #12556
+Fixed rollback error when a manifest is removed in a failed upgrade #13437
+Fixed check to ensure CLI plugin does not load with the same name as an existing Helm command
+Fixed helm test --logs failure with hook-delete-policy "hook-failed" or "hook-succeed" #9098
+Fixed a bug where empty depende…]]></summary>
+        <author>
+            <name>Release notes from helm</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.12.3]]></title>
+        <id>https://github.com/open-policy-agent/opa/releases/tag/v1.12.3</id>
+        <link href="https://github.com/open-policy-agent/opa/releases/tag/v1.12.3"/>
+        <updated>2026-01-14T22:23:16.000Z</updated>
+        <summary type="html"><![CDATA[v1.12.3
+This is a bug fix release addressing two issues:
+Bundle polling is being misconfigured when discovery bundle is updated (#8215)
+This is an issue where the polling interval for discovery (discovery.polling.min_delay_seconds and discovery.polling.max_delay_seconds) were misinterpreted on reconfiguration, causing extremely long update intervals.
+Reported by @loganmiller-chime, authored by @sspaink
+Decision log size buffer buffer_size_limit_bytes misconfigured during reconfiguration (#8213)
+This is a regression in the decision log, where the decision_logs.reporting.buffer_size_limit_bytes was mistakenly assigned the value of decision_logs.reporting.upload_size_limit_bytes during reconfiguration.
+decision_logs.reporting.buffer_type is set to size, which is the default value.
+Authored by @sspaink]]></summary>
+        <author>
+            <name>Release notes from opa</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[0.50.0-rc1]]></title>
+        <id>https://github.com/strimzi/strimzi-kafka-operator/releases/tag/0.50.0-rc1</id>
+        <link href="https://github.com/strimzi/strimzi-kafka-operator/releases/tag/0.50.0-rc1"/>
+        <updated>2026-01-14T22:00:23.000Z</updated>
+        <summary type="html"><![CDATA[⚠️ IMPORTANT: Strimzi 0.49 introduced new API version v1 to all Strimzi custom resources.
+Make sure to Upgrade the CRDs as part of the Strimzi upgrade as well (especially when using Helm).
+The old API versions (v1alpha1, v1beta1, and v1beta2) will continue to be supported until Strimzi 1.0.0 / 0.52.0.
+Before upgrading to Strimzi 0.50.0, make sure that you update your KafkaUser resources to use the .spec.authorization.acls[]operations field instead of the deprecated .spec.authorization.acls[]operation.
+For more details about the migration to the v1 API and CRD upgrades, see the documentation.
+Main changes since 0.49
+This release contains the following new features and improvements:
+Use Java 21 as the runtime and language level
+Support for Linux user namespaces in Strimzi Pods through the ho…]]></summary>
+        <author>
+            <name>Release notes from strimzi-kafka-operator</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[edge-26.1.2]]></title>
+        <id>https://github.com/linkerd/linkerd2/releases/tag/edge-26.1.2</id>
+        <link href="https://github.com/linkerd/linkerd2/releases/tag/edge-26.1.2"/>
+        <updated>2026-01-14T17:21:05.000Z</updated>
+        <summary type="html"><![CDATA[What's Changed
+fix(policy-tests): adapt curl library for native sidecar proxies by @alpeb in #14840
+fix(policy): guard against deserialization errors in watches by @adleong in #14844
+fix(tests): adapt injection integration tests to native sidecars by @alpeb in #14842
+build(deps): bump actions/setup-go from 6.1.0 to 6.2.0 by @dependabot[bot] in #14848
+build(deps): bump golang.org/x/tools from 0.40.0 to 0.41.0 by @dependabot[bot] in #14847
+build(deps-dev): bump webpack-bundle-analyzer from 5.1.0 to 5.1.1 in /web/app by @dependabot[bot] in #14845
+proxy: v2.336.0 by @l5d-bot in #14850
+Full Changelog: edge-26.1.1...edge-26.1.2]]></summary>
+        <author>
+            <name>Release notes from linkerd2</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[0.43.0-rc1]]></title>
+        <id>https://github.com/falcosecurity/falco/releases/tag/0.43.0-rc1</id>
+        <link href="https://github.com/falcosecurity/falco/releases/tag/0.43.0-rc1"/>
+        <updated>2026-01-14T14:41:43.000Z</updated>
+        <summary type="html"><![CDATA[chore(cmake): bump libs/drivers to `0.23.1`/`9.1.0+driver`
+The previously used driver version was already the `9.1.0+driver`:
+simply replace the commit SHA with the release name.
+Signed-off-by: Leonardo Di Giovanna <leonardodigiovanna1@gmail.com>]]></summary>
+        <author>
+            <name>Release notes from falco</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Istio 1.29.0-alpha.0]]></title>
+        <id>https://github.com/istio/istio/releases/tag/1.29.0-alpha.0</id>
+        <link href="https://github.com/istio/istio/releases/tag/1.29.0-alpha.0"/>
+        <updated>2026-01-13T22:55:22.000Z</updated>
+        <summary type="html"><![CDATA[Artifacts]]></summary>
+        <author>
+            <name>Release notes from istio</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v3.0.22]]></title>
+        <id>https://github.com/argoproj/argo-cd/releases/tag/v3.0.22</id>
+        <link href="https://github.com/argoproj/argo-cd/releases/tag/v3.0.22"/>
+        <updated>2026-01-13T19:37:00.000Z</updated>
+        <summary type="html"><![CDATA[Quick Start
+Non-HA:
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.0.22/manifests/install.yaml
+
+HA:
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.0.22/manifests/ha/install.yaml
+
+Release Signatures and Provenance
+All Argo CD container images are signed by cosign.  A Provenance is generated for container images and CLI binaries which meet the SLSA Level 3 specifications. See the documentation on how to verify.
+Release Notes Blog Post
+For a detailed breakdown of the key changes and improvements in this release, check out the official blog post
+Upgrading
+If upgrading from a different minor version, be sure to read the upgrading documentation.
+Changelog
+Bug fixes
+e5b85ef: fix: Only show please update resource specification message when spec… (cherry-pick #25066 for 3.0) (#25893) (@argo-cd-cherry-pick-bot[bot])
+Other work
+f9212b0: chore(cherry-pick-3.0): bump expr version from v1.16.9 to v1.17.7 (#25908) (@aali309)
+Full Changelog: v3.0.21...v3.0.22]]></summary>
+        <author>
+            <name>Release notes from argo-cd</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[1.16.19]]></title>
+        <id>https://github.com/cilium/cilium/releases/tag/v1.16.19</id>
+        <link href="https://github.com/cilium/cilium/releases/tag/v1.16.19"/>
+        <updated>2026-01-13T19:28:20.000Z</updated>
+        <summary type="html"><![CDATA[Summary of Changes
+Major Changes:
+Publish Helm charts to OCI registries (Backport PR #43688, Upstream PR #43624, @aanm)
+Bugfixes:
+ipcache: Fix leak in CIDR metadata consolidation logic (Backport PR #43427, Upstream PR #43074, @christarazi)
+xds: fix nil-pointer in processRequestStream (Backport PR #43614, Upstream PR #43609, @mhofstetter)
+CI Changes:
+chore: comment job to use generated token instead of PAT (Backport PR #43614, Upstream PR #43148, @sekhar-isovalent)
+ci: Use newer lvh image for privileged tests (Backport PR #43488, Upstream PR #41082, @rastislavs)
+Misc Changes:
+Add documentation and examples for using the egressDeny field in CiliumNetworkPolicy (Backport PR #43427, Upstream PR #40272, @syedazeez337)
+chore(deps): update all github action dependencies (v1.16) (#43471, @cilium-r…]]></summary>
+        <author>
+            <name>Release notes from cilium</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[1.17.12]]></title>
+        <id>https://github.com/cilium/cilium/releases/tag/v1.17.12</id>
+        <link href="https://github.com/cilium/cilium/releases/tag/v1.17.12"/>
+        <updated>2026-01-13T19:27:49.000Z</updated>
+        <summary type="html"><![CDATA[Summary of Changes
+Major Changes:
+Publish Helm charts to OCI registries (Backport PR #43687, Upstream PR #43624, @aanm)
+Bugfixes:
+Fix an issue in proxy NOTRACK iptables rule for aws-cni chaining mode which causes proxy->upstream(outside cluster) traffic not being SNAT'd. (Backport PR #43677, Upstream PR #43566, @fristonio)
+ipcache: Fix leak in CIDR metadata consolidation logic (Backport PR #43426, Upstream PR #43074, @christarazi)
+iptables: Fix IPv6 SNAT for L7 proxy upstream traffic (Backport PR #43677, Upstream PR #41034, @gentoo-root)
+xds: fix nil-pointer in processRequestStream (Backport PR #43613, Upstream PR #43609, @mhofstetter)
+CI Changes:
+chore: comment job to use generated token instead of PAT (Backport PR #43613, Upstream PR #43148, @sekhar-isovalent)
+ci: Use newer lvh image for…]]></summary>
+        <author>
+            <name>Release notes from cilium</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[1.18.6]]></title>
+        <id>https://github.com/cilium/cilium/releases/tag/v1.18.6</id>
+        <link href="https://github.com/cilium/cilium/releases/tag/v1.18.6"/>
+        <updated>2026-01-13T19:27:32.000Z</updated>
+        <summary type="html"><![CDATA[Summary of Changes
+Major Changes:
+Publish Helm charts to OCI registries (Backport PR #43689, Upstream PR #43624, @aanm)
+Minor Changes:
+Cilium Preflight check no longer includes Envoy Configmaps, making it easier to correctly run. (Backport PR #43290, Upstream PR #43153, @youngnick)
+runtime: Add libatomic1 for cilium-envoy dependency (Backport PR #43642, Upstream PR #43292, @sayboras)
+Bugfixes:
+bpf:wireguard: delivery host packets to bpf_host for ingress policies (Backport PR #43690, Upstream PR #42892, @smagnani96)
+cgroup: don't start watch if KPRConfig.EnableSocketLB is disabled (Backport PR #43290, Upstream PR #43256, @mhofstetter)
+Fix a bug with local redirect service entries being created when backend pods weren't ready. (Backport PR #43425, Upstream PR #43095, @aditighag)
+Fix an issue…]]></summary>
+        <author>
+            <name>Release notes from cilium</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.18.9]]></title>
+        <id>https://github.com/rook/rook/releases/tag/v1.18.9</id>
+        <link href="https://github.com/rook/rook/releases/tag/v1.18.9"/>
+        <updated>2026-01-13T19:24:38.000Z</updated>
+        <summary type="html"><![CDATA[Improvements
+Rook v1.18.9 is a patch release limited in scope and focusing on feature additions and bug fixes to the Ceph operator.
+csi: Disable read affinity for ceph v20.2.0 to avoid corruption (#16895, @travisn)
+core: Allow skipping cephcluster reconcile via do-not-reconcile label (#16874, @OdedViner)
+helm: Merge rook-config-override ConfigMap into toolbox ceph.conf (#16862, @mheler)
+helm: Add cephclusters/finalizers permission for mgr sidecar (#16854, @grandeit)
+csi: Add fix to support multiple fs mount option (#16837, @subhamkrai)
+operator: Watch cephConfigFromSecret changes (#16786, @cyanidium)
+rgw: Support all S3 notification events in CRD validation (#16804, @arttor)
+docs: Add pool parameter for erasure code optimizations (#16789, @travisn)]]></summary>
+        <author>
+            <name>Release notes from rook</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[edge-25.12.1]]></title>
+        <id>https://github.com/linkerd/linkerd2/releases/tag/edge-25.12.1</id>
+        <link href="https://github.com/linkerd/linkerd2/releases/tag/edge-25.12.1"/>
+        <updated>2026-01-13T18:44:37.000Z</updated>
+        <summary type="html"><![CDATA[Overall status: RECOMMENDED
+Cautions
+N/A
+Changes
+This release bumps dependencies but has no functional changes from edge-25.11.3.
+What's Changed
+build(deps): bump node-forge from 1.3.0 to 1.3.2 in /web/app by @dependabot[bot] in #14761
+build(deps): bump github.com/prometheus/common from 0.67.3 to 0.67.4 by @dependabot[bot] in #14756
+build(deps): bump use-query-params from 2.2.1 to 2.2.2 in /web/app by @dependabot[bot] in #14755
+build(deps-dev): bump webpack-bundle-analyzer from 4.10.2 to 5.0.1 in /web/app by @dependabot[bot] in #14754
+build(deps): bump actions/checkout from 5.0.1 to 6.0.0 by @dependabot[bot] in #14748
+build(deps): bump core-js from 3.45.1 to 3.47.0 in /web/app by @dependabot[bot] in #14751
+build(deps): bump hyper from 1.8.0 to 1.8.1 by @dependabot[bot] in #14746
+build(deps…]]></summary>
+        <author>
+            <name>Release notes from linkerd2</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[edge-25.12.2]]></title>
+        <id>https://github.com/linkerd/linkerd2/releases/tag/edge-25.12.2</id>
+        <link href="https://github.com/linkerd/linkerd2/releases/tag/edge-25.12.2"/>
+        <updated>2026-01-13T18:44:34.000Z</updated>
+        <summary type="html"><![CDATA[Overall status: RECOMMENDED
+Cautions
+N/A
+Changes
+This release correctly takes hostPorts and opaque ports into account when using native sidecars, and improves native sidecar support in the linkerd authz and linkerd check --proxy commands.
+What's Changed
+fix(cli): improved support for native sidecar servers in linkerd authz by @alpeb in #14780
+fix(cli): improved support for native sidecar servers in linkerd check --proxy by @alpeb in #14779
+fix(injector): improved support for native sidecar servers by @alpeb in #14767
+build(deps): bump syn from 2.0.110 to 2.0.111 by @dependabot[bot] in #14783
+fix(destination): properly discover hostports in native sidecars by @alpeb in #14786
+build(deps): bump golang.org/x/tools from 0.39.0 to 0.40.0 by @dependabot[bot] in #14790
+build(deps): bump github.com/go-openapi/spec from 0.22.1 to 0.22.2 by @dependabot[bot] in #14789
+proxy: v2.333.0 by @l5d-bot in #14793
+build(deps): bump DavidAnson/markdownlint-cli2-action from 21.0.0 to 22.0.0 by @dependabot[bot] in #14794
+build(deps): bump codecov/codecov-action from 5.5.1 to 5.5.2 by @dependabot[bot] in #14795
+Full Changelog: edge-25.12.1...edge-25.12.2]]></summary>
+        <author>
+            <name>Release notes from linkerd2</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[edge-25.12.3]]></title>
+        <id>https://github.com/linkerd/linkerd2/releases/tag/edge-25.12.3</id>
+        <link href="https://github.com/linkerd/linkerd2/releases/tag/edge-25.12.3"/>
+        <updated>2026-01-13T18:44:14.000Z</updated>
+        <summary type="html"><![CDATA[Overall status: RECOMMENDED
+Cautions
+N/A
+Changes
+This release correctly discovers ports and port opacity when using native sidecars, and fixes a race condition in the CNI plugin that could prevent proper deployment in some environments, particularly EKS.
+What's Changed
+build(deps): bump actions/download-artifact from 6.0.0 to 7.0.0 in /.github/actions/cli-setup by @dependabot[bot] in #14809
+build(deps): bump dessant/lock-threads from 5.0.1 to 6.0.0 by @dependabot[bot] in #14808
+build(deps): bump google.golang.org/protobuf from 1.36.10 to 1.36.11 by @dependabot[bot] in #14805
+build(deps): bump tokio-metrics from 0.4.5 to 0.4.6 by @dependabot[bot] in #14784
+build(deps): bump actions/download-artifact from 6.0.0 to 7.0.0 by @dependabot[bot] in #14807
+build(deps): bump actions/upload-artifact from 5.0.0 to 6.0.0 by @dependabot[bot] in #14806
+build(deps): bump helm.sh/helm/v3 from 3.19.2 to 3.19.4 by @dependabot[bot] in #14804
+build(deps-dev): bump webpack-bundle-analyzer from 5.0.1 to 5.1.0 in /web/app by @dependabot[bot] in #14802
+build(deps): bump tj-actions/changed-files from abdd2f68ea150cee8f236d4a9fb4e0f2491abf1b to e0021407031f5be11a464abee9a0776171c79891 by @dependabot[bot] in #14799
+build(deps): bump indexmap from 2.12.0 to 2.12.1 by @dependabot[bot] in #14785
+fix(destination): properly deal with native sidecar port opacity in getProfile by @alpeb in #14791
+build(deps): bump the kube group with 7 updates by @dependabot[bot] in #14797
+build(deps): bump rustls-pki-types from 1.13.0 to 1.13.1 by @dependabot[bot] in #14810
+build(deps): bump socket2 from 0.6.0 to 0.6.1 by @dependabot[bot] in #14811
+build(deps): bump hostname from 0.4.1 to 0.4.2 by @dependabot[bot] in #14787
+fix(destination): properly discover native sidecar ports by @alpeb in #14814
+chore(deps): bump proxy-init(v2.4.4), linkerd-cni(v1.6.5) and validator(0.1.5) by @alpeb in #14816
+Full Changelog: edge-25.12.2...edge-25.12.3]]></summary>
+        <author>
+            <name>Release notes from linkerd2</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[edge-26.1.1]]></title>
+        <id>https://github.com/linkerd/linkerd2/releases/tag/edge-26.1.1</id>
+        <link href="https://github.com/linkerd/linkerd2/releases/tag/edge-26.1.1"/>
+        <updated>2026-01-13T18:44:06.000Z</updated>
+        <summary type="html"><![CDATA[Overall status: RECOMMENDED
+Cautions
+N/A
+Changes
+This release bumps dependencies but has no functional changes from edge-25.12.3.
+What's Changed
+chore(build): upgrade to go 1.25.5 by @adleong in #14821
+build(deps): bump docker/setup-buildx-action from 3.11.1 to 3.12.0 in /.github/actions/docker-build by @dependabot[bot] in #14826
+build(deps): bump actions/setup-go from 6.0.0 to 6.1.0 by @dependabot[bot] in #14825
+build(deps): bump the kube group with 8 updates - update related tests by @dependabot[bot] in #14817
+proxy: v2.335.0 by @l5d-bot in #14830
+build(deps): bump github.com/go-openapi/spec from 0.22.2 to 0.22.3 by @dependabot[bot] in #14831
+build(deps): bump google.golang.org/grpc from 1.77.0 to 1.78.0 by @dependabot[bot] in #14829
+build(deps): bump docker/setup-buildx-action from 3.11.1 to 3.12.0 by @dependabot[bot] in #14824
+build(deps-dev): bump webpack from 5.103.0 to 5.104.1 in /web/app by @dependabot[bot] in #14823
+build(deps-dev): bump sinon from 21.0.0 to 21.0.1 in /web/app by @dependabot[bot] in #14822
+build(deps): bump github.com/prometheus/common from 0.67.4 to 0.67.5 by @dependabot[bot] in #14839
+Full Changelog: edge-25.12.3...edge-26.1.1]]></summary>
+        <author>
+            <name>Release notes from linkerd2</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.37.0]]></title>
+        <id>https://github.com/envoyproxy/envoy/releases/tag/v1.37.0</id>
+        <link href="https://github.com/envoyproxy/envoy/releases/tag/v1.37.0"/>
+        <updated>2026-01-13T16:55:57.000Z</updated>
+        <summary type="html"><![CDATA[Summary of changes
+Dynamic modules expansion
+Added support for network, listener, UDP listener, and access logger filters
+Introduced streaming HTTP callouts to HTTP filters
+Enhanced ABI for streaming body manipulation and header operations
+Added global module loading and improved module search path handling
+HTTP and protocol enhancements
+Container-aware CPU detection for improved resource utilization in containerized environments
+HTTP/2 performance optimizations including reduced allocations for well-known headers
+Enhanced cookie matching in route configuration
+Added vhost header customization and forward client cert matching via xDS matcher
+Filter ecosystem growth
+New transform filter for request/response body modification
+New MCP (Model Context Protocol) filter and router for agentic net…]]></summary>
+        <author>
+            <name>Release notes from envoy</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.47.0-next.3]]></title>
+        <id>https://github.com/backstage/backstage/releases/tag/v1.47.0-next.3</id>
+        <link href="https://github.com/backstage/backstage/releases/tag/v1.47.0-next.3"/>
+        <updated>2026-01-13T15:53:41.000Z</updated>
+        <summary type="html"><![CDATA[See docs/releases/v1.47.0-next.3-changelog.md for more information.]]></summary>
+        <author>
+            <name>Release notes from backstage</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.16.2]]></title>
+        <id>https://github.com/kyverno/kyverno/releases/tag/v1.16.2</id>
+        <link href="https://github.com/kyverno/kyverno/releases/tag/v1.16.2"/>
+        <updated>2026-01-13T13:46:39.000Z</updated>
+        <summary type="html"><![CDATA[What's Changed
+cherry-pick #14414 by @fjogeleit in #14481
+fix: revert accidentally introduced breaking change for the kyverno_policy_results metric (Cherry-pick #14471) by @kyverno-bot in #14479
+cherry-pick #14470 by @fjogeleit in #14480
+cherry pick #14492 by @fjogeleit in #14494
+execute missing controller metric (Cherry-pick #14493) by @kyverno-bot in #14496
+perf(globalcontext): use DynamicInformer for optimal memory and performance (Cherry-pick #14518) by @kyverno-bot in #14524
+read kind label value from AdmissionRequest (Cherry-pick #14549) by @kyverno-bot in #14550
+fix: add a pre-flight check for listing CRDs in cleanup controller (Cherry-pick #14565) by @kyverno-bot in #14603
+feat: release v1.16.2-rc.1 by @realshuting in #14610
+feat: release v1.16.2 by @realshuting in #14628
+Full Changelog: v1.16.1...v1.16.2]]></summary>
+        <author>
+            <name>Release notes from kyverno</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.8.0-alpha.0]]></title>
+        <id>https://github.com/kubevirt/kubevirt/releases/tag/v1.8.0-alpha.0</id>
+        <link href="https://github.com/kubevirt/kubevirt/releases/tag/v1.8.0-alpha.0"/>
+        <updated>2026-01-13T13:29:52.000Z</updated>
+        <summary type="html"><![CDATA[tag v1.8.0-alpha.0
+ffossemo@redhat.com
+This release follows v1.7.0 and consists of 599 changes, contributed by 46 people, leading to 1655 files changed, 127038 insertions(+), 60017 deletions(-).
+The source code and selected binaries are available for download at: https://github.com/kubevirt/kubevirt/releases/tag/v1.8.0-alpha.0.
+The primary release artifact of KubeVirt is the git tree. The release tag is
+git tag -v v1.8.0-alpha.0.
+Pre-built containers are published on Quay and can be viewed at: https://quay.io/kubevirt/.
+Notable changes
+[PR #15113][alromeros] Label memory-dump PVCs to support CDI WebhookPvcRendering
+[PR #16463][akalenyu] BugFix: migration metrics missing
+[PR #16024][Sreeja1725] Scale up KWOK performance test and add virt-controller queue metrics
+[PR #16453][nirdothan] Macvt…]]></summary>
+        <author>
+            <name>Release notes from kubevirt</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v3.1.11]]></title>
+        <id>https://github.com/argoproj/argo-cd/releases/tag/v3.1.11</id>
+        <link href="https://github.com/argoproj/argo-cd/releases/tag/v3.1.11"/>
+        <updated>2026-01-13T13:03:47.000Z</updated>
+        <summary type="html"><![CDATA[Quick Start
+Non-HA:
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.11/manifests/install.yaml
+
+HA:
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.11/manifests/ha/install.yaml
+
+Release Signatures and Provenance
+All Argo CD container images are signed by cosign.  A Provenance is generated for container images and CLI binaries which meet the SLSA Level 3 specifications. See the documentation on how to verify.
+Release Notes Blog Post
+For a detailed breakdown of the key changes and improvements in this release, check out the official blog post
+Upgrading
+If upgrading from a different minor version, be sure to read the upgrading documentation.
+Changelog
+Bug fixes
+b424210: fix(appset): do not trigger reconciliation on appsets not part of allowed namespaces when updating a cluster secret (cherry-pick #25622 for 3.1) (#25910) (@argo-cd-cherry-pick-bot[bot])
+cc053b2: fix(ci): bump golang.x/tools to v0.35.0 (#25955) (@nitishfy)
+836d47f: fix: Only show please update resource specification message when spec… (cherry-pick #25066 for 3.1) (#25896) (@argo-cd-cherry-pick-bot[bot])
+6c3f3ea: fix: Selecting repoType in dropdown doesn't do anything (#23747) (#25945) (@keithchong)
+Other work
+955ea1b: chore(cherry-pick-3.1): bump expr version from v1.17.5 to v1.17.7 (#25907) (@aali309)
+f22ccc2: chore(cherry-pick-3.1): bump go to 1.25.5 and bump expr to v1.17.7 (#25890) (@nitishfy)
+db2004f: ci: test against k8s 1.34.2 (cherry-pick #25856 for 3.1) (#25861) (@argo-cd-cherry-pick-bot[bot])
+Full Changelog: v3.1.10...v3.1.11]]></summary>
+        <author>
+            <name>Release notes from argo-cd</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[1.18.6]]></title>
+        <id>https://github.com/cilium/cilium/releases/tag/1.18.6</id>
+        <link href="https://github.com/cilium/cilium/releases/tag/1.18.6"/>
+        <updated>2026-01-13T07:44:21.000Z</updated>
+        <summary type="html"><![CDATA[Release v1.18.6]]></summary>
+        <author>
+            <name>Release notes from cilium</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[1.17.12]]></title>
+        <id>https://github.com/cilium/cilium/releases/tag/1.17.12</id>
+        <link href="https://github.com/cilium/cilium/releases/tag/1.17.12"/>
+        <updated>2026-01-13T07:43:21.000Z</updated>
+        <summary type="html"><![CDATA[Release v1.17.12]]></summary>
+        <author>
+            <name>Release notes from cilium</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[1.16.19]]></title>
+        <id>https://github.com/cilium/cilium/releases/tag/1.16.19</id>
+        <link href="https://github.com/cilium/cilium/releases/tag/1.16.19"/>
+        <updated>2026-01-13T07:41:20.000Z</updated>
+        <summary type="html"><![CDATA[Release v1.16.19]]></summary>
+        <author>
+            <name>Release notes from cilium</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.14.0-alpha.1]]></title>
+        <id>https://github.com/volcano-sh/volcano/releases/tag/v1.14.0-alpha.1</id>
+        <link href="https://github.com/volcano-sh/volcano/releases/tag/v1.14.0-alpha.1"/>
+        <updated>2026-01-13T06:19:25.000Z</updated>
+        <summary type="html"><![CDATA[Release volcano v1.14.0-alpha.1 version]]></summary>
+        <author>
+            <name>Release notes from volcano</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Helm v3.20.0-rc.1]]></title>
+        <id>https://github.com/helm/helm/releases/tag/v3.20.0-rc.1</id>
+        <link href="https://github.com/helm/helm/releases/tag/v3.20.0-rc.1"/>
+        <updated>2026-01-12T20:34:06.000Z</updated>
+        <summary type="html"><![CDATA[Helm v3.20.0-rc.1 is a pre-release. It is to help gather feedback from the community as well as give users a chance to test Helm in staging environments before v3.20.0 is officially released.
+The official changelog will come out with the v3.20.0 release. For now, you can see the commit changes from v3.19.4 here.
+The community keeps growing, and we'd love to see you there!
+Join the discussion in Kubernetes Slack:
+
+for questions and just to hang out
+for discussing PRs, code, and bugs
+Hang out at the Public Developer Call: Thursday, 9:30 Pacific via Zoom
+Test, debug, and contribute charts: ArtifactHub/packages
+Installation and Upgrading
+Download Helm v3.20.0-rc.1. The common platform binaries are here:
+MacOS amd64 (checksum / 2433b602d8067629e572674cd456e3e0e3687ef5fba7278e4251e0475255926b)
+M…]]></summary>
+        <author>
+            <name>Release notes from helm</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Helm v4.1.0-rc.1]]></title>
+        <id>https://github.com/helm/helm/releases/tag/v4.1.0-rc.1</id>
+        <link href="https://github.com/helm/helm/releases/tag/v4.1.0-rc.1"/>
+        <updated>2026-01-12T20:33:59.000Z</updated>
+        <summary type="html"><![CDATA[Helm v4.1.0-rc.1 is a pre-release. It is to help gather feedback from the community as well as give users a chance to test Helm in staging environments before v4.1.0 is officially released.
+The official changelog will come out with the v4.1.0 release. For now, you can see the commit changes from v4.0.4 here.
+The community keeps growing, and we'd love to see you there!
+Join the discussion in Kubernetes Slack:
+
+for questions and just to hang out
+for discussing PRs, code, and bugs
+Hang out at the Public Developer Call: Thursday, 9:30 Pacific via Zoom
+Test, debug, and contribute charts: ArtifactHub/packages
+Installation and Upgrading
+Download Helm v4.1.0-rc.1. The common platform binaries are here:
+MacOS amd64 (checksum / 4f85c7ec56f6e383511496340c92e02f80588f3b71eeb8e08d6408b1e9458bcb)
+MacOS …]]></summary>
+        <author>
+            <name>Release notes from helm</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.13.4-rc2]]></title>
+        <id>https://github.com/goharbor/harbor/releases/tag/v2.13.4-rc2</id>
+        <link href="https://github.com/goharbor/harbor/releases/tag/v2.13.4-rc2"/>
+        <updated>2026-01-12T18:03:52.000Z</updated>
+        <summary type="html"><![CDATA[What's Changed
+Component updates ⬆️
+[CHERRY-PICK] fix(artifact): correct typo in artifact_type column definition by @chlins in #22657
+Bump up trivy and trivy adapter for v2.13.4 by @reasonerjt in #22693
+bump bases for v2.13.4 by @wy65701436 in #22711
+Full Changelog: v2.13.3...v2.13.4-rc2]]></summary>
+        <author>
+            <name>Release notes from harbor</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.14.2-rc2]]></title>
+        <id>https://github.com/goharbor/harbor/releases/tag/v2.14.2-rc2</id>
+        <link href="https://github.com/goharbor/harbor/releases/tag/v2.14.2-rc2"/>
+        <updated>2026-01-12T17:19:53.000Z</updated>
+        <summary type="html"><![CDATA[What's Changed
+Component updates ⬆️
+chore(deps): bump golang.org/x/sync from 0.16.0 to 0.18.0 in /src by @dependabot[bot] in #22603
+feat: bump UI version v2.14 by @bupd in #22646
+[CHERRY-PICK] fix(artifact): correct typo in artifact_type column definition by @chlins in #22658
+Bump up trivy and trivy adapter for v2.14.2 by @reasonerjt in #22689
+(cherry-pick) fix error related to search user and search groups by @stonezdj in #22705
+bump bases for v2.14.2 by @wy65701436 in #22712
+Other Changes
+(cherry-pick) Correct the log upload path and make sure it always run by @stonezdj in #22691
+Full Changelog: v2.14.1...v2.14.2-rc2]]></summary>
+        <author>
+            <name>Release notes from harbor</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.18.3]]></title>
+        <id>https://github.com/kedacore/keda/releases/tag/v2.18.3</id>
+        <link href="https://github.com/kedacore/keda/releases/tag/v2.18.3"/>
+        <updated>2026-01-12T13:46:05.000Z</updated>
+        <summary type="html"><![CDATA[We are happy to release KEDA v2.18.3 🚀
+Fixes
+General: Fix CVE-2025-68476 (#7334)]]></summary>
+        <author>
+            <name>Release notes from keda</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.4.0]]></title>
+        <id>https://github.com/dragonflyoss/dragonfly/releases/tag/v2.4.0</id>
+        <link href="https://github.com/dragonflyoss/dragonfly/releases/tag/v2.4.0"/>
+        <updated>2026-01-12T07:37:38.000Z</updated>
+        <summary type="html"><![CDATA[Dragonfly v2.4.0 is released
+Dragonfly v2.4.0 is released!🎉🎉🎉 Thanks the contributors who made this release happend and welcome you to visit d7y.io website.
+
+New features and enhancements
+load-aware scheduling algorithm
+A two-stage scheduling algorithm combining central scheduling with node-level secondary scheduling to
+
+For more information, please refer to the Scheduling.
+Vortex Protocol Support for P2P File Transfer
+Dragonfly provide the new Vortex transfer protocol based on TLV to improve the download performance in internal network.
+50% and QUIC-based Vortex by 40% compared to gRPC, both effectively reducing peak memory usage.
+For more information, please refer to the TCP Protocol Support for P2P File Transfer and QUIC Protocol Support for P2P File Transfer.
+Request SDK
+A SDK for r…]]></summary>
+        <author>
+            <name>Release notes from dragonfly</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Dapr Runtime v1.17.0-rc.1]]></title>
+        <id>https://github.com/dapr/dapr/releases/tag/v1.17.0-rc.1</id>
+        <link href="https://github.com/dapr/dapr/releases/tag/v1.17.0-rc.1"/>
+        <updated>2026-01-09T15:07:49.000Z</updated>
+        <summary type="html"><![CDATA[This is the release candidate 1.17.0-rc.1]]></summary>
+        <author>
+            <name>Release notes from dapr</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Dapr Runtime v1.16.6]]></title>
+        <id>https://github.com/dapr/dapr/releases/tag/v1.16.6</id>
+        <link href="https://github.com/dapr/dapr/releases/tag/v1.16.6"/>
+        <updated>2026-01-09T15:07:35.000Z</updated>
+        <summary type="html"><![CDATA[Dapr 1.16.6
+This update includes bug fixes:
+Fixed sidecar injector incorrectly logging and recording metrics for non-Dapr applications
+Incorrect error log on workflow scenario initialization
+Update UID check to check only root
+Fixed sidecar injector incorrectly logging and recording metrics for non-Dapr applications
+Problem
+The Dapr sidecar injector was incorrectly logging "succeeded injection" and recording metrics for non-Dapr applications (pods without the dapr.io/enabled: "true" annotation). Although the injector correctly skipped injection for these pods, the false success logs and metrics made it difficult to monitor actual sidecar injection activity and distinguish between real injections and non-Dapr pod processing.
+Impact
+Users inspecting sidecar injector logs and metrics saw misl…]]></summary>
+        <author>
+            <name>Release notes from dapr</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[kyverno-chart-3.6.2]]></title>
+        <id>https://github.com/kyverno/kyverno/releases/tag/kyverno-chart-3.6.2</id>
+        <link href="https://github.com/kyverno/kyverno/releases/tag/kyverno-chart-3.6.2"/>
+        <updated>2026-01-09T13:18:01.000Z</updated>
+        <summary type="html"><![CDATA[tag kyverno-chart-3.6.2]]></summary>
+        <author>
+            <name>Release notes from kyverno</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[kyverno-policies-chart-3.6.2]]></title>
+        <id>https://github.com/kyverno/kyverno/releases/tag/kyverno-policies-chart-3.6.2</id>
+        <link href="https://github.com/kyverno/kyverno/releases/tag/kyverno-policies-chart-3.6.2"/>
+        <updated>2026-01-09T13:17:52.000Z</updated>
+        <summary type="html"><![CDATA[tag kyverno-policies-chart-3.6.2]]></summary>
+        <author>
+            <name>Release notes from kyverno</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.12.0-dev-20260111]]></title>
+        <id>https://github.com/longhorn/longhorn/releases/tag/v1.12.0-dev-20260111</id>
+        <link href="https://github.com/longhorn/longhorn/releases/tag/v1.12.0-dev-20260111"/>
+        <updated>2026-01-09T07:22:59.000Z</updated>
+        <summary type="html"><![CDATA[chore(crd): update crds.yaml and manifests (PR longhorn/longhorn-mana…]]></summary>
+        <author>
+            <name>Release notes from longhorn</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.11.0-dev-20260111]]></title>
+        <id>https://github.com/longhorn/longhorn/releases/tag/v1.11.0-dev-20260111</id>
+        <link href="https://github.com/longhorn/longhorn/releases/tag/v1.11.0-dev-20260111"/>
+        <updated>2026-01-09T07:22:40.000Z</updated>
+        <summary type="html"><![CDATA[chore(crd): update crds.yaml and manifests (PR longhorn/longhorn-mana…]]></summary>
+        <author>
+            <name>Release notes from longhorn</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.14.0]]></title>
+        <id>https://github.com/coredns/coredns/releases/tag/v1.14.0</id>
+        <link href="https://github.com/coredns/coredns/releases/tag/v1.14.0"/>
+        <updated>2026-01-08T01:10:06.000Z</updated>
+        <summary type="html"><![CDATA[This release focuses on security hardening and operational reliability. Core updates
+show_first), reduce misleading SOA warnings, add
+Brought to You By
+cangming
+Noteworthy Changes
+core: Fix gosec G115 integer overflow warnings (#7799)
+core: Add regex length limit (#7802)
+plugin/azure: Fix slice init length (#6901)
+plugin/errors: Add optional show_first flag to consolidate directive (#7703)
+plugin/file: Fix for misleading SOA parser warnings (#7774)
+plugin/kubernetes: Rate limits to api server (#7771)
+plugin/metrics: Implement plugin chain tracking (#7791)
+plugin/sign: Report parser err before missing SOA (#7775)]]></summary>
+        <author>
+            <name>Release notes from coredns</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v0.309.1]]></title>
+        <id>https://github.com/prometheus/prometheus/releases/tag/v0.309.1</id>
+        <link href="https://github.com/prometheus/prometheus/releases/tag/v0.309.1"/>
+        <updated>2026-01-07T19:20:52.000Z</updated>
+        <summary type="html"><![CDATA[v0.309.1]]></summary>
+        <author>
+            <name>Release notes from prometheus</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[3.9.1 / 2026-01-07]]></title>
+        <id>https://github.com/prometheus/prometheus/releases/tag/v3.9.1</id>
+        <link href="https://github.com/prometheus/prometheus/releases/tag/v3.9.1"/>
+        <updated>2026-01-07T17:05:54.000Z</updated>
+        <summary type="html"><![CDATA[[BUGFIX] Agent: fix crash shortly after startup from invalid type of object. #17802
+[BUGFIX] Scraping: fix relabel keep/drop not working. #17807]]></summary>
+        <author>
+            <name>Release notes from prometheus</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[1.19.0-pre.4]]></title>
+        <id>https://github.com/cilium/cilium/releases/tag/v1.19.0-pre.4</id>
+        <link href="https://github.com/cilium/cilium/releases/tag/v1.19.0-pre.4"/>
+        <updated>2026-01-07T12:58:55.000Z</updated>
+        <summary type="html"><![CDATA[Summary of Changes
+Major Changes:
+Cilium policy engine now supports enforcing ordered policy rules. (#42784, @jrajahalme)
+Policy engine adds support for tiers and pass verdicts for ClusterNetworkPolicies (#42896, @jrajahalme)
+ztunnel: add ZDS server (#42364, @rgo3)
+Minor Changes:
+Add the new flags of eni and ipam for cilium agent, and users can use helm to configure the agent directly without using custom CNI (#43086, @liyihuang)
+bpf:hubble: support policy verdict from L3 devices (#43015, @smagnani96)
+ces: remove controller maximum limits on QPS (#43154, @jshr-w)
+Cilium Preflight check no longer includes Envoy Configmaps, making it easier to correctly run. (#43153, @youngnick)
+clustermesh:  prevent redirecting to endpoints from clusters not exposing certain ports on a port conflict in the …]]></summary>
+        <author>
+            <name>Release notes from cilium</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[1.19.0-pre.4]]></title>
+        <id>https://github.com/cilium/cilium/releases/tag/1.19.0-pre.4</id>
+        <link href="https://github.com/cilium/cilium/releases/tag/1.19.0-pre.4"/>
+        <updated>2026-01-07T12:12:59.000Z</updated>
+        <summary type="html"><![CDATA[Release v1.19.0-pre.4]]></summary>
+        <author>
+            <name>Release notes from cilium</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[3.9.0 / 2026-01-06]]></title>
+        <id>https://github.com/prometheus/prometheus/releases/tag/v3.9.0</id>
+        <link href="https://github.com/prometheus/prometheus/releases/tag/v3.9.0"/>
+        <updated>2026-01-07T10:25:43.000Z</updated>
+        <summary type="html"><![CDATA[Note for users of Native Histograms
+In version 3.9, Native Histograms is no longer experimental, and the feature flag native-histogram has no effect.  You must now turn on
+scrape_native_histograms to collect Native Histogram samples from exporters.
+Changelog
+[CHANGE] Native Histograms are no longer experimental! Make the native-histogram feature flag a no-op. Use scrape_native_histograms config option instead. #17528
+[CHANGE] API: Add maximum limit of 10,000 sets of statistics to TSDB status endpoint. #17647
+[FEATURE] API: Add /api/v1/features for clients to understand which features are supported. #17427
+[FEATURE] Promtool: Add start_timestamp field for unit tests. #17636
+[FEATURE] Promtool: Add --format seriesjson option to tsdb dump to output just series labels in JSON format. #13409
+[F…]]></summary>
+        <author>
+            <name>Release notes from prometheus</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.14.2-rc1]]></title>
+        <id>https://github.com/goharbor/harbor/releases/tag/v2.14.2-rc1</id>
+        <link href="https://github.com/goharbor/harbor/releases/tag/v2.14.2-rc1"/>
+        <updated>2026-01-07T08:57:36.000Z</updated>
+        <summary type="html"><![CDATA[What's Changed
+Component updates ⬆️
+chore(deps): bump golang.org/x/sync from 0.16.0 to 0.18.0 in /src by @dependabot[bot] in #22603
+feat: bump UI version v2.14 by @bupd in #22646
+[CHERRY-PICK] fix(artifact): correct typo in artifact_type column definition by @chlins in #22658
+Bump up trivy and trivy adapter for v2.14.2 by @reasonerjt in #22689
+(cherry-pick) fix error related to search user and search groups by @stonezdj in #22705
+bump bases for v2.14.2 by @wy65701436 in #22712
+Other Changes
+(cherry-pick) Correct the log upload path and make sure it always run by @stonezdj in #22691
+Full Changelog: v2.14.1...v2.14.2-rc1]]></summary>
+        <author>
+            <name>Release notes from harbor</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.13.4-rc1]]></title>
+        <id>https://github.com/goharbor/harbor/releases/tag/v2.13.4-rc1</id>
+        <link href="https://github.com/goharbor/harbor/releases/tag/v2.13.4-rc1"/>
+        <updated>2026-01-07T08:55:14.000Z</updated>
+        <summary type="html"><![CDATA[What's Changed
+Component updates ⬆️
+[CHERRY-PICK] fix(artifact): correct typo in artifact_type column definition by @chlins in #22657
+Bump up trivy and trivy adapter for v2.13.4 by @reasonerjt in #22693
+bump bases for v2.13.4 by @wy65701436 in #22711
+Full Changelog: v2.13.3...v2.13.4-rc1]]></summary>
+        <author>
+            <name>Release notes from harbor</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.16.2-rc.1]]></title>
+        <id>https://github.com/kyverno/kyverno/releases/tag/v1.16.2-rc.1</id>
+        <link href="https://github.com/kyverno/kyverno/releases/tag/v1.16.2-rc.1"/>
+        <updated>2026-01-07T08:22:32.000Z</updated>
+        <summary type="html"><![CDATA[No content.]]></summary>
+        <author>
+            <name>Release notes from kyverno</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[kyverno-policies-chart-3.6.2-rc.1]]></title>
+        <id>https://github.com/kyverno/kyverno/releases/tag/kyverno-policies-chart-3.6.2-rc.1</id>
+        <link href="https://github.com/kyverno/kyverno/releases/tag/kyverno-policies-chart-3.6.2-rc.1"/>
+        <updated>2026-01-07T07:28:10.000Z</updated>
+        <summary type="html"><![CDATA[tag kyverno-policies-chart-3.6.2-rc.1]]></summary>
+        <author>
+            <name>Release notes from kyverno</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[kyverno-chart-3.6.2-rc.1]]></title>
+        <id>https://github.com/kyverno/kyverno/releases/tag/kyverno-chart-3.6.2-rc.1</id>
+        <link href="https://github.com/kyverno/kyverno/releases/tag/kyverno-chart-3.6.2-rc.1"/>
+        <updated>2026-01-07T07:27:58.000Z</updated>
+        <summary type="html"><![CDATA[tag kyverno-chart-3.6.2-rc.1]]></summary>
+        <author>
+            <name>Release notes from kyverno</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[release: v1.11.0-rc1]]></title>
+        <id>https://github.com/longhorn/longhorn/releases/tag/v1.11.0-rc1</id>
+        <link href="https://github.com/longhorn/longhorn/releases/tag/v1.11.0-rc1"/>
+        <updated>2026-01-07T01:42:02.000Z</updated>
+        <summary type="html"><![CDATA[Signed-off-by: David Ko dko@suse.com]]></summary>
+        <author>
+            <name>Release notes from longhorn</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v0.309.0]]></title>
+        <id>https://github.com/prometheus/prometheus/releases/tag/v0.309.0</id>
+        <link href="https://github.com/prometheus/prometheus/releases/tag/v0.309.0"/>
+        <updated>2026-01-06T16:52:59.000Z</updated>
+        <summary type="html"><![CDATA[v0.309.0]]></summary>
+        <author>
+            <name>Release notes from prometheus</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.47.0-next.2]]></title>
+        <id>https://github.com/backstage/backstage/releases/tag/v1.47.0-next.2</id>
+        <link href="https://github.com/backstage/backstage/releases/tag/v1.47.0-next.2"/>
+        <updated>2026-01-06T15:37:54.000Z</updated>
+        <summary type="html"><![CDATA[See docs/releases/v1.47.0-next.2-changelog.md for more information.]]></summary>
+        <author>
+            <name>Release notes from backstage</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.12.2]]></title>
+        <id>https://github.com/open-policy-agent/opa/releases/tag/v1.12.2</id>
+        <link href="https://github.com/open-policy-agent/opa/releases/tag/v1.12.2"/>
+        <updated>2026-01-06T15:21:24.000Z</updated>
+        <summary type="html"><![CDATA[This bug fix release address issues found in the new string interpolation feature
+Add (*TemplateString).Copy() method (#8159) authored by @anderseknert
+Fix template string not serialized with escaped { (#8161)
+@anderseknert
+fix(ast): skip template string vars in ref safety (#8174)
+@thevilledev
+fix(ast): use original var names in template error (#8180)
+@thevilledev]]></summary>
+        <author>
+            <name>Release notes from opa</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Release v2.12.4-RC.1]]></title>
+        <id>https://github.com/nats-io/nats-server/releases/tag/v2.12.4-RC.1</id>
+        <link href="https://github.com/nats-io/nats-server/releases/tag/v2.12.4-RC.1"/>
+        <updated>2026-01-06T14:40:31.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Refer to the 2.12 Upgrade Guide for backwards compatibility notes with 2.11.x.
+Go Version
+1.25.5
+Dependencies
+github.com/google/go-tpm v0.9.8 (#7696)
+github.com/nats-io/nats.go v1.48.0 (#7696)
+Improved
+JetStream
+Creating consumer file stores no longer contends on the stream lock, improving consumer create performance on heavily loaded streams (#7700)
+Fixed
+JetStream
+Raft single node elections now transition into leader state correctly (#7642)
+R1 streams will no longer incorrectly drift last sequence when exceeding limits (#7658)
+Deleted streams are no longer wrongfully revived if stalled on an upper-layer catchup (#7668)
+A panic that could happen when receiving a shutdown signal while JetStream is still starting up has been fixed (#7683)
+JetStream usage stats now correctly reflect purged whole blocks when optimising large purges (#7685)
+Recovering JetStream encryption keys now happens independently of the stream index recovery, fixing some cases where the key could be reset unexpectedly if the index is rebuilt (#7678)
+Non-replicated file-based consumers now detect corrupted state on disk and are deleted automatically (#7691)
+A panic that could occur when a compact and a hash check run concurrently on a store has been fixed (#7697)
+Raft no longer allows a repeat vote for the same term after a stepdown or leadership transfer (#7698)
+Replicated consumers are no longer incorrectly deleted if they become leader just as JetStream is about to shut down (#7699)
+Complete Changes
+v2.12.3...v2.12.4-RC.1]]></summary>
+        <author>
+            <name>Release notes from nats-server</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Release v2.11.12-RC.2]]></title>
+        <id>https://github.com/nats-io/nats-server/releases/tag/v2.11.12-RC.2</id>
+        <link href="https://github.com/nats-io/nats-server/releases/tag/v2.11.12-RC.2"/>
+        <updated>2026-01-06T14:39:36.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Refer to the 2.11 Upgrade Guide for backwards compatibility notes with 2.10.x.
+Go Version
+1.25.5
+Dependencies
+github.com/google/go-tpm v0.9.8 (#7696)
+github.com/nats-io/nats.go v1.48.0 (#7696)
+Improved
+JetStream
+Creating consumer file stores no longer contends on the stream lock, improving consumer create performance on heavily loaded streams (#7700)
+Fixed
+JetStream
+Raft will no longer allow multiple membership changes to take place concurrently (#7565, #7609)
+Raft will no longer count responses from peer-removed nodes towards quorum (#7589)
+Raft quorum counting has been refactored so the implicit leader ack is now only counted if still a part of the membership (#7600)
+Raft now writes the peer state immediately when handling a peer-remove to ensure the removed peers cannot unexpe…]]></summary>
+        <author>
+            <name>Release notes from nats-server</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[26.5.0]]></title>
+        <id>https://github.com/keycloak/keycloak/releases/tag/26.5.0</id>
+        <link href="https://github.com/keycloak/keycloak/releases/tag/26.5.0"/>
+        <updated>2026-01-06T08:11:02.000Z</updated>
+        <summary type="html"><![CDATA[Highlights
+This release features new capabilities for users and administrators of Keycloak. The highlights of this release are:
+Workflows to automate administrative tasks and process within a realm.
+JWT Authorization Grants, our recommended alternative to external to internal token exchange.
+Guide for using Keycloak as an authorization server for Model Context Protocol (MCP) servers.
+Authenticating clients with Kubernetes service account tokens to avoid static client secrets.
+OpenTelemetry support for metrics and logging, combining all observability information in this popular standard.
+Read on to learn more about each new feature. If you are upgrading from a previous release, review also the changes listed in the upgrading guide.
+Security and Standards
+JWT Authorization Grant (preview)
+Ke…]]></summary>
+        <author>
+            <name>Release notes from keycloak</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.3.5-rc.3]]></title>
+        <id>https://github.com/dragonflyoss/dragonfly/releases/tag/v2.3.5-rc.3</id>
+        <link href="https://github.com/dragonflyoss/dragonfly/releases/tag/v2.3.5-rc.3"/>
+        <updated>2026-01-06T08:00:43.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Features
+7172afd feat(scheduler): Add task completion status tracking for preheatImage/preheatFile (#4528)
+Bug Fixes
+bed6b6c refactor(job): simplify IsFinished logic (#4540)
+40b001a refactor: improve error handling and optimize peer store operations (#4539)
+Dependency updates
+d122374 chore(deps): bump github.com/onsi/gomega from 1.38.2 to 1.38.3 (#4531)
+f85ee8d chore(deps): bump google.golang.org/grpc from 1.75.0 to 1.78.0 (#4547)
+ba311ee chore(deps): bump kentaro-m/auto-assign-action from 6cd97c823cf4de88c6ca0059841f4f8b3bae70cd to 72309cdba98adf773e9326cd1964e7d6bb7e1513 (#4536)
+ca4aeb5 chore(deps): bump kentaro-m/auto-assign-action from 72309cdba98adf773e9326cd1964e7d6bb7e1513 to 18e62580c51802a607cac53db7cb07ddacb24731 (#4548)
+45df05d chore(deps): improve OpenSSF results (#4530)
+Chores
+6533aef build(release): add upload-tag-name input for assets upload (#4551)
+e3df150 chore: update Go version to 1.25.5 (#4542)
+e032010 ci(release): enable asset upload in SLSA workflow (#4549)
+Contributors
+Thanks to all the contributors! ❤️]]></summary>
+        <author>
+            <name>Release notes from dragonfly</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v2.3.5-rc.2]]></title>
+        <id>https://github.com/dragonflyoss/dragonfly/releases/tag/v2.3.5-rc.2</id>
+        <link href="https://github.com/dragonflyoss/dragonfly/releases/tag/v2.3.5-rc.2"/>
+        <updated>2026-01-06T02:40:15.000Z</updated>
+        <summary type="html"><![CDATA[Changelog
+Bug Fixes
+a8c2100 fix(peer): update event transition for failed state (#4529)
+Contributors
+Thanks to all the contributors! ❤️]]></summary>
+        <author>
+            <name>Release notes from dragonfly</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.33.8]]></title>
+        <id>https://github.com/cri-o/cri-o/releases/tag/v1.33.8</id>
+        <link href="https://github.com/cri-o/cri-o/releases/tag/v1.33.8"/>
+        <updated>2026-01-06T00:29:58.000Z</updated>
+        <summary type="html"><![CDATA[CRI-O v1.33.8
+
+Downloads
+Changelog since v1.33.7
+
+Changes by Kind
+
+Documentation
+Uncategorized
+Dependencies
+
+Added
+Changed
+Removed
+CRI-O v1.33.8
+The release notes have been generated for the commit range
+v1.33.7...v1.33.8 on Tue, 06 Jan 2026 00:27:17 UTC.
+Downloads
+Download one of our static release bundles via our Google Cloud Bucket:
+cri-o.amd64.v1.33.8.tar.gz
+
+cri-o.amd64.v1.33.8.tar.gz.sha256sum
+cri-o.amd64.v1.33.8.tar.gz.bundle
+cri-o.amd64.v1.33.8.tar.gz.spdx
+cri-o.amd64.v1.33.8.tar.gz.spdx.bundle
+cri-o.arm64.v1.33.8.tar.gz
+
+cri-o.arm64.v1.33.8.tar.gz.sha256sum
+cri-o.arm64.v1.33.8.tar.gz.bundle
+cri-o.arm64.v1.33.8.tar.gz.spdx
+cri-o.arm64.v1.33.8.tar.gz.spdx.bundle
+cri-o.ppc64le.v1.33.8.tar.gz
+
+cri-o.ppc64le.v1.33.8.tar.gz.sha256sum
+cri-o.ppc64le.v1.33.8.tar.gz.bundle
+cri-o.ppc64le.v1.33.8.tar.gz.spdx
+cri-o.ppc64le.v1.33.8.tar.gz.spdx.bundle
+cri-o.s390x.v1.33.8.tar.gz
+
+cri-o.s390x.v1.33.8.tar.gz.sha256sum
+cri-o.s390x.v1.33.8.tar.gz.bundle
+cri-o.s390x.v1.33.8.tar.gz.spdx
+cri-o.s390x.v1.33.8.tar.gz.spdx.bundle
+To verify the artifact signatures via cosign, run:
+> export COSIGN_EXPERIMENTAL=1
+> cosign verify-blob cri-o.amd64.v1.33.8.tar.gz \
+    --certificate-identity https://github.com/cri-o/packaging/.github/workflows/obs.yml@refs/heads/main \
+    --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+    --certificate-github-workflow-repository cri-o/packaging \
+    --certificate-github-workflow-ref refs/heads/main \
+    --bundle cri-o.amd64.v1.33.8.tar.gz.bundle
+
+To verify the bill of materials (SBOM) in SPDX format using the bom tool, run:
+> tar xfz cri-o.amd64.v1.33.8.tar.gz
+> bom validate -e cri-o.amd64.v1.33.8.tar.gz.spdx -d cri-o
+
+Changelog since v1.33.7
+Changes by Kind
+Documentation
+Fixed release description to use cosigns new bundle format. (#9657, @saschagrunert)
+Uncategorized
+Respect user specified selinux label for systemd or init container. (#9674, @openshift-cherrypick-robot)
+Dependencies
+Added
+Nothing has changed.
+Changed
+Nothing has changed.
+Removed
+Nothing has changed.]]></summary>
+        <author>
+            <name>Release notes from cri-o</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.32.12]]></title>
+        <id>https://github.com/cri-o/cri-o/releases/tag/v1.32.12</id>
+        <link href="https://github.com/cri-o/cri-o/releases/tag/v1.32.12"/>
+        <updated>2026-01-06T00:29:36.000Z</updated>
+        <summary type="html"><![CDATA[CRI-O v1.32.12
+
+Downloads
+Changelog since v1.32.11
+
+Changes by Kind
+
+Documentation
+Dependencies
+
+Added
+Changed
+Removed
+CRI-O v1.32.12
+The release notes have been generated for the commit range
+v1.32.11...v1.32.12 on Tue, 06 Jan 2026 00:27:18 UTC.
+Downloads
+Download one of our static release bundles via our Google Cloud Bucket:
+cri-o.amd64.v1.32.12.tar.gz
+
+cri-o.amd64.v1.32.12.tar.gz.sha256sum
+cri-o.amd64.v1.32.12.tar.gz.bundle
+cri-o.amd64.v1.32.12.tar.gz.spdx
+cri-o.amd64.v1.32.12.tar.gz.spdx.bundle
+cri-o.arm64.v1.32.12.tar.gz
+
+cri-o.arm64.v1.32.12.tar.gz.sha256sum
+cri-o.arm64.v1.32.12.tar.gz.bundle
+cri-o.arm64.v1.32.12.tar.gz.spdx
+cri-o.arm64.v1.32.12.tar.gz.spdx.bundle
+cri-o.ppc64le.v1.32.12.tar.gz
+
+cri-o.ppc64le.v1.32.12.tar.gz.sha256sum
+cri-o.ppc64le.v1.32.12.tar.gz.bundle
+cri-o.ppc64le.v1.32.12.tar.gz.spdx
+cri-o.ppc64le.v1.32.12.tar.gz.spdx.bundle
+cri-o.s390x.v1.32.12.tar.gz
+
+cri-o.s390x.v1.32.12.tar.gz.sha256sum
+cri-o.s390x.v1.32.12.tar.gz.bundle
+cri-o.s390x.v1.32.12.tar.gz.spdx
+cri-o.s390x.v1.32.12.tar.gz.spdx.bundle
+To verify the artifact signatures via cosign, run:
+> export COSIGN_EXPERIMENTAL=1
+> cosign verify-blob cri-o.amd64.v1.32.12.tar.gz \
+    --certificate-identity https://github.com/cri-o/packaging/.github/workflows/obs.yml@refs/heads/main \
+    --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+    --certificate-github-workflow-repository cri-o/packaging \
+    --certificate-github-workflow-ref refs/heads/main \
+    --bundle cri-o.amd64.v1.32.12.tar.gz.bundle
+
+To verify the bill of materials (SBOM) in SPDX format using the bom tool, run:
+> tar xfz cri-o.amd64.v1.32.12.tar.gz
+> bom validate -e cri-o.amd64.v1.32.12.tar.gz.spdx -d cri-o
+
+Changelog since v1.32.11
+Changes by Kind
+Documentation
+Fixed release description to use cosigns new bundle format. (#9658, @saschagrunert)
+Dependencies
+Added
+Nothing has changed.
+Changed
+Nothing has changed.
+Removed
+Nothing has changed.]]></summary>
+        <author>
+            <name>Release notes from cri-o</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.34.4]]></title>
+        <id>https://github.com/cri-o/cri-o/releases/tag/v1.34.4</id>
+        <link href="https://github.com/cri-o/cri-o/releases/tag/v1.34.4"/>
+        <updated>2026-01-06T00:29:34.000Z</updated>
+        <summary type="html"><![CDATA[CRI-O v1.34.4
+
+Downloads
+Changelog since v1.34.3
+
+Changes by Kind
+
+Documentation
+Bug or Regression
+Dependencies
+
+Added
+Changed
+Removed
+CRI-O v1.34.4
+The release notes have been generated for the commit range
+v1.34.3...v1.34.4 on Tue, 06 Jan 2026 00:27:13 UTC.
+Downloads
+Download one of our static release bundles via our Google Cloud Bucket:
+cri-o.amd64.v1.34.4.tar.gz
+
+cri-o.amd64.v1.34.4.tar.gz.sha256sum
+cri-o.amd64.v1.34.4.tar.gz.bundle
+cri-o.amd64.v1.34.4.tar.gz.spdx
+cri-o.amd64.v1.34.4.tar.gz.spdx.bundle
+cri-o.arm64.v1.34.4.tar.gz
+
+cri-o.arm64.v1.34.4.tar.gz.sha256sum
+cri-o.arm64.v1.34.4.tar.gz.bundle
+cri-o.arm64.v1.34.4.tar.gz.spdx
+cri-o.arm64.v1.34.4.tar.gz.spdx.bundle
+cri-o.ppc64le.v1.34.4.tar.gz
+
+cri-o.ppc64le.v1.34.4.tar.gz.sha256sum
+cri-o.ppc64le.v1.34.4.tar.gz.bundle
+cri-o.ppc64le…]]></summary>
+        <author>
+            <name>Release notes from cri-o</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[alpha release of v1.9.0]]></title>
+        <id>https://github.com/openkruise/kruise/releases/tag/v1.9.0-alpha2</id>
+        <link href="https://github.com/openkruise/kruise/releases/tag/v1.9.0-alpha2"/>
+        <updated>2026-01-03T11:10:10.000Z</updated>
+        <summary type="html"><![CDATA[Change Log
+v1.9.0
+Change log since v1.8.2
+Upgrade Notice
+No, really, you must read this before you upgrade
+Update Kubernetes dependency to v1.32.6 and Golang to v1.23 (#2067, @chengjoey)
+Upgrade kruise apis(BroadcastJob, AdvancedCronJob, ImagePullJob, ImageListPullJob, NodeImage, Advanced DaemonSet, SidecarSet) from v1alpha1 to v1beta1. (#2186,#2201, @PersistentJZH)
+Key Features
+UnitedDeployment support feature ReserveUnschedulablePods. (#1941, @AiRanthem)
+AdvancedCronJob support cron ImagePullJob. (#2207, @bitsf)
+CloneSet support progressDeadlineSeconds. (#2108, @MichaelRren)
+SidecarSet supports setting up sidecar resources based on pod specification. (#2200, @Colvin-Y)
+PodUnavailableBudget support protect Pod RESIZE action. (#2061, @Colvin-Y)
+Other Notable Changes
+Sidecar Management
+Side…]]></summary>
+        <author>
+            <name>Release notes from kruise</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[first alpha release of 1.9.0]]></title>
+        <id>https://github.com/openkruise/kruise/releases/tag/v1.9.0-alpha1</id>
+        <link href="https://github.com/openkruise/kruise/releases/tag/v1.9.0-alpha1"/>
+        <updated>2026-01-03T11:06:20.000Z</updated>
+        <summary type="html"><![CDATA[Change Log
+v1.9.0
+Change log since v1.8.2
+Upgrade Notice
+No, really, you must read this before you upgrade
+Update Kubernetes dependency to v1.32.6 and Golang to v1.23 (#2067, @chengjoey)
+Upgrade kruise apis(BroadcastJob, AdvancedCronJob, ImagePullJob, ImageListPullJob, NodeImage, Advanced DaemonSet, SidecarSet) from v1alpha1 to v1beta1. (#2186,#2201, @PersistentJZH)
+Key Features
+UnitedDeployment support feature ReserveUnschedulablePods. (#1941, @AiRanthem)
+AdvancedCronJob support cron ImagePullJob. (#2207, @bitsf)
+CloneSet support progressDeadlineSeconds. (#2108, @MichaelRren)
+SidecarSet supports setting up sidecar resources based on pod specification. (#2200, @Colvin-Y)
+PodUnavailableBudget support protect Pod RESIZE action. (#2061, @Colvin-Y)
+Other Notable Changes
+Sidecar Management
+Side…]]></summary>
+        <author>
+            <name>Release notes from kruise</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Release v2.14.1]]></title>
+        <id>https://github.com/jaegertracing/jaeger/releases/tag/v2.14.1</id>
+        <link href="https://github.com/jaegertracing/jaeger/releases/tag/v2.14.1"/>
+        <updated>2026-01-02T19:00:28.000Z</updated>
+        <summary type="html"><![CDATA[📊 UI Changes
+🐞 Bug fixes, Minor Improvements
+Dark theme fixes (@yurishkuro in #3285)
+Fix span detail panel in dark theme (@yurishkuro in #3283)]]></summary>
+        <author>
+            <name>Release notes from jaeger</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Release v2.14.0]]></title>
+        <id>https://github.com/jaegertracing/jaeger/releases/tag/v2.14.0</id>
+        <link href="https://github.com/jaegertracing/jaeger/releases/tag/v2.14.0"/>
+        <updated>2026-01-02T02:53:49.000Z</updated>
+        <summary type="html"><![CDATA[TL;DR: Two significant changes in this release:
+☠️ Starting from this release the legacy v1 components query, collector, and ingester
+🌓 The UI now officially supports dark theme and the theme selector is enabled by default.
+Backend Changes
+⛔ Breaking Changes
+Remove storage/v1/grpc (@yurishkuro in #7806)
+Migrate remote-storage to yaml configuration with shared storageconfig package (@Copilot in #7704)
+Remove v1 collector, query, and all-in-one (@yurishkuro in #7702)
+Remove v1/ingester and all kafka related code (@yurishkuro in #7701)
+Eliminate v1 binary references and sunset deprecated components (@Copilot in #7695)
+Fix otel collector v0.141.0 api breaking changes for toserver/toclientconn and kafka receiver/exporter (@Copilot in #7694)
+🐞 Bug fixes, Minor Improvements
+Migrate docker-compo…]]></summary>
+        <author>
+            <name>Release notes from jaeger</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v3.0.21]]></title>
+        <id>https://github.com/argoproj/argo-cd/releases/tag/v3.0.21</id>
+        <link href="https://github.com/argoproj/argo-cd/releases/tag/v3.0.21"/>
+        <updated>2026-01-01T10:09:39.000Z</updated>
+        <summary type="html"><![CDATA[Quick Start
+Non-HA:
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.0.21/manifests/install.yaml
+
+HA:
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.0.21/manifests/ha/install.yaml
+
+Release Signatures and Provenance
+All Argo CD container images are signed by cosign.  A Provenance is generated for container images and CLI binaries which meet the SLSA Level 3 specifications. See the documentation on how to verify.
+Release Notes Blog Post
+For a detailed breakdown of the key changes and improvements in this release, check out the official blog post
+Upgrading
+If upgrading from a different minor version, be sure to read the upgrading documentation.
+Changelog
+Bug fixes
+…]]></summary>
+        <author>
+            <name>Release notes from argo-cd</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v8.5.4-20251231-f006964: compact-log-backup: pick some of fixs of restoring. (#19258)]]></title>
+        <id>https://github.com/tikv/tikv/releases/tag/v8.5.4-20251231-f006964</id>
+        <link href="https://github.com/tikv/tikv/releases/tag/v8.5.4-20251231-f006964"/>
+        <updated>2025-12-31T10:48:06.000Z</updated>
+        <summary type="html"><![CDATA[sst_importer: set fill cache to false when merge downloaded SST files (#19229)
+close #19228
+set fill cache to false when merge downloaded SST files
+Signed-off-by: Jianjun Liao jianjun.liao@outlook.com
+sst_importer: ensure cleanup of temporary files on error (#19240)
+ref #17283, close #19239
+sst_importer: enhance failpoint handling and ensure cleanup of temporary files on error
+Ensure temporary files are cleaned up when a download fails in sst_importer
+Add a new failpoint download_files_ext_after_download to inject errors right after batch downloads complete, improving test coverage of cleanup paths
+Signed-off-by: Juncen Yu yujuncen@pingcap.com
+Squashed commit of the following:
+commit 5a14b2b
+yujuncen@pingcap.com
+make clippy happy
+
+Signed-off-by: Juncen Yu <yujuncen@pingcap.com>
+
+
+commit ace595e
+bd5bff3 147cacc
+yujuncen@pingcap.com
+Merge branch 'master' of https://github.com/tikv/tikv into resolve-compact-conflict
+
+
+commit bd5bff3
+fde14ce 301984c
+yujuncen@pingcap.com
+Merge branch 'master' of https://github.com/tikv/tikv into resolve-compact-conflict
+
+Signed-off-by: Juncen Yu <yujuncen@pingcap.com>
+
+
+commit fde14ce
+yujuncen@pingcap.com
+added more checks
+
+Signed-off-by: Juncen Yu <yujuncen@pingcap.com>
+
+
+commit d0801cb
+yujuncen@pingcap.com
+added more case about collapsed rollback
+
+Signed-off-by: Juncen Yu <yujuncen@pingcap.com>
+
+
+commit 6d2b994
+yujuncen@pingcap.com
+compact-log-backup: try to resolve conflict encountering during compacting
+
+Signed-off-by: Juncen Yu <yujuncen@pingcap.com>
+
+
+Signed-off-by: Juncen Yu yujuncen@pingcap.com
+*: upgrade cargo-deny version to make it compatible to further developments.
+Signed-off-by: lucasliang nkcs_lykx@hotmail.com
+Signed-off-by: Jianjun Liao jianjun.liao@outlook.com
+yujuncen@pingcap.com
+nkcs_lykx@hotmail.com
+36503113+Leavrth@users.noreply.github.com
+nkcs_lykx@hotmail.com]]></summary>
+        <author>
+            <name>Release notes from tikv</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Karmada v1.16.1 release]]></title>
+        <id>https://github.com/karmada-io/karmada/releases/tag/v1.16.1</id>
+        <link href="https://github.com/karmada-io/karmada/releases/tag/v1.16.1"/>
+        <updated>2025-12-31T09:23:22.000Z</updated>
+        <summary type="html"><![CDATA[See the CHANGELOG for details.
+Full Changelog: v1.16.0...v1.16.1]]></summary>
+        <author>
+            <name>Release notes from karmada</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Karmada v1.15.4 release]]></title>
+        <id>https://github.com/karmada-io/karmada/releases/tag/v1.15.4</id>
+        <link href="https://github.com/karmada-io/karmada/releases/tag/v1.15.4"/>
+        <updated>2025-12-31T09:20:03.000Z</updated>
+        <summary type="html"><![CDATA[See the CHANGELOG for details.
+Full Changelog: v1.15.3...v1.15.4]]></summary>
+        <author>
+            <name>Release notes from karmada</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Karmada v1.14.8 release]]></title>
+        <id>https://github.com/karmada-io/karmada/releases/tag/v1.14.8</id>
+        <link href="https://github.com/karmada-io/karmada/releases/tag/v1.14.8"/>
+        <updated>2025-12-31T09:12:54.000Z</updated>
+        <summary type="html"><![CDATA[See the CHANGELOG for details.
+Full Changelog: v1.14.7...v1.14.8]]></summary>
+        <author>
+            <name>Release notes from karmada</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Release v3.5.3 - 2025/12/23]]></title>
+        <id>https://github.com/cubefs/cubefs/releases/tag/v3.5.3</id>
+        <link href="https://github.com/cubefs/cubefs/releases/tag/v3.5.3"/>
+        <updated>2025-12-31T04:40:06.000Z</updated>
+        <summary type="html"><![CDATA[UPGRAGDE NOTICE
+If you are using a CubeFS version earlier than v3.5.0, please refer to the UPGRADE NOTICE in version v3.5.0 for detailed upgrade steps and upgrade to v3.5.0 first.
+Upgrade nodes in this order: flshnode → master → datanode → metanode → objectnode → lcnode → cli → client.
+Upgrade lcnode and  flashnode when needed.
+Deploy flashgroupmanager when needed
+Clients should use versions later than 3.2.0. Older versions need to be upgraded promptly; otherwise, there will be a risk of compromising stability.
+Main Feature
+High-throughput LLM/MLLM training (Tolerable storage-compute disaggregation latency: 8ms)
+client: Support asynchronous flush for extent handler to improve write performance. Write speed exceeds 1.2 GB/s; on a high-spec H20 training node, a single client can achieve 10+ …]]></summary>
+        <author>
+            <name>Release notes from cubefs</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.47.0-next.1]]></title>
+        <id>https://github.com/backstage/backstage/releases/tag/v1.47.0-next.1</id>
+        <link href="https://github.com/backstage/backstage/releases/tag/v1.47.0-next.1"/>
+        <updated>2025-12-30T16:12:08.000Z</updated>
+        <summary type="html"><![CDATA[See docs/releases/v1.47.0-next.1-changelog.md for more information.]]></summary>
+        <author>
+            <name>Release notes from backstage</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Backstage Wrapped 2025: Celebrating a mature framework with modern foundations]]></title>
+        <id>https://backstage.io/blog/2025/12/30/backstage-wrapped-2025</id>
+        <link href="https://backstage.io/blog/2025/12/30/backstage-wrapped-2025"/>
+        <updated>2025-12-30T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Let's blast into the New Year with a quick look back at all the big hits — backend, frontend, AI, UI, and more! See how today's Backstage is ready to build the future of developer experience.]]></summary>
+        <author>
+            <name>Backstage Software Catalog and Developer Platform Blog</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.46.2]]></title>
+        <id>https://github.com/backstage/backstage/releases/tag/v1.46.2</id>
+        <link href="https://github.com/backstage/backstage/releases/tag/v1.46.2"/>
+        <updated>2025-12-29T13:58:49.000Z</updated>
+        <summary type="html"><![CDATA[This release fixes an issue where forcing lower casing of GitHub URL's caused conflicts in the catalog]]></summary>
+        <author>
+            <name>Release notes from backstage</name>
+        </author>
+    </entry>
 </feed>
