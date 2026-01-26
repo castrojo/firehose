@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://castrojo.github.io/firehose/index.html</id>
     <title>osmos::feed</title>
-    <updated>2026-01-26T17:17:44.885Z</updated>
+    <updated>2026-01-26T17:20:23.139Z</updated>
     <generator>osmosfeed 1.15.1</generator>
     <link rel="alternate" href="https://castrojo.github.io/firehose/index.html"/>
     <link rel="self" href="https://castrojo.github.io/firehose/feed.atom"/>
