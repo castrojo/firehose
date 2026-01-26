@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>urn:2026-01-26T17:15:56.409Z</id>
+    <id>https://castrojo.github.io/firehose/index.html</id>
     <title>osmos::feed</title>
-    <updated>2026-01-26T17:15:56.409Z</updated>
+    <updated>2026-01-26T17:17:44.885Z</updated>
     <generator>osmosfeed 1.15.1</generator>
-    <link rel="alternate" href="index.html"/>
+    <link rel="alternate" href="https://castrojo.github.io/firehose/index.html"/>
+    <link rel="self" href="https://castrojo.github.io/firehose/feed.atom"/>
     <entry>
         <title type="html"><![CDATA[Dapr Runtime v1.16.8]]></title>
         <id>https://github.com/dapr/dapr/releases/tag/v1.16.8</id>
