@@ -30,7 +30,7 @@ sources:
   - href: https://github.com/envoyproxy/envoy/releases.atom # Envoy releases
   - href: https://github.com/falcosecurity/falco/releases.atom # Falco releases
   - href: https://github.com/fluent/fluentd/releases.atom # Fluentd releases
-  - href: http://www.fluentd.org/blog/rss # Fluentd blog
+  - href: https://www.fluentd.org/blog/rss # Fluentd blog
   - href: https://github.com/fluxcd/flux2/releases.atom # Flux releases
   - href: https://fluxcd.io/blog/rss # Flux blog
   - href: https://github.com/goharbor/harbor/releases.atom # Harbor releases
@@ -44,7 +44,7 @@ sources:
   - href: https://github.com/knative/serving/releases.atom # Knative releases
   - href: https://github.com/kubeedge/kubeedge/releases.atom # KubeEdge releases
   - href: https://github.com/kubernetes/kubernetes/releases.atom # Kubernetes releases
-  - href: http://blog.kubernetes.io/rss # Kubernetes blog
+  - href: https://blog.kubernetes.io/rss # Kubernetes blog
   - href: https://github.com/linkerd/linkerd2/releases.atom # Linkerd releases
   - href: https://blog.linkerd.io/rss # Linkerd blog
   - href: https://github.com/open-policy-agent/opa/releases.atom # Open Policy Agent (OPA) releases
