@@ -12,7 +12,7 @@ This roadmap transforms The Firehose from a brittle osmosfeed prototype into a r
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Core Infrastructure** - Establish Astro project with working RSS loader and landscape parsing
+- [x] **Phase 1: Core Infrastructure** - Establish Astro project with working RSS loader and landscape parsing ✅ 2026-01-26
 - [ ] **Phase 2: Multi-Feed Aggregation** - Scale to ~100 feeds with robust error handling
 - [ ] **Phase 3: User Interface** - Display releases chronologically with GitHub formatting and project metadata
 - [ ] **Phase 4: Search & Filtering** - Add Pagefind search and client-side filtering
