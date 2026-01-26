@@ -1,0 +1,238 @@
+---
+interface ErrorEntry {
+  projectName?: string;
+  feedUrl: string;
+  feedError?: string;
+  feedErrorType?: string;
+}
+
+interface Props {
+  errors: ErrorEntry[];
+}
+
+const { errors } = Astro.props;
+const errorCount = errors.length;
+---
+
+{errorCount > 0 && (
+  <div class="error-banner" id="error-banner">
+    <div class="error-banner-header">
+      <div class="error-banner-title">
+        <svg class="icon-warning" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path>
+        </svg>
+        <span>
+          <strong>{errorCount} feed{errorCount === 1 ? '' : 's'} failed to load</strong>
+        </span>
+      </div>
+      <button class="error-banner-toggle" aria-label="Toggle error details" aria-expanded="false">
+        <span class="toggle-text">Show details</span>
+        <svg class="icon-chevron" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+          <path d="M6 8.825l3.825-3.825 .7.7L6 10.225 1.475 5.7l.7-.7L6 8.825z"></path>
+        </svg>
+      </button>
+      <button class="error-banner-dismiss" aria-label="Dismiss banner">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+          <path d="M1.757 10.243a.75.75 0 1 0 1.06 1.06L6 8.12l3.182 3.182a.75.75 0 0 0 1.061-1.06L7.061 7.06l3.182-3.182a.75.75 0 1 0-1.06-1.061L6 5.939 2.818 2.757a.75.75 0 1 0-1.061 1.06L4.939 6.94 1.757 10.243z"></path>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="error-banner-details" id="error-details" style="display: none;">
+      <ul class="error-list">
+        {errors.map((error) => (
+          <li class="error-item">
+            <strong class="error-project">{error.projectName || 'Unknown Project'}</strong>
+            <code class="error-url">{error.feedUrl}</code>
+            {error.feedError && (
+              <p class="error-message">
+                <span class="error-type">[{error.feedErrorType || 'error'}]</span> {error.feedError}
+              </p>
+            )}
+          </li>
+        ))}
+      </ul>
+      <p class="error-footer">
+        The site will continue to work with partial data. Failed feeds will be retried on the next build.
+      </p>
+    </div>
+  </div>
+)}
+
+<script>
+  // Error banner toggle and dismiss logic
+  (function() {
+    const banner = document.getElementById('error-banner');
+    const toggle = banner?.querySelector('.error-banner-toggle');
+    const dismiss = banner?.querySelector('.error-banner-dismiss');
+    const details = document.getElementById('error-details');
+    const toggleText = banner?.querySelector('.toggle-text');
+    const chevron = banner?.querySelector('.icon-chevron');
+    
+    if (!banner || !toggle || !dismiss || !details) return;
+    
+    // Toggle details
+    toggle.addEventListener('click', () => {
+      const isExpanded = details.style.display !== 'none';
+      details.style.display = isExpanded ? 'none' : 'block';
+      toggle.setAttribute('aria-expanded', String(!isExpanded));
+      if (toggleText) toggleText.textContent = isExpanded ? 'Show details' : 'Hide details';
+      if (chevron) chevron.style.transform = isExpanded ? 'rotate(0deg)' : 'rotate(180deg)';
+    });
+    
+    // Dismiss banner
+    dismiss.addEventListener('click', () => {
+      banner.style.display = 'none';
+      // Store dismiss state in localStorage
+      localStorage.setItem('errorBannerDismissed', 'true');
+    });
+    
+    // Check if banner was previously dismissed
+    if (localStorage.getItem('errorBannerDismissed') === 'true') {
+      banner.style.display = 'none';
+    }
+  })();
+</script>
+
+<style>
+  .error-banner {
+    background: #fff8c5;
+    border: 1px solid #d4a72c;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .error-banner-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  
+  .error-banner-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+  }
+  
+  .icon-warning {
+    color: #9a6700;
+    flex-shrink: 0;
+  }
+  
+  .error-banner-title span {
+    color: #4d2d00;
+  }
+  
+  .error-banner-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: none;
+    border: none;
+    color: #4d2d00;
+    font-size: 0.875rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+  
+  .error-banner-toggle:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+  
+  .icon-chevron {
+    transition: transform 0.2s;
+  }
+  
+  .error-banner-dismiss {
+    background: none;
+    border: none;
+    color: #4d2d00;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+  }
+  
+  .error-banner-dismiss:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+  
+  .error-banner-details {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #d4a72c;
+  }
+  
+  .error-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+  }
+  
+  .error-item {
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .error-project {
+    display: block;
+    color: #4d2d00;
+    margin-bottom: 0.25rem;
+  }
+  
+  .error-url {
+    display: block;
+    font-size: 0.75rem;
+    color: #6e4c00;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 0.125rem 0.25rem;
+    border-radius: 3px;
+    word-break: break-all;
+    font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+    margin-bottom: 0.5rem;
+  }
+  
+  .error-message {
+    font-size: 0.875rem;
+    color: #6e4c00;
+    margin: 0;
+  }
+  
+  .error-type {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+  
+  .error-footer {
+    font-size: 0.875rem;
+    color: #6e4c00;
+    margin: 0;
+    font-style: italic;
+  }
+  
+  /* Mobile responsive */
+  @media (max-width: 640px) {
+    .error-banner-header {
+      flex-wrap: wrap;
+    }
+    
+    .toggle-text {
+      display: none;
+    }
+    
+    .error-banner-title span strong {
+      font-size: 0.875rem;
+    }
+  }
+</style>
