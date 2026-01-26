@@ -1,0 +1,212 @@
+---
+// This component wraps release list and provides infinite scroll
+// Data is passed via data attribute and hydrated client-side
+---
+
+<div class="infinite-scroll-container">
+  <div id="release-list" class="releases">
+    <!-- Initial releases rendered server-side in index.astro -->
+    <slot />
+  </div>
+  
+  <!-- Loading indicator -->
+  <div id="loading-indicator" class="loading-indicator" style="display: none;">
+    <div class="spinner"></div>
+    <p>Loading more releases...</p>
+  </div>
+  
+  <!-- Scroll trigger (invisible element) -->
+  <div id="scroll-trigger" class="scroll-trigger"></div>
+  
+  <!-- End of content -->
+  <div id="end-message" class="end-message" style="display: none;">
+    <p>🎉 You've reached the end! All releases loaded.</p>
+  </div>
+</div>
+
+<script>
+  // Infinite scroll implementation using Intersection Observer
+  (function() {
+    const BATCH_SIZE = 30;
+    let currentIndex = BATCH_SIZE; // Start after initial batch
+    let isLoading = false;
+    let allReleases: any[] = [];
+    
+    // Get data from parent element
+    const container = document.querySelector('.infinite-scroll-container');
+    const releaseList = document.getElementById('release-list');
+    const scrollTrigger = document.getElementById('scroll-trigger');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const endMessage = document.getElementById('end-message');
+    
+    if (!container || !releaseList || !scrollTrigger) {
+      console.error('Infinite scroll: Required elements not found');
+      return;
+    }
+    
+    // Get releases data from data attribute (passed from index.astro)
+    const releasesData = container.getAttribute('data-releases');
+    if (releasesData) {
+      try {
+        allReleases = JSON.parse(releasesData);
+        console.log(`[InfiniteScroll] Loaded ${allReleases.length} releases for progressive loading`);
+      } catch (e) {
+        console.error('[InfiniteScroll] Failed to parse releases data:', e);
+        return;
+      }
+    }
+    
+    // Function to render a single release card
+    function renderReleaseCard(release: any): string {
+      const data = release.data;
+      const formattedDate = data.isoDate
+        ? new Date(data.isoDate).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })
+        : null;
+      
+      const projectStatus = data.projectStatus
+        ? `<span class="project-status ${data.projectStatus}">${data.projectStatus}</span>`
+        : '';
+      
+      const projectDescription = data.projectDescription
+        ? `<p class="project-description">${escapeHtml(data.projectDescription)}</p>`
+        : '';
+      
+      const dateHtml = formattedDate
+        ? `<div class="release-date"><time datetime="${data.isoDate}">${formattedDate}</time></div>`
+        : '';
+      
+      // Use contentSnippet for preview (markdown rendering happens server-side for initial batch)
+      const contentPreview = data.contentSnippet
+        ? `<div class="release-content">${escapeHtml(data.contentSnippet.substring(0, 300))}${data.contentSnippet.length > 300 ? '...' : ''}</div>`
+        : '';
+      
+      return `
+        <article class="release-card">
+          <div class="release-header">
+            <span class="project-name">${escapeHtml(data.projectName || data.feedTitle || 'Unknown Project')}</span>
+            ${projectStatus}
+          </div>
+          ${projectDescription}
+          <h2 class="release-title">
+            <a href="${escapeHtml(data.link)}" target="_blank" rel="noopener noreferrer">
+              ${escapeHtml(data.title)}
+            </a>
+          </h2>
+          ${dateHtml}
+          ${contentPreview}
+        </article>
+      `;
+    }
+    
+    // HTML escape utility
+    function escapeHtml(text: string): string {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    // Load next batch of releases
+    function loadMoreReleases() {
+      if (isLoading || currentIndex >= allReleases.length) {
+        return;
+      }
+      
+      isLoading = true;
+      if (loadingIndicator) loadingIndicator.style.display = 'block';
+      
+      // Simulate network delay for smooth UX (even though data is local)
+      setTimeout(() => {
+        const batch = allReleases.slice(currentIndex, currentIndex + BATCH_SIZE);
+        
+        batch.forEach(release => {
+          const html = renderReleaseCard(release);
+          if (releaseList) {
+            releaseList.insertAdjacentHTML('beforeend', html);
+          }
+        });
+        
+        currentIndex += BATCH_SIZE;
+        isLoading = false;
+        
+        if (loadingIndicator) loadingIndicator.style.display = 'none';
+        
+        // Check if we've loaded everything
+        if (currentIndex >= allReleases.length) {
+          if (scrollTrigger) scrollTrigger.style.display = 'none';
+          if (endMessage) endMessage.style.display = 'block';
+        }
+        
+        console.log(`[InfiniteScroll] Loaded batch, now showing ${Math.min(currentIndex + BATCH_SIZE, currentIndex + allReleases.length)}/${BATCH_SIZE + allReleases.length} releases`);
+      }, 300);
+    }
+    
+    // Set up Intersection Observer
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !isLoading) {
+            loadMoreReleases();
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '200px', // Trigger 200px before reaching trigger element
+        threshold: 0,
+      }
+    );
+    
+    observer.observe(scrollTrigger);
+    
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      observer.disconnect();
+    });
+  })();
+</script>
+
+<style>
+  .infinite-scroll-container {
+    position: relative;
+  }
+  
+  .releases {
+    /* Releases container */
+  }
+  
+  .scroll-trigger {
+    height: 1px;
+    margin: 2rem 0;
+  }
+  
+  .loading-indicator {
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-text-secondary, #57606a);
+  }
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 1rem;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: var(--color-accent-emphasis, #0969da);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .end-message {
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-text-secondary, #57606a);
+    font-size: 0.875rem;
+  }
+</style>
