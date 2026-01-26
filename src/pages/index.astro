@@ -4,6 +4,8 @@ import ReleaseCard from '../components/ReleaseCard.astro';
 import InfiniteScroll from '../components/InfiniteScroll.astro';
 import ErrorBanner from '../components/ErrorBanner.astro';
 import KeyboardHelp from '../components/KeyboardHelp.astro';
+import SearchBar from '../components/SearchBar.astro';
+import FilterBar from '../components/FilterBar.astro';
 
 // Fetch all releases from the content collection
 const releases = await getCollection('releases');
@@ -70,7 +72,6 @@ const remainingReleasesData = remainingReleases.map(r => ({
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="CNCF project releases aggregated in one place">
   <title>The Firehose - CNCF Releases</title>
-  <script src="/src/scripts/keyboard-nav.ts" type="module"></script>
 </head>
 <body>
   <header class="site-header">
@@ -93,6 +94,16 @@ const remainingReleasesData = remainingReleases.map(r => ({
   </header>
   
   <main class="container">
+    <!-- Search bar -->
+    <SearchBar />
+    
+    <!-- Filter bar -->
+    <FilterBar 
+      projects={uniqueProjects}
+      statuses={uniqueStatuses}
+      totalCount={sortedReleases.length}
+    />
+    
     <!-- Stats bar -->
     <div class="stats">
       <div class="stat">
@@ -151,6 +162,148 @@ const remainingReleasesData = remainingReleases.map(r => ({
   document.getElementById('help-button')?.addEventListener('click', () => {
     document.getElementById('keyboard-help-modal')?.classList.add('visible');
     document.getElementById('keyboard-help-backdrop')?.classList.add('visible');
+  });
+</script>
+
+<script>
+  // Keyboard navigation
+  class KeyboardNavigator {
+    focusedIndex = -1;
+    items = [];
+    searchInput = null;
+    
+    constructor(itemSelector, searchInputSelector) {
+      this.items = Array.from(document.querySelectorAll(itemSelector));
+      this.searchInput = document.querySelector(searchInputSelector);
+      this.attachListeners();
+      console.log(`[KeyboardNav] Initialized with ${this.items.length} items`);
+    }
+    
+    attachListeners() {
+      document.addEventListener('keydown', (e) => {
+        if (this.isTypingContext(e.target)) return;
+        
+        switch(e.key) {
+          case 'j':
+            e.preventDefault();
+            this.moveDown();
+            break;
+          case 'k':
+            e.preventDefault();
+            this.moveUp();
+            break;
+          case '/':
+            e.preventDefault();
+            this.focusSearch();
+            break;
+          case 'o':
+          case 'Enter':
+            e.preventDefault();
+            this.openFocused();
+            break;
+          case '?':
+            e.preventDefault();
+            this.showHelp();
+            break;
+          case 'Escape':
+            this.handleEscape();
+            break;
+        }
+      });
+    }
+    
+    isTypingContext(target) {
+      if (!target || !(target instanceof HTMLElement)) return false;
+      const tagName = target.tagName.toLowerCase();
+      if (tagName === 'input' || tagName === 'textarea') return true;
+      if (target.isContentEditable) return true;
+      if (target.closest('.pagefind-ui') || target.closest('.search-bar')) return true;
+      return false;
+    }
+    
+    moveDown() {
+      if (this.items.length === 0) return;
+      this.focusedIndex = Math.min(this.focusedIndex + 1, this.items.length - 1);
+      this.scrollToFocused();
+      this.announceNavigation();
+    }
+    
+    moveUp() {
+      if (this.items.length === 0) return;
+      this.focusedIndex = Math.max(this.focusedIndex - 1, 0);
+      this.scrollToFocused();
+      this.announceNavigation();
+    }
+    
+    scrollToFocused() {
+      const item = this.items[this.focusedIndex];
+      if (!item) return;
+      this.items.forEach(el => el.classList.remove('kbd-focused'));
+      item.classList.add('kbd-focused');
+      item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    }
+    
+    openFocused() {
+      const item = this.items[this.focusedIndex];
+      if (!item) return;
+      const link = item.querySelector('a[href]');
+      if (link) window.open(link.href, '_blank', 'noopener,noreferrer');
+    }
+    
+    focusSearch() {
+      if (this.searchInput) {
+        this.searchInput.focus();
+        this.searchInput.select();
+      }
+    }
+    
+    showHelp() {
+      document.getElementById('keyboard-help-modal')?.classList.add('visible');
+      document.getElementById('keyboard-help-backdrop')?.classList.add('visible');
+    }
+    
+    hideHelp() {
+      document.getElementById('keyboard-help-modal')?.classList.remove('visible');
+      document.getElementById('keyboard-help-backdrop')?.classList.remove('visible');
+    }
+    
+    handleEscape() {
+      const helpModal = document.getElementById('keyboard-help-modal');
+      if (helpModal?.classList.contains('visible')) {
+        this.hideHelp();
+        return;
+      }
+      if (document.activeElement === this.searchInput) {
+        this.searchInput?.blur();
+        return;
+      }
+      this.items.forEach(el => el.classList.remove('kbd-focused'));
+      this.focusedIndex = -1;
+    }
+    
+    announceNavigation() {
+      const item = this.items[this.focusedIndex];
+      const liveRegion = document.getElementById('kbd-live-region');
+      if (liveRegion && item) {
+        const title = item.querySelector('h2, .release-title')?.textContent?.trim() || 'Release';
+        liveRegion.textContent = `Focused: ${title}`;
+      }
+    }
+    
+    refresh() {
+      this.items = Array.from(document.querySelectorAll('.release-card'));
+      console.log(`[KeyboardNav] Refreshed, now tracking ${this.items.length} items`);
+    }
+  }
+
+  let navigator = null;
+  document.addEventListener('DOMContentLoaded', () => {
+    navigator = new KeyboardNavigator('.release-card', '#search-input, .search-bar input');
+    const observer = new MutationObserver(() => navigator?.refresh());
+    const releaseList = document.getElementById('release-list');
+    if (releaseList) observer.observe(releaseList, { childList: true });
+    const infiniteScrollContainer = document.querySelector('.infinite-scroll-container');
+    if (infiniteScrollContainer) observer.observe(infiniteScrollContainer, { childList: true, subtree: true });
   });
 </script>
 
@@ -398,5 +551,132 @@ const remainingReleasesData = remainingReleases.map(r => ({
     background: var(--color-bg-default);
     color: var(--color-text-primary);
     border-color: var(--color-text-primary);
+  }
+  
+  /* Filter bar responsive layout */
+  :global(.filter-bar) {
+    background: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  :global(.filter-controls) {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  
+  :global(.filter-controls select) {
+    padding: 0.5rem;
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    background: var(--color-bg-default);
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    min-width: 150px;
+  }
+  
+  :global(.date-range-buttons) {
+    display: flex;
+    gap: 0.25rem;
+    background: var(--color-bg-secondary);
+    padding: 0.25rem;
+    border-radius: 6px;
+  }
+  
+  :global(.date-range-buttons button) {
+    padding: 0.375rem 0.75rem;
+    border: none;
+    background: transparent;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    transition: all 0.15s ease;
+  }
+  
+  :global(.date-range-buttons button.active) {
+    background: var(--color-bg-default);
+    color: var(--color-text-primary);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  :global(.date-range-buttons button:hover:not(.active)) {
+    color: var(--color-text-primary);
+  }
+  
+  :global(#clear-filters) {
+    padding: 0.5rem 1rem;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    transition: all 0.15s ease;
+  }
+  
+  :global(#clear-filters:hover) {
+    background: var(--color-bg-default);
+    color: var(--color-text-primary);
+    border-color: var(--color-text-secondary);
+  }
+  
+  :global(.filter-results) {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+  
+  /* Tablet (768px and below) - filter bar stacks */
+  @media (max-width: 768px) {
+    :global(.filter-bar) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    :global(.filter-controls) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    :global(.filter-controls select) {
+      width: 100%;
+      min-width: unset;
+    }
+    
+    :global(.date-range-buttons) {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    :global(#clear-filters) {
+      width: 100%;
+    }
+    
+    :global(.filter-results) {
+      text-align: center;
+    }
+  }
+  
+  /* Mobile (480px and below) - compact filter buttons */
+  @media (max-width: 480px) {
+    :global(.filter-bar) {
+      padding: 0.75rem;
+    }
+    
+    :global(.date-range-buttons button) {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+    }
   }
 </style>
