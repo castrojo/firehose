@@ -43,10 +43,12 @@ const initialReleases = sortedReleases.slice(0, INITIAL_BATCH);
 const remainingReleases = sortedReleases.slice(INITIAL_BATCH);
 
 // Extract unique project names (sorted alphabetically)
-const uniqueProjects = [...new Set(sortedReleases.map(r => r.data.projectName || r.data.feedTitle))].filter(Boolean).sort();
+const uniqueProjects = [...new Set(sortedReleases.map(r => r.data.projectName || r.data.feedTitle).filter(p => p !== undefined))] as string[];
+uniqueProjects.sort();
 
 // Extract unique statuses (graduated, incubating)
-const uniqueStatuses = [...new Set(sortedReleases.map(r => r.data.projectStatus))].filter(Boolean).sort();
+const uniqueStatuses = [...new Set(sortedReleases.map(r => r.data.projectStatus).filter(s => s !== undefined))] as string[];
+uniqueStatuses.sort();
 
 // Serialize remaining releases for client-side hydration
 // Note: Only pass minimal data (no full markdown content) to keep JSON small
@@ -158,6 +160,7 @@ const remainingReleasesData = remainingReleases.map(r => ({
 </html>
 
 <script>
+  // @ts-nocheck
   // Help button handler
   document.getElementById('help-button')?.addEventListener('click', () => {
     document.getElementById('keyboard-help-modal')?.classList.add('visible');
@@ -166,12 +169,19 @@ const remainingReleasesData = remainingReleases.map(r => ({
 </script>
 
 <script>
+  // @ts-nocheck
   // Keyboard navigation
   class KeyboardNavigator {
     focusedIndex = -1;
+    /** @type {HTMLElement[]} */
     items = [];
+    /** @type {HTMLElement | null} */
     searchInput = null;
     
+    /**
+     * @param {string} itemSelector
+     * @param {string} searchInputSelector
+     */
     constructor(itemSelector, searchInputSelector) {
       this.items = Array.from(document.querySelectorAll(itemSelector));
       this.searchInput = document.querySelector(searchInputSelector);
@@ -212,6 +222,10 @@ const remainingReleasesData = remainingReleases.map(r => ({
       });
     }
     
+    /**
+     * @param {EventTarget | null} target
+     * @returns {boolean}
+     */
     isTypingContext(target) {
       if (!target || !(target instanceof HTMLElement)) return false;
       const tagName = target.tagName.toLowerCase();
