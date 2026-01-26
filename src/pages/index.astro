@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import ReleaseCard from '../components/ReleaseCard.astro';
 import InfiniteScroll from '../components/InfiniteScroll.astro';
 import ErrorBanner from '../components/ErrorBanner.astro';
+import KeyboardHelp from '../components/KeyboardHelp.astro';
 
 // Fetch all releases from the content collection
 const releases = await getCollection('releases');
@@ -39,6 +40,12 @@ const INITIAL_BATCH = 30;
 const initialReleases = sortedReleases.slice(0, INITIAL_BATCH);
 const remainingReleases = sortedReleases.slice(INITIAL_BATCH);
 
+// Extract unique project names (sorted alphabetically)
+const uniqueProjects = [...new Set(sortedReleases.map(r => r.data.projectName || r.data.feedTitle))].filter(Boolean).sort();
+
+// Extract unique statuses (graduated, incubating)
+const uniqueStatuses = [...new Set(sortedReleases.map(r => r.data.projectStatus))].filter(Boolean).sort();
+
 // Serialize remaining releases for client-side hydration
 // Note: Only pass minimal data (no full markdown content) to keep JSON small
 const remainingReleasesData = remainingReleases.map(r => ({
@@ -63,12 +70,25 @@ const remainingReleasesData = remainingReleases.map(r => ({
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="CNCF project releases aggregated in one place">
   <title>The Firehose - CNCF Releases</title>
+  <script src="/src/scripts/keyboard-nav.ts" type="module"></script>
 </head>
 <body>
   <header class="site-header">
     <div class="container">
-      <h1 class="site-title">🔥 The Firehose</h1>
-      <p class="site-subtitle">CNCF Project Releases</p>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h1 class="site-title">🔥 The Firehose</h1>
+          <p class="site-subtitle">CNCF Project Releases</p>
+        </div>
+        <button 
+          id="help-button" 
+          class="keyboard-help-button"
+          aria-label="Keyboard shortcuts"
+          title="Keyboard shortcuts (Press ?)"
+        >
+          ?
+        </button>
+      </div>
     </div>
   </header>
   
@@ -117,8 +137,22 @@ const remainingReleasesData = remainingReleases.map(r => ({
       <p>Updated daily • <a href="https://github.com/castrojo/firehose" target="_blank" rel="noopener noreferrer">View on GitHub</a></p>
     </div>
   </footer>
+  
+  <!-- Keyboard help modal -->
+  <KeyboardHelp />
+  
+  <!-- Screen reader live region for keyboard navigation -->
+  <div id="kbd-live-region" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 </body>
 </html>
+
+<script>
+  // Help button handler
+  document.getElementById('help-button')?.addEventListener('click', () => {
+    document.getElementById('keyboard-help-modal')?.classList.add('visible');
+    document.getElementById('keyboard-help-backdrop')?.classList.add('visible');
+  });
+</script>
 
 <style>
   :root {
@@ -300,8 +334,69 @@ const remainingReleasesData = remainingReleases.map(r => ({
       font-size: 0.8125rem;
     }
     
-    .stat-value {
-      font-size: 1.25rem;
-    }
+  .stat-value {
+    font-size: 1.25rem;
+  }
+  
+  /* Keyboard navigation focus indicator */
+  :global(.release-card) {
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  
+  :global(.release-card.kbd-focused) {
+    box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.3);
+    border-color: #0969da;
+    outline: none;
+    position: relative;
+  }
+  
+  :global(.release-card.kbd-focused::before) {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: 8px;
+    border: 2px solid #0969da;
+    pointer-events: none;
+  }
+  
+  /* Screen reader only utility */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+  
+  /* Help button in header (visual hint) */
+  .keyboard-help-button {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    font-weight: 600;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    margin-left: 1rem;
+  }
+  
+  .keyboard-help-button:hover {
+    background: var(--color-bg-default);
+    color: var(--color-text-primary);
+    border-color: var(--color-text-primary);
   }
 </style>
