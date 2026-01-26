@@ -1,22 +1,22 @@
 {
-  "name": "osmosfeed-template",
+  "name": "firehose",
   "version": "1.0.0",
-  "description": "Use this template to create the UI and content of an RSS feed reader.",
+  "description": "The Firehose - An RSS feed reader for CNCF and cloud native content.",
   "main": "index.js",
   "scripts": {
     "build": "osmosfeed"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/osmoscraft/osmosfeed-template.git"
+    "url": "git+https://github.com/castrojo/firehose.git"
   },
-  "keywords": [],
-  "author": "osmoscraft",
+  "keywords": ["rss", "feed-reader", "cncf", "cloud-native"],
+  "author": "castrojo",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/osmoscraft/osmosfeed-template/issues"
+    "url": "https://github.com/castrojo/firehose/issues"
   },
-  "homepage": "https://github.com/osmoscraft/osmosfeed-template#readme",
+  "homepage": "https://github.com/castrojo/firehose#readme",
   "dependencies": {
     "@osmoscraft/osmosfeed": "^1.2.2"
   }
