@@ -129,10 +129,12 @@ Plans:
 12. User presses ? to see keyboard shortcuts help modal
 13. Keyboard shortcuts don't trigger when typing in input fields
 
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] TBD during phase planning
+- [ ] 04-01-PLAN.md — Pagefind search integration with term highlighting and offline support
+- [ ] 04-02-PLAN.md — Client-side filtering by project, status, and date range
+- [ ] 04-03-PLAN.md — Vim-style keyboard navigation with help modal
 
 ---
 
