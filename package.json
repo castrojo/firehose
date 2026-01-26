@@ -29,10 +29,12 @@
   "dependencies": {
     "astro": "^5.16.15",
     "js-yaml": "^4.1.1",
+    "marked": "^17.0.1",
     "rss-parser": "^3.13.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@types/js-yaml": "^4.0.9"
+    "@types/js-yaml": "^4.0.9",
+    "@types/marked": "^5.0.2"
   }
 }
