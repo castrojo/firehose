@@ -1,1 +1,224 @@
-# Placeholder for file content
+main:
+  url: https://www.cncf.io/feed.xml
+  cacheUrl: true
+
+graduated:
+  - name: Argo
+    url: https://github.com/argoproj/argo-cd/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: CRI-O
+    url: https://github.com/cri-o/cri-o/releases.atom
+    cacheUrl: true
+  - name: Cilium
+    url: https://github.com/cilium/cilium/releases.atom
+    cacheUrl: true
+  - name: CloudEvents
+    url: https://github.com/cloudevents/spec/releases.atom
+    cacheUrl: true
+  - name: CoreDNS
+    url: https://github.com/coredns/coredns/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Crossplane
+    url: https://github.com/crossplane/crossplane/releases.atom
+    cacheUrl: true
+  - name: CubeFS
+    url: https://github.com/cubeFS/cubefs/releases.atom
+    cacheUrl: true
+  - name: Dapr
+    url: https://github.com/dapr/dapr/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Dragonfly
+    url: https://github.com/dragonflyoss/dragonfly/releases.atom
+    cacheUrl: true
+  - name: Envoy
+    url: https://github.com/envoyproxy/envoy/releases.atom
+    cacheUrl: true
+  - name: Falco
+    url: https://github.com/falcosecurity/falco/releases.atom
+    cacheUrl: true
+  - name: Fluentd
+    url: https://github.com/fluent/fluentd/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Flux
+    url: https://github.com/fluxcd/flux2/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Harbor
+    url: https://github.com/goharbor/harbor/releases.atom
+    cacheUrl: true
+  - name: Helm
+    url: https://github.com/helm/helm/releases.atom
+    cacheUrl: true
+  - name: Istio
+    url: https://github.com/istio/istio/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Jaeger
+    url: https://github.com/jaegertracing/jaeger/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: KEDA
+    url: https://github.com/kedacore/keda/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Knative
+    url: https://github.com/knative/serving/releases.atom
+    cacheUrl: true
+  - name: KubeEdge
+    url: https://github.com/kubeedge/kubeedge/releases.atom
+    cacheUrl: true
+  - name: Kubernetes
+    url: https://github.com/kubernetes/kubernetes/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Linkerd
+    url: https://github.com/linkerd/linkerd2/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: OPA
+    url: https://github.com/open-policy-agent/opa/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Prometheus
+    url: https://github.com/prometheus/prometheus/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Rook
+    url: https://github.com/rook/rook/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: SPIFFE
+    url: https://github.com/spiffe/spiffe/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: SPIRE
+    url: https://github.com/spiffe/spire/releases.atom
+    cacheUrl: true
+  - name: TUF
+    url: https://github.com/theupdateframework/python-tuf/releases.atom
+    cacheUrl: true
+  - name: TiKV
+    url: https://github.com/tikv/tikv/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Vitess
+    url: https://github.com/vitessio/vitess/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: cert-manager
+    url: https://github.com/cert-manager/cert-manager/releases.atom
+    cacheUrl: true
+  - name: containerd
+    url: https://github.com/containerd/containerd/releases.atom
+    cacheUrl: true
+  - name: etcd
+    url: https://github.com/etcd-io/etcd/releases.atom
+    cacheUrl: true
+  - name: in-toto
+    url: https://github.com/in-toto/in-toto/releases.atom
+    cacheUrl: true
+
+incubating:
+  - name: Backstage
+    url: https://github.com/backstage/backstage/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Buildpacks
+    url: https://github.com/buildpacks/pack/releases.atom
+    cacheUrl: true
+  - name: Chaos Mesh
+    url: https://github.com/chaos-mesh/chaos-mesh/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Cloud Custodian
+    url: https://github.com/cloud-custodian/cloud-custodian/releases.atom
+    cacheUrl: true
+  - name: CNI
+    url: https://github.com/containernetworking/cni/releases.atom
+    cacheUrl: true
+  - name: Contour
+    url: https://github.com/projectcontour/contour/releases.atom
+    cacheUrl: true
+  - name: Cortex
+    url: https://github.com/cortexproject/cortex/releases.atom
+    cacheUrl: true
+  - name: Crossplane
+    url: https://github.com/crossplane/crossplane/releases.atom
+    cacheUrl: true
+  - name: Dragonfly
+    url: https://github.com/dragonflyoss/dragonfly/releases.atom
+    cacheUrl: true
+  - name: Emissary Ingress
+    url: https://github.com/emissary-ingress/emissary/releases.atom
+    cacheUrl: true
+  - name: gRPC
+    url: https://github.com/grpc/grpc/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Karmada
+    url: https://github.com/karmada-io/karmada/releases.atom
+    cacheUrl: true
+  - name: Keycloak
+    url: https://github.com/keycloak/keycloak/releases.atom
+    cacheUrl: true
+  - name: KServe
+    url: https://github.com/kserve/kserve/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: KubeVela
+    url: https://github.com/kubevela/kubevela/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: KubeVirt
+    url: https://github.com/kubevirt/kubevirt/releases.atom
+    cacheUrl: true
+  - name: Kubeflow
+    url: https://github.com/kubeflow/kubeflow/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Kyverno
+    url: https://github.com/kyverno/kyverno/releases.atom
+    cacheUrl: true
+  - name: LitmusChaos
+    url: https://github.com/litmuschaos/litmus/releases.atom
+    cacheUrl: true
+  - name: Longhorn
+    url: https://github.com/longhorn/longhorn/releases.atom
+    cacheUrl: true
+  - name: Metal³
+    url: https://github.com/metal3-io/baremetal-operator/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: NATS
+    url: https://github.com/nats-io/nats-server/releases.atom
+    cacheUrl: true
+  - name: Notary
+    url: https://github.com/notaryproject/notary/releases.atom
+    cacheUrl: true
+  - name: OpenFeature
+    url: https://github.com/open-feature/spec/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: OpenKruise
+    url: https://github.com/openkruise/kruise/releases.atom
+    cacheUrl: true
+  - name: OpenTelemetry
+    url: https://github.com/open-telemetry/opentelemetry-collector/releases.atom
+    cacheUrl: true
+  - name: Operator Framework
+    url: https://github.com/operator-framework/operator-sdk/releases.atom
+    cacheUrl: true
+  - name: Strimzi
+    url: https://github.com/strimzi/strimzi-kafka-operator/releases.atom
+    cacheUrl: true
+  - name: Thanos
+    url: https://github.com/thanos-io/thanos/releases.atom
+    cacheUrl: true
+    blog: true
+  - name: Volcano
+    url: https://github.com/volcano-sh/volcano/releases.atom
+    cacheUrl: true
