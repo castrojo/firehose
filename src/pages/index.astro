@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import ReleaseCard from '../components/ReleaseCard.astro';
 import InfiniteScroll from '../components/InfiniteScroll.astro';
+import ErrorBanner from '../components/ErrorBanner.astro';
 
 // Fetch all releases from the content collection
 const releases = await getCollection('releases');
@@ -18,6 +19,16 @@ const sortedReleases = validReleases.sort((a, b) => {
   const dateB = b.data.isoDate ? new Date(b.data.isoDate).getTime() : 0;
   return dateB - dateA;
 });
+
+// Get error entries for error banner
+const errorEntries = releases
+  .filter(r => r.data.feedStatus === 'error')
+  .map(r => ({
+    projectName: r.data.projectName || r.data.feedTitle,
+    feedUrl: r.data.feedUrl,
+    feedError: r.data.feedError,
+    feedErrorType: r.data.feedErrorType,
+  }));
 
 // Count by project status
 const graduatedCount = validReleases.filter(r => r.data.projectStatus === 'graduated').length;
@@ -83,6 +94,11 @@ const remainingReleasesData = remainingReleases.map(r => ({
         </div>
       )}
     </div>
+    
+    <!-- Error banner (if any feeds failed) -->
+    {errorCount > 0 && (
+      <ErrorBanner errors={errorEntries} />
+    )}
     
     <!-- Infinite scroll container with data hydration -->
     <div class="infinite-scroll-container" data-releases={JSON.stringify(remainingReleasesData)}>
@@ -212,22 +228,34 @@ const remainingReleasesData = remainingReleases.map(r => ({
     text-decoration: underline;
   }
   
-  /* Responsive design */
+  /* Mobile-first responsive design */
+  
+  /* Tablet (768px and below) */
   @media (max-width: 768px) {
     .site-title {
       font-size: 1.5rem;
     }
     
+    .site-subtitle {
+      font-size: 0.875rem;
+    }
+    
     .stats {
       grid-template-columns: repeat(2, 1fr);
+      padding: 1rem;
     }
     
     .stat-value {
       font-size: 1.5rem;
     }
+    
+    .stat-label {
+      font-size: 0.75rem;
+    }
   }
   
-  @media (max-width: 480px) {
+  /* Mobile landscape (640px and below) */
+  @media (max-width: 640px) {
     .container {
       padding: 0 0.75rem;
     }
@@ -236,10 +264,44 @@ const remainingReleasesData = remainingReleases.map(r => ({
       padding: 1.5rem 0;
     }
     
+    .site-title {
+      font-size: 1.25rem;
+    }
+  }
+  
+  /* Mobile portrait (480px and below) */
+  @media (max-width: 480px) {
     .stats {
       grid-template-columns: 1fr;
       gap: 0.75rem;
-      padding: 1rem;
+    }
+    
+    .stat {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--color-border-default);
+    }
+    
+    .stat:last-child {
+      border-bottom: none;
+    }
+  }
+  
+  /* Small mobile (320px - minimum supported) */
+  @media (max-width: 320px) {
+    .container {
+      padding: 0 0.5rem;
+    }
+    
+    .site-title {
+      font-size: 1.125rem;
+    }
+    
+    .site-subtitle {
+      font-size: 0.8125rem;
+    }
+    
+    .stat-value {
+      font-size: 1.25rem;
     }
   }
 </style>

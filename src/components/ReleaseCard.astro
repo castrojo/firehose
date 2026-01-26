@@ -243,4 +243,69 @@ const formattedDate = data.isoDate
     background-color: #d0d7de;
     border: 0;
   }
+  
+  /* Mobile responsive adjustments */
+  @media (max-width: 768px) {
+    .release-card {
+      padding: 1rem;
+    }
+    
+    .release-title {
+      font-size: 1.125rem;
+    }
+    
+    .markdown-body :global(h1) { font-size: 1.5rem; }
+    .markdown-body :global(h2) { font-size: 1.25rem; }
+    .markdown-body :global(h3) { font-size: 1.125rem; }
+    .markdown-body :global(h4) { font-size: 1rem; }
+    
+    .markdown-body :global(pre) {
+      font-size: 0.8125rem;
+      padding: 0.75rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .release-card {
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    
+    .release-header {
+      flex-wrap: wrap;
+    }
+    
+    .project-name {
+      font-size: 0.8125rem;
+    }
+    
+    .project-status {
+      font-size: 0.5625rem;
+      padding: 0.125rem 0.375rem;
+    }
+    
+    .project-description {
+      font-size: 0.8125rem;
+    }
+    
+    .release-title {
+      font-size: 1rem;
+    }
+    
+    .markdown-body {
+      font-size: 0.9375rem;
+    }
+    
+    .markdown-body :global(pre) {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+  
+  @media (max-width: 320px) {
+    .release-card {
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
+  }
 </style>
