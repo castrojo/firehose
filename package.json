@@ -4,7 +4,7 @@
   "description": "The Firehose - An RSS feed reader for CNCF and cloud native content.",
   "main": "index.js",
   "scripts": {
-    "build": "osmosfeed && node scripts/extract-html.js && node scripts/create-html-data.js"
+    "build": "osmosfeed && node scripts/fetch-landscape-data.js && node scripts/extract-html.js && node scripts/create-html-data.js"
   },
   "repository": {
     "type": "git",

@@ -23,42 +23,42 @@
 
       <main class="releases-container">
         {{#each dates}}
-          <section class="date-section">
-            <h2 class="date-heading">
-              <time datetime="{{isoUtcPublishTime}}">{{isoOffsetPublishDate}}</time>
-            </h2>
-            
-            {{#each sources}}
-              <div class="source-group">
-                <h3 class="source-title">
-                  <a href="{{siteUrl}}" class="source-link">{{title}}</a>
-                </h3>
-                
-                {{#each articles}}
-                  <article class="release-card">
-                    <div class="release-header">
-                      <h4 class="release-title">
-                        <a href="{{link}}" target="_blank" rel="noopener noreferrer">{{title}}</a>
-                      </h4>
-                      <time class="release-time" datetime="{{publishedOn}}">{{isoOffsetPublishDate}}</time>
-                    </div>
-                    <div class="release-body markdown-body">
-                      {{#if htmlContent}}
-                        {{{htmlContent}}}
-                      {{else}}
-                        {{description}}
-                      {{/if}}
-                    </div>
-                    <div class="release-footer">
-                      <a href="{{link}}" class="release-link" target="_blank" rel="noopener noreferrer">
-                        View full release →
-                      </a>
-                    </div>
-                  </article>
-                {{/each}}
-              </div>
-            {{/each}}
-          </section>
+          {{#each sources}}
+            <div class="source-group">
+              <h3 class="source-title">
+                <a href="{{siteUrl}}" class="source-link">
+                  {{#if projectName}}
+                    <strong>{{projectName}}</strong>{{#if projectDescription}} - {{projectDescription}}{{/if}}
+                  {{else}}
+                    {{title}}
+                  {{/if}}
+                </a>
+              </h3>
+              
+              {{#each articles}}
+                <article class="release-card">
+                  <div class="release-header">
+                    <h4 class="release-title">
+                      <a href="{{link}}" target="_blank" rel="noopener noreferrer">{{title}}</a>
+                    </h4>
+                    <time class="release-time" datetime="{{publishedOn}}">{{isoOffsetPublishDate}}</time>
+                  </div>
+                  <div class="release-body markdown-body">
+                    {{#if htmlContent}}
+                      {{{htmlContent}}}
+                    {{else}}
+                      {{description}}
+                    {{/if}}
+                  </div>
+                  <div class="release-footer">
+                    <a href="{{link}}" class="release-link" target="_blank" rel="noopener noreferrer">
+                      View full release →
+                    </a>
+                  </div>
+                </article>
+              {{/each}}
+            </div>
+          {{/each}}
         {{/each}}
       </main>
 
