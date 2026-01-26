@@ -3,6 +3,7 @@ import Parser from 'rss-parser';
 import { fetchLandscapeData, matchFeedToProject } from './landscape';
 import { FeedEntrySchema, type FeedEntry, type FeedSource } from './schemas';
 import { createFailedFeedEntry, addFetchMetadata } from '../utils/feed-status';
+import { retryWithBackoff } from '../utils/retry';
 
 /**
  * Custom Astro Content Loader for RSS/Atom feeds
@@ -106,6 +107,7 @@ export function feedLoader(sources: FeedSource[]): Loader {
 
 /**
  * Fetch a single feed and return its entries
+ * Includes automatic retry with exponential backoff for transient errors
  */
 async function fetchSingleFeed(
   source: FeedSource,
@@ -114,8 +116,17 @@ async function fetchSingleFeed(
   logger: any,
 ): Promise<{ entries: Partial<FeedEntry>[]; feedUrl: string }> {
   try {
-    // Parse the feed
-    const feed = await parser.parseURL(source.url);
+    // Parse the feed with retry logic
+    const feed = await retryWithBackoff(
+      () => parser.parseURL(source.url),
+      {
+        maxAttempts: 3,
+        initialDelay: 1000,
+        maxDelay: 10000,
+        backoffMultiplier: 2,
+      },
+      source.url
+    );
     
     // Match feed to project
     const project = matchFeedToProject(source.url, landscapeData);
