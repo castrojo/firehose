@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import ReleaseCard from '../components/ReleaseCard.astro';
+import InfiniteScroll from '../components/InfiniteScroll.astro';
 
 // Fetch all releases from the content collection
 const releases = await getCollection('releases');
@@ -21,6 +22,27 @@ const sortedReleases = validReleases.sort((a, b) => {
 // Count by project status
 const graduatedCount = validReleases.filter(r => r.data.projectStatus === 'graduated').length;
 const incubatingCount = validReleases.filter(r => r.data.projectStatus === 'incubating').length;
+
+// Pagination: Initial batch for server-side render
+const INITIAL_BATCH = 30;
+const initialReleases = sortedReleases.slice(0, INITIAL_BATCH);
+const remainingReleases = sortedReleases.slice(INITIAL_BATCH);
+
+// Serialize remaining releases for client-side hydration
+// Note: Only pass minimal data (no full markdown content) to keep JSON small
+const remainingReleasesData = remainingReleases.map(r => ({
+  id: r.id,
+  data: {
+    title: r.data.title,
+    link: r.data.link,
+    isoDate: r.data.isoDate,
+    contentSnippet: r.data.contentSnippet,
+    projectName: r.data.projectName,
+    projectDescription: r.data.projectDescription,
+    projectStatus: r.data.projectStatus,
+    feedTitle: r.data.feedTitle,
+  }
+}));
 ---
 
 <!DOCTYPE html>
@@ -62,11 +84,14 @@ const incubatingCount = validReleases.filter(r => r.data.projectStatus === 'incu
       )}
     </div>
     
-    <!-- Release list -->
-    <div class="releases">
-      {sortedReleases.map((release) => (
-        <ReleaseCard release={release} />
-      ))}
+    <!-- Infinite scroll container with data hydration -->
+    <div class="infinite-scroll-container" data-releases={JSON.stringify(remainingReleasesData)}>
+      <InfiniteScroll>
+        <!-- Initial batch rendered server-side -->
+        {initialReleases.map((release) => (
+          <ReleaseCard release={release} />
+        ))}
+      </InfiniteScroll>
     </div>
   </main>
   
