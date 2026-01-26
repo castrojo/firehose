@@ -4,7 +4,7 @@
 #########################
 
 # Uncomment after GitHub Pages is set up
-# cacheUrl: https://castrojo.github.io/firehose/cache.json
+cacheUrl: https://castrojo.github.io/firehose/cache.json
 sources:
   # Original feeds
   - href: https://github.com/osmoscraft/osmosfeed/releases.atom # Get new feature announcement via this feed
