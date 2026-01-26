@@ -1,18 +1,14 @@
 import { defineCollection } from 'astro:content';
 import { feedLoader } from '../lib/feed-loader';
 import { FeedEntrySchema } from '../lib/schemas';
+import feeds from '../config/feeds';
 
 /**
  * Define the 'releases' content collection
  * Uses custom feed loader to fetch and parse CNCF project releases
  */
 const releases = defineCollection({
-  loader: feedLoader([
-    // Phase 1: Single feed for proof of concept
-    { url: 'https://github.com/dapr/dapr/releases.atom' },
-    
-    // Phase 2 will expand to ~100 feeds from osmosfeed.yaml
-  ]),
+  loader: feedLoader(feeds),
   schema: FeedEntrySchema,
 });
 

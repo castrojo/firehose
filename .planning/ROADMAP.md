@@ -65,10 +65,18 @@ Plans:
 5. Transient errors (5xx, timeouts) are retried with exponential backoff (max 3 attempts)
 6. Permanent errors (404, 403) skip retry and log immediately
 
-**Plans**: TBD
+**Plans**: See `.planning/phase-2-plans.md` for detailed breakdown (9 plans, ~4.75 hours total)
 
 Plans:
-- [ ] TBD during phase planning
+- [ ] 2.1: Add Feed Configuration File (30 min)
+- [ ] 2.2: Implement Error Classification (25 min)
+- [ ] 2.3: Add Retry Logic with Exponential Backoff (40 min)
+- [ ] 2.4: Add Feed Status Tracking (30 min)
+- [ ] 2.5: Refactor Loader for Parallel Fetching (50 min)
+- [ ] 2.6: Integrate Retry Logic into Loader (35 min)
+- [ ] 2.7: Improve Build Logging and Error Reporting (30 min)
+- [ ] 2.8: Add Build Failure Logic (20 min)
+- [ ] 2.9: Verify Phase 2 Success Criteria (25 min)
 
 ---
 
@@ -158,8 +166,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Core Infrastructure | 0/8 | Ready to execute | - |
-| 2. Multi-Feed Aggregation | 0/TBD | Not started | - |
+| 1. Core Infrastructure | 8/8 | ✅ Complete | 2026-01-26 |
+| 2. Multi-Feed Aggregation | 0/9 | Ready to execute | - |
 | 3. User Interface | 0/TBD | Not started | - |
 | 4. Search & Filtering | 0/TBD | Not started | - |
 | 5. Deployment & Automation | 0/TBD | Not started | - |
