@@ -35,10 +35,17 @@ Decimal phases appear between their surrounding integers in numeric order.
 4. Feed entries validate against Zod schema, invalid entries are skipped
 5. Landscape.yml parsing uses js-yaml library (no regex) and extracts correct project metadata
 
-**Plans**: TBD (will be defined during phase planning)
+**Plans**: See `.planning/phase-1-plans.md` for detailed breakdown (8 plans, ~3.5 hours total)
 
 Plans:
-- [ ] TBD during phase planning
+- [ ] 1.1: Initialize Astro v5 Project with TypeScript (15 min)
+- [ ] 1.2: Install RSS and YAML Parsing Libraries (10 min)
+- [ ] 1.3: Create TypeScript Types and Zod Schemas (30 min)
+- [ ] 1.4: Implement CNCF Landscape Fetcher and Parser (45 min)
+- [ ] 1.5: Create Custom RSS Loader for Content Layer API (60 min)
+- [ ] 1.6: Configure Content Collection with Custom Loader (20 min)
+- [ ] 1.7: Create Minimal Test Page to Query Collection (20 min)
+- [ ] 1.8: Verify Success Criteria and Document (20 min)
 
 ---
 
@@ -151,7 +158,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Core Infrastructure | 0/TBD | Not started | - |
+| 1. Core Infrastructure | 0/8 | Ready to execute | - |
 | 2. Multi-Feed Aggregation | 0/TBD | Not started | - |
 | 3. User Interface | 0/TBD | Not started | - |
 | 4. Search & Filtering | 0/TBD | Not started | - |

@@ -9,8 +9,8 @@ Requirements for initial Astro rebuild. Includes all core functionality with gra
 
 ### Feed Aggregation
 
-- [ ] **FEED-01**: System fetches RSS feeds from ~100 CNCF project GitHub release feeds at build time
-- [ ] **FEED-02**: System parses both RSS 2.0 and Atom 1.0 feed formats
+- [ ] **FEED-01**: System fetches Atom feeds from ~100 CNCF project GitHub release feeds at build time
+- [ ] **FEED-02**: System parses Atom 1.0 feed format (GitHub releases standard)
 - [ ] **FEED-03**: System fetches feeds in parallel to minimize build time
 - [ ] **FEED-04**: System handles network errors gracefully without failing entire build
 - [ ] **FEED-05**: System retries transient failures (5xx, timeouts) with exponential backoff
