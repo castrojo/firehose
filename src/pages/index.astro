@@ -1,17 +1,169 @@
 ---
+import { getCollection } from 'astro:content';
 
+// Fetch all releases from the content collection
+const releases = await getCollection('releases');
+
+// Sort by date (newest first)
+const sortedReleases = releases.sort((a, b) => {
+  const dateA = a.data.isoDate ? new Date(a.data.isoDate).getTime() : 0;
+  const dateB = b.data.isoDate ? new Date(b.data.isoDate).getTime() : 0;
+  return dateB - dateA;
+});
 ---
 
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Firehose - CNCF Releases</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      line-height: 1.6;
+      color: #24292f;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      color: #57606a;
+      margin-bottom: 2rem;
+    }
+    .release {
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .release-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .project-name {
+      font-weight: 600;
+      color: #0969da;
+    }
+    .project-status {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .graduated { background: #dafbe1; color: #1a7f37; }
+    .incubating { background: #fff8c5; color: #9a6700; }
+    .release-title {
+      font-size: 1.25rem;
+      margin: 0.5rem 0;
+    }
+    .release-title a {
+      color: #0969da;
+      text-decoration: none;
+    }
+    .release-title a:hover {
+      text-decoration: underline;
+    }
+    .release-date {
+      color: #57606a;
+      font-size: 0.875rem;
+    }
+    .description {
+      color: #57606a;
+      margin: 0.5rem 0;
+    }
+    .content-snippet {
+      margin-top: 1rem;
+      color: #24292f;
+    }
+    .stats {
+      background: #f6f8fa;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 2rem;
+    }
+    .stat {
+      flex: 1;
+    }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #0969da;
+    }
+    .stat-label {
+      color: #57606a;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔥 The Firehose</h1>
+  <p class="subtitle">CNCF Project Releases</p>
+  
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-value">{sortedReleases.length}</div>
+      <div class="stat-label">Total Releases</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">{sortedReleases.filter(r => r.data.projectStatus === 'graduated').length}</div>
+      <div class="stat-label">Graduated Projects</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">{sortedReleases.filter(r => r.data.projectStatus === 'incubating').length}</div>
+      <div class="stat-label">Incubating Projects</div>
+    </div>
+  </div>
+  
+  {sortedReleases.map((release) => (
+    <article class="release">
+      <div class="release-header">
+        <span class="project-name">{release.data.projectName || release.data.feedTitle || 'Unknown Project'}</span>
+        {release.data.projectStatus && (
+          <span class={`project-status ${release.data.projectStatus}`}>
+            {release.data.projectStatus}
+          </span>
+        )}
+      </div>
+      
+      {release.data.projectDescription && (
+        <p class="description">{release.data.projectDescription}</p>
+      )}
+      
+      <h2 class="release-title">
+        <a href={release.data.link} target="_blank" rel="noopener noreferrer">
+          {release.data.title}
+        </a>
+      </h2>
+      
+      {release.data.isoDate && (
+        <div class="release-date">
+          {new Date(release.data.isoDate).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
+        </div>
+      )}
+      
+      {release.data.contentSnippet && (
+        <div class="content-snippet">
+          {release.data.contentSnippet.substring(0, 300)}
+          {release.data.contentSnippet.length > 300 ? '...' : ''}
+        </div>
+      )}
+    </article>
+  ))}
+</body>
 </html>
