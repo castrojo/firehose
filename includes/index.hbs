@@ -2,7 +2,7 @@
 <html lang="en">
 
   <head>
-    <title>{{siteTitle}}</title>
+    <title>The Firehose - Cloud Native Releases</title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="robots" content="noindex, nofollow" />
@@ -15,73 +15,65 @@
 
   <body>
     <!-- %after-body-begin.html% -->
-    {{#each dates}}
-      <section class="daily-content js-toggle-accordions-scope">
-        <h2 class="daily-heading">
-          <button
-            class="daily-heading-toggle"
-            data-action="toggle-accordions"
-            title="Click to toggle the day, Ctrl + click to toggle all."
-          >
-            <time class="daily-heading-toggle__weekday js-offset-weekday" data-offset-date={{isoOffsetPublishDate}} datetime="{{isoUtcPublishTime}}">{{isoOffsetPublishDate}}</time>
-            <time class="daily-heading-toggle__date js-offset-date" data-offset-date={{isoOffsetPublishDate}} datetime="{{isoUtcPublishTime}}"></time>
-          </button>
-        </h2>
-        <ul class="sources card">
-          {{#each sources}}
-            <li class="card__section">
-              <section class="js-toggle-accordions-scope">
-                <h3 class="source-heading">
-                  <button
-                    class="source-heading__name"
-                    data-action="toggle-accordions"
-                    title="Click to toggle the source, Ctrl + click to toggle all."
-                  >{{title}}</button>
-                  <a class="source-heading__link" href="{{siteUrl}}">Open</a>
-                </h3>
-                <section class="articles-per-source">
-                  {{#each articles}}
-                    <article>
-                      <details
-                        class="article-expander"
-                        data-action="toggle-native-accordion"
-                        data-accordion-key="{{id}}"
-                        open
-                      >
-                        <summary class="article-expander__title">{{title}}</summary>
-                        <div class="article-content">
-                          {{#if imageUrl}}
-                            <img src="{{imageUrl}}" loading="lazy" class="article-image" alt="" />
-                          {{/if}}
-                          <div class="article-body release-notes">
-                            {{description}}
-                          </div>
-                          <a class="article-link" href="{{link}}" target="_blank" rel="noopener noreferrer">
-                            Read full release notes →
-                          </a>
-                        </div>
-                      </details>
-                    </article>
-                  {{/each}}
-                </section>
-              </section>
-            </li>
-          {{/each}}
-        </ul>
-      </section>
-    {{/each}}
+    <div class="container">
+      <header class="site-header">
+        <h1 class="site-title">The Firehose</h1>
+        <p class="site-subtitle">Cloud Native & CNCF Project Releases</p>
+      </header>
 
-    <footer>
-      {{#if githubRunUrl}}
-      <a class="footer-link" href="{{githubRunUrl}}">
-        <time id="build-timestamp" datetime="{{siteBuildTimestamp}}">{{siteBuildTimestamp}}</time>
-      </a>
-      {{else}}
-      <time id="build-timestamp" datetime="{{siteBuildTimestamp}}">{{siteBuildTimestamp}}</time>
-      {{/if}}
-      <a class="footer-link" href="{{projectUrl}}">osmosfeed {{cliVersion}}</a>
-    </footer>
-    <script src="index.js"></script>
+      <main class="releases-container">
+        {{#each dates}}
+          <section class="date-section">
+            <h2 class="date-heading">
+              <time datetime="{{isoUtcPublishTime}}">{{isoOffsetPublishDate}}</time>
+            </h2>
+            
+            {{#each sources}}
+              <div class="source-group">
+                <h3 class="source-title">
+                  <a href="{{siteUrl}}" class="source-link">{{title}}</a>
+                </h3>
+                
+                {{#each articles}}
+                  <article class="release-card">
+                    <div class="release-header">
+                      <h4 class="release-title">
+                        <a href="{{link}}" target="_blank" rel="noopener noreferrer">{{title}}</a>
+                      </h4>
+                      <time class="release-time" datetime="{{publishedOn}}">{{isoOffsetPublishDate}}</time>
+                    </div>
+                    <div class="release-body markdown-body">
+                      {{#if htmlContent}}
+                        {{{htmlContent}}}
+                      {{else}}
+                        {{description}}
+                      {{/if}}
+                    </div>
+                    <div class="release-footer">
+                      <a href="{{link}}" class="release-link" target="_blank" rel="noopener noreferrer">
+                        View full release →
+                      </a>
+                    </div>
+                  </article>
+                {{/each}}
+              </div>
+            {{/each}}
+          </section>
+        {{/each}}
+      </main>
+
+      <footer class="site-footer">
+        <p>
+          {{#if githubRunUrl}}
+            Last updated: <a href="{{githubRunUrl}}"><time datetime="{{siteBuildTimestamp}}">{{siteBuildTimestamp}}</time></a>
+          {{else}}
+            Last updated: <time datetime="{{siteBuildTimestamp}}">{{siteBuildTimestamp}}</time>
+          {{/if}}
+          | Powered by <a href="{{projectUrl}}">osmosfeed {{cliVersion}}</a>
+        </p>
+      </footer>
+    </div>
+    <script src="html-loader.js"></script>
     <!-- %before-body-end.html% -->
   </body>
 
