@@ -6,8 +6,62 @@
 # Uncomment after GitHub Pages is set up
 # cacheUrl: https://castrojo.github.io/firehose/cache.json
 sources:
+  # Original feeds
   - href: https://github.com/osmoscraft/osmosfeed/releases.atom # Get new feature announcement via this feed
   - href: https://www.cncf.io/feed/ # CNCF blog RSS feed
   - href: https://css-tricks.com/feed/
   - href: https://www.smashingmagazine.com/feed/
   - href: https://www.freecodecamp.org/news/rss/
+  
+  # CNCF Graduated Projects - GitHub Releases and Blogs
+  - href: https://github.com/argoproj/argo-cd/releases.atom # Argo releases
+  - href: https://blog.argoproj.io/rss # Argo blog
+  - href: https://github.com/cri-o/cri-o/releases.atom # CRI-O releases
+  - href: https://medium.com/cri-o/rss # CRI-O blog
+  - href: https://github.com/cilium/cilium/releases.atom # Cilium releases
+  - href: https://github.com/cloudevents/spec/releases.atom # CloudEvents releases
+  - href: https://github.com/coredns/coredns/releases.atom # CoreDNS releases
+  - href: https://coredns.io/blog/rss # CoreDNS blog
+  - href: https://github.com/crossplane/crossplane/releases.atom # Crossplane releases
+  - href: https://github.com/cubeFS/cubefs/releases.atom # CubeFS releases
+  - href: https://github.com/dapr/dapr/releases.atom # Dapr releases
+  - href: https://blog.dapr.io/posts/rss # Dapr blog
+  - href: https://github.com/dragonflyoss/dragonfly/releases.atom # Dragonfly releases
+  - href: https://github.com/envoyproxy/envoy/releases.atom # Envoy releases
+  - href: https://github.com/falcosecurity/falco/releases.atom # Falco releases
+  - href: https://github.com/fluent/fluentd/releases.atom # Fluentd releases
+  - href: https://www.fluentd.org/blog/rss # Fluentd blog
+  - href: https://github.com/fluxcd/flux2/releases.atom # Flux releases
+  - href: https://fluxcd.io/blog/rss # Flux blog
+  - href: https://github.com/goharbor/harbor/releases.atom # Harbor releases
+  - href: https://github.com/helm/helm/releases.atom # Helm releases
+  - href: https://github.com/istio/istio/releases.atom # Istio releases
+  - href: https://istio.io/blog/rss # Istio blog
+  - href: https://github.com/jaegertracing/jaeger/releases.atom # Jaeger releases
+  - href: https://medium.com/jaegertracing/rss # Jaeger blog
+  - href: https://github.com/kedacore/keda/releases.atom # KEDA releases
+  - href: https://keda.sh/blog/rss # KEDA blog
+  - href: https://github.com/knative/serving/releases.atom # Knative releases
+  - href: https://github.com/kubeedge/kubeedge/releases.atom # KubeEdge releases
+  - href: https://github.com/kubernetes/kubernetes/releases.atom # Kubernetes releases
+  - href: https://blog.kubernetes.io/rss # Kubernetes blog
+  - href: https://github.com/linkerd/linkerd2/releases.atom # Linkerd releases
+  - href: https://blog.linkerd.io/rss # Linkerd blog
+  - href: https://github.com/open-policy-agent/opa/releases.atom # Open Policy Agent (OPA) releases
+  - href: https://blog.openpolicyagent.org/rss # Open Policy Agent (OPA) blog
+  - href: https://github.com/prometheus/prometheus/releases.atom # Prometheus releases
+  - href: https://prometheus.io/blog/rss # Prometheus blog
+  - href: https://github.com/rook/rook/releases.atom # Rook releases
+  - href: https://blog.rook.io/rss # Rook blog
+  - href: https://github.com/spiffe/spiffe/releases.atom # SPIFFE releases
+  - href: https://blog.spiffe.io/rss # SPIFFE blog
+  - href: https://github.com/spiffe/spire/releases.atom # SPIRE releases
+  - href: https://github.com/theupdateframework/python-tuf/releases.atom # The Update Framework (TUF) releases
+  - href: https://github.com/tikv/tikv/releases.atom # TiKV releases
+  - href: https://tikv.org/blog/rss # TiKV blog
+  - href: https://github.com/vitessio/vitess/releases.atom # Vitess releases
+  - href: https://vitess.io/blog/rss # Vitess blog
+  - href: https://github.com/cert-manager/cert-manager/releases.atom # cert-manager releases
+  - href: https://github.com/containerd/containerd/releases.atom # containerd releases
+  - href: https://github.com/etcd-io/etcd/releases.atom # etcd releases
+  - href: https://github.com/in-toto/in-toto/releases.atom # in-toto releases
