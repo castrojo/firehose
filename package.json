@@ -1,16 +1,19 @@
 {
   "name": "firehose",
+  "type": "module",
   "version": "1.0.0",
   "description": "The Firehose - An RSS feed reader for CNCF and cloud native content.",
-  "main": "index.js",
   "scripts": {
-    "build": "osmosfeed && node scripts/fetch-landscape-data.js && node scripts/extract-html.js && node scripts/create-html-data.js"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/castrojo/firehose.git"
   },
-  "keywords": ["rss", "feed-reader", "cncf", "cloud-native"],
+  "keywords": ["rss", "feed-reader", "cncf", "cloud-native", "astro"],
   "author": "castrojo",
   "license": "MIT",
   "bugs": {
@@ -18,6 +21,6 @@
   },
   "homepage": "https://github.com/castrojo/firehose#readme",
   "dependencies": {
-    "@osmoscraft/osmosfeed": "^1.2.2"
+    "astro": "^5.16.15"
   }
 }
