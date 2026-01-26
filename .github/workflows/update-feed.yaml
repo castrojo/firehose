@@ -9,6 +9,7 @@ on:
     # Syntax reference: https://docs.github.com/en/actions/reference/events-that-trigger-workflows#schedule
     # Recommended tool: https://crontab.guru/
     - cron: "0 0 * * *"
+  workflow_dispatch:
 
 jobs:
   build:
@@ -29,3 +30,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+
