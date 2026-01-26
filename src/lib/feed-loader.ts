@@ -46,6 +46,7 @@ export function feedLoader(sources: FeedSource[]): Loader {
       let successCount = 0;
       let errorCount = 0;
       let totalEntries = 0;
+      const failedFeeds: Array<{ url: string; error: string; project?: string }> = [];
       
       for (const result of results) {
         if (result.status === 'fulfilled') {
@@ -89,17 +90,39 @@ export function feedLoader(sources: FeedSource[]): Loader {
             });
           }
           
+          // Track failed feed for summary
+          failedFeeds.push({
+            url: feedUrl,
+            error: error.message,
+            project: projectName,
+          });
+          
           errorCount++;
+          logger.error(`${feedUrl}: ${error.message}`);
         }
       }
       
-      // Log summary
-      logger.info(`Load complete: ${successCount} succeeded, ${errorCount} failed, ${totalEntries} total entries`);
+      // Log detailed summary
+      logger.info('─'.repeat(80));
+      logger.info(`📊 Feed Load Summary:`);
+      logger.info(`   ✅ Success: ${successCount}/${sources.length} feeds (${((successCount/sources.length)*100).toFixed(1)}%)`);
+      logger.info(`   ❌ Failed:  ${errorCount}/${sources.length} feeds (${((errorCount/sources.length)*100).toFixed(1)}%)`);
+      logger.info(`   📝 Entries: ${totalEntries} total`);
+      logger.info(`   ⏱️  Duration: ${fetchDuration}s`);
+      
+      if (failedFeeds.length > 0) {
+        logger.info(`\n❌ Failed Feeds:`);
+        for (const failed of failedFeeds) {
+          logger.info(`   • ${failed.project || failed.url}: ${failed.error}`);
+        }
+      }
+      
+      logger.info('─'.repeat(80));
       
       // Warn if too many failures
       const failureRate = errorCount / sources.length;
       if (failureRate > 0.5) {
-        logger.warn(`High failure rate: ${(failureRate * 100).toFixed(1)}% of feeds failed`);
+        logger.warn(`⚠️  High failure rate: ${(failureRate * 100).toFixed(1)}% of feeds failed`);
       }
     },
   };
