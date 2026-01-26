@@ -7,11 +7,7 @@
 cacheUrl: https://castrojo.github.io/firehose/cache.json
 sources:
   # Original feeds
-  - href: https://github.com/osmoscraft/osmosfeed/releases.atom # Get new feature announcement via this feed
   - href: https://www.cncf.io/feed/ # CNCF blog RSS feed
-  - href: https://css-tricks.com/feed/
-  - href: https://www.smashingmagazine.com/feed/
-  - href: https://www.freecodecamp.org/news/rss/
   
   # CNCF Graduated Projects - GitHub Releases and Blogs
   - href: https://github.com/argoproj/argo-cd/releases.atom # Argo releases
