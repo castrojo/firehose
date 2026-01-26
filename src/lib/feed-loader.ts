@@ -124,6 +124,19 @@ export function feedLoader(sources: FeedSource[]): Loader {
       if (failureRate > 0.5) {
         logger.warn(`⚠️  High failure rate: ${(failureRate * 100).toFixed(1)}% of feeds failed`);
       }
+      
+      // Fail build if catastrophic failure (>50% of feeds failed)
+      if (failureRate > 0.5) {
+        throw new Error(
+          `Build failed: ${errorCount}/${sources.length} feeds failed (${(failureRate * 100).toFixed(1)}%). ` +
+          `This exceeds the 50% threshold for graceful degradation.`
+        );
+      }
+      
+      // Success! Build continues with partial data if <50% failed
+      if (errorCount > 0 && errorCount <= sources.length * 0.5) {
+        logger.info(`✅ Build succeeds with partial data (${successCount}/${sources.length} feeds loaded)`);
+      }
     },
   };
 }
