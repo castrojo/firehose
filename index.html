@@ -24,7 +24,7 @@
       <main class="releases-container">
           <section class="date-section">
             <h2 class="date-heading">
-              <time datetime="2026-01-26T18:45:01.000Z">2026-01-26</time>
+              <time datetime="2026-01-26T19:55:18.000Z">2026-01-26</time>
             </h2>
             
               <div class="source-group">
@@ -32,6 +32,63 @@
                   <a href="https://github.com/nats-io/nats-server/releases" class="source-link">Release notes from nats-server</a>
                 </h3>
                 
+                  <article class="release-card">
+                    <div class="release-header">
+                      <h4 class="release-title">
+                        <a href="https://github.com/nats-io/nats-server/releases/tag/v2.12.4-RC.6" target="_blank" rel="noopener noreferrer">Release v2.12.4-RC.6</a>
+                      </h4>
+                      <time class="release-time" datetime="2026-01-26T19:55:18.000Z">2026-01-26</time>
+                    </div>
+                    <div class="release-body markdown-body">
+                        Changelog
+Refer to the 2.12 Upgrade Guide for backwards compatibility notes with 2.11.x.
+Go Version
+1.25.6
+Fixed
+General
+Internal functions for handling headers should no longer corrupt message bodies if appended (#7752)
+JetStream
+Multi-filtered next message lookups in the filestore can now skip blocks when faster to do so (#7750)
+The binary search for start times now handles deleted messages correctly (#7751)
+Consumer updates will now only recalculate num pending when the filter subjects are changed (#7753)
+Consumer info calls will no longer recalculate num pending (#7758)
+Complete Changes
+v2.12.4-RC.4...v2.12.4-RC.6
+                    </div>
+                    <div class="release-footer">
+                      <a href="https://github.com/nats-io/nats-server/releases/tag/v2.12.4-RC.6" class="release-link" target="_blank" rel="noopener noreferrer">
+                        View full release →
+                      </a>
+                    </div>
+                  </article>
+                  <article class="release-card">
+                    <div class="release-header">
+                      <h4 class="release-title">
+                        <a href="https://github.com/nats-io/nats-server/releases/tag/v2.11.12-RC.7" target="_blank" rel="noopener noreferrer">Release v2.11.12-RC.7</a>
+                      </h4>
+                      <time class="release-time" datetime="2026-01-26T19:55:06.000Z">2026-01-26</time>
+                    </div>
+                    <div class="release-body markdown-body">
+                        Changelog
+Refer to the 2.11 Upgrade Guide for backwards compatibility notes with 2.10.x.
+Go Version
+1.25.6
+Fixed
+General
+Internal functions for handling headers should no longer corrupt message bodies if appended (#7752)
+JetStream
+Multi-filtered next message lookups in the filestore can now skip blocks when faster to do so (#7750)
+The binary search for start times now handles deleted messages correctly (#7751)
+Consumer updates will now only recalculate num pending when the filter subjects are changed (#7753)
+Complete Changes
+v2.11.12-RC.5...v2.11.12-RC.7
+                    </div>
+                    <div class="release-footer">
+                      <a href="https://github.com/nats-io/nats-server/releases/tag/v2.11.12-RC.7" class="release-link" target="_blank" rel="noopener noreferrer">
+                        View full release →
+                      </a>
+                    </div>
+                  </article>
                   <article class="release-card">
                     <div class="release-header">
                       <h4 class="release-title">
@@ -8953,7 +9010,7 @@ Co-authored-by: lucasliang <a href="mailto:nkcs_lykx@hotmail.com">nkcs_lykx@hotm
 
       <footer class="site-footer">
         <p>
-            Last updated: <a href="https://github.com/castrojo/firehose/actions/runs/21371260719"><time datetime="2026-01-26T19:36:55.236Z">2026-01-26T19:36:55.236Z</time></a>
+            Last updated: <a href="https://github.com/castrojo/firehose/actions/runs/21372299855"><time datetime="2026-01-26T20:11:22.248Z">2026-01-26T20:11:22.248Z</time></a>
           | Powered by <a href="https://github.com/osmoscraft/osmosfeed">osmosfeed 1.15.1</a>
         </p>
       </footer>
