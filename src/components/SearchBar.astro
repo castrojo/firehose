@@ -130,8 +130,12 @@
             // Trigger the filter change event
             projectFilterSelect.dispatchEvent(new Event('change'));
             
-            // Clear and hide search
-            clearSearch();
+            // Keep the project name in search box (don't clear it)
+            searchInput.value = projectName;
+            
+            // Hide dropdown but show clear button
+            searchResults.style.display = 'none';
+            searchClear.style.display = 'block';
             
             console.log(`[SearchBar] Applied filter for project: ${projectName}`);
           }
@@ -158,11 +162,17 @@
       return div.innerHTML;
     }
     
-    // Clear search
+    // Clear search and filter
     function clearSearch() {
       searchInput.value = '';
       searchResults.style.display = 'none';
       searchClear.style.display = 'none';
+      
+      // Also clear the project filter
+      if (projectFilterSelect) {
+        projectFilterSelect.value = '';
+        projectFilterSelect.dispatchEvent(new Event('change'));
+      }
     }
     
     // Event handlers
@@ -216,6 +226,29 @@
         }
       }
     });
+    
+    // Listen for FilterBar clear button - sync search box
+    const clearFiltersButton = document.getElementById('clear-filters');
+    if (clearFiltersButton) {
+      clearFiltersButton.addEventListener('click', () => {
+        searchInput.value = '';
+        searchResults.style.display = 'none';
+        searchClear.style.display = 'none';
+      });
+    }
+    
+    // Listen for project filter changes - sync search box
+    if (projectFilterSelect) {
+      projectFilterSelect.addEventListener('change', (e) => {
+        const selectedProject = (e.target as HTMLSelectElement).value;
+        
+        // If filter cleared from dropdown, also clear search box
+        if (!selectedProject) {
+          searchInput.value = '';
+          searchClear.style.display = 'none';
+        }
+      });
+    }
   })();
 </script>
 
