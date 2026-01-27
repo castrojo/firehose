@@ -14,11 +14,14 @@ export interface ReleaseGroup {
  * 
  * Strategy:
  * - Group consecutive releases by project name
- * - Within each project group, detect version series
- * - If multiple releases in same minor series (e.g., v1.2.3, v1.2.2, v1.2.1):
- *   - Show most recent (v1.2.3) as lead
- *   - Collapse older patch releases (v1.2.2, v1.2.1)
- * - Major/minor bumps always start new group (always expanded)
+ * - Special handling for prereleases (RC, alpha, beta):
+ *   - All prereleases from same project collapse together
+ *   - This handles parallel development tracks (e.g., v2.11.12-RC.5 and v2.12.4-RC.5)
+ * - For stable releases, group by minor version series:
+ *   - If multiple releases in same minor series (e.g., v1.2.3, v1.2.2, v1.2.1):
+ *     - Show most recent (v1.2.3) as lead
+ *     - Collapse older patch releases (v1.2.2, v1.2.1)
+ *   - Major/minor bumps start new group (always expanded)
  * 
  * @param releases - Sorted releases (newest first)
  * @returns Array of release groups
@@ -36,14 +39,20 @@ export function groupReleases(
     // Check if we can collapse this release into the previous group
     const prevGroup = groups[groups.length - 1];
     
-    if (
+    const canCollapse = 
       prevGroup &&
       prevGroup.project === projectName &&
       version &&
       prevGroup.version &&
-      isSameMinorSeries(prevGroup.version, version)
-    ) {
-      // Same project, same minor series → collapse into previous group
+      (
+        // Case 1: Both are prereleases from same project → always group
+        (version.prerelease && prevGroup.version.prerelease) ||
+        // Case 2: Both are stable and in same minor series → group
+        (!version.prerelease && !prevGroup.version.prerelease && isSameMinorSeries(prevGroup.version, version))
+      );
+    
+    if (canCollapse) {
+      // Collapse into previous group
       prevGroup.collapsedReleases.push(release);
     } else {
       // Different project, different series, or no version → new group
