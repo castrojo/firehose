@@ -8,6 +8,7 @@ import KeyboardHelp from '../components/KeyboardHelp.astro';
 import SearchBar from '../components/SearchBar.astro';
 import FilterBar from '../components/FilterBar.astro';
 import InfoBox from '../components/InfoBox.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 import { groupReleases } from '../lib/releaseGrouping';
 
 // Base URL from Astro config (e.g., /firehose for GitHub Pages)
@@ -88,6 +89,27 @@ const remainingReleasesData = remainingReleases.map(r => ({
   <meta name="description" content="CNCF project releases aggregated in one place">
   <link rel="alternate" type="application/rss+xml" title="The Firehose - CNCF Releases" href={`${baseUrl}feed.xml`}>
   <title>The Firehose - CNCF Releases</title>
+  
+  <!-- Theme initialization script - runs before page render to prevent FOUC -->
+  <script is:inline>
+    (function() {
+      const getTheme = () => {
+        // Check localStorage first
+        const stored = localStorage.getItem('theme');
+        if (stored === 'light' || stored === 'dark') {
+          return stored;
+        }
+        // Fall back to system preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      };
+      
+      const theme = getTheme();
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -97,14 +119,17 @@ const remainingReleasesData = remainingReleases.map(r => ({
           <h1 class="site-title">🔥 The Firehose</h1>
           <p class="site-subtitle">CNCF Project Releases</p>
         </div>
-        <button 
-          id="help-button" 
-          class="keyboard-help-button"
-          aria-label="Keyboard shortcuts"
-          title="Keyboard shortcuts (Press ?)"
-        >
-          ?
-        </button>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <ThemeToggle />
+          <button 
+            id="help-button" 
+            class="keyboard-help-button"
+            aria-label="Keyboard shortcuts"
+            title="Keyboard shortcuts (Press ?)"
+          >
+            ?
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -259,6 +284,10 @@ const remainingReleasesData = remainingReleases.map(r => ({
             e.preventDefault();
             this.showHelp();
             break;
+          case 't':
+            e.preventDefault();
+            this.toggleTheme();
+            break;
           case 'Escape':
             this.handleEscape();
             break;
@@ -328,6 +357,12 @@ const remainingReleasesData = remainingReleases.map(r => ({
       document.getElementById('keyboard-help-backdrop')?.classList.add('visible');
     }
     
+    toggleTheme() {
+      if (typeof window.toggleTheme === 'function') {
+        window.toggleTheme();
+      }
+    }
+    
     hideHelp() {
       document.getElementById('keyboard-help-modal')?.classList.remove('visible');
       document.getElementById('keyboard-help-backdrop')?.classList.remove('visible');
@@ -388,7 +423,7 @@ const remainingReleasesData = remainingReleases.map(r => ({
     --color-cncf-stone: #E5E5E5;
     --color-cncf-white: #FFFFFF;
     
-    /* CNCF Site Theme - Matching cncf.io/blog */
+    /* CNCF Site Theme - Light Mode (Default) */
     --color-bg-default: #ffffff;
     --color-bg-secondary: #fdfdfd;  /* Very light gray from CNCF site */
     --color-bg-tertiary: #f8f8f8;  /* Subtle gray for cards */
@@ -398,6 +433,21 @@ const remainingReleasesData = remainingReleases.map(r => ({
     --color-text-tertiary: #c4c4c4;  /* Gray-500 from CNCF */
     --color-text-link: #D62293; /* CNCF pink for links */
     --color-accent-emphasis: #0086FF; /* CNCF blue for accents */
+    --color-rss-orange: #ff6600; /* RSS icon color */
+  }
+  
+  /* Dark Mode Theme - GitHub-inspired with CNCF accents */
+  [data-theme="dark"] {
+    --color-bg-default: #0d1117;  /* GitHub dark background */
+    --color-bg-secondary: #010409;  /* Darker background for page */
+    --color-bg-tertiary: #161b22;  /* Elevated surfaces (cards) */
+    --color-border-default: #30363d;  /* Subtle borders */
+    --color-text-primary: #c9d1d9;  /* Primary text (near-white) */
+    --color-text-secondary: #8b949e;  /* Secondary text (muted) */
+    --color-text-tertiary: #6e7681;  /* Tertiary text (subtle) */
+    --color-text-link: #ff6bc4;  /* Brighter CNCF pink for dark mode contrast */
+    --color-accent-emphasis: #58a6ff;  /* Brighter CNCF blue for dark mode */
+    --color-rss-orange: #ffa657;  /* Brighter orange for dark mode */
   }
   
   * {
