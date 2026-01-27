@@ -59,6 +59,9 @@
     // Function to render a single release card
     function renderReleaseCard(release: any): string {
       const data = release.data;
+      const projectName = data.projectName || data.feedTitle || 'Unknown Project';
+      const projectStatus = data.projectStatus || 'unknown';
+      
       const formattedDate = data.isoDate
         ? new Date(data.isoDate).toLocaleDateString('en-US', {
             year: 'numeric',
@@ -67,12 +70,18 @@
           })
         : null;
       
-      const projectStatus = data.projectStatus
-        ? `<span class="project-status ${data.projectStatus}">${data.projectStatus}</span>`
+      // Get logo path
+      const logoPath = getProjectLogoPath(projectName);
+      
+      // Truncate description to 2 sentences
+      const description = data.projectDescription ? truncateToSentences(data.projectDescription, 2) : '';
+      
+      const projectStatusHtml = projectStatus !== 'unknown'
+        ? `<span class="project-status ${projectStatus}">${projectStatus}</span>`
         : '';
       
-      const projectDescription = data.projectDescription
-        ? `<p class="project-description">${escapeHtml(data.projectDescription)}</p>`
+      const projectDescriptionHtml = description
+        ? `<p class="project-description" title="${escapeHtml(data.projectDescription || '')}">${escapeHtml(description)}</p>`
         : '';
       
       const dateHtml = formattedDate
@@ -88,18 +97,27 @@
         <article 
           class="release-card" 
           data-pagefind-ignore
-          data-project="${escapeHtml(data.projectName || data.feedTitle || 'Unknown')}"
-          data-status="${escapeHtml(data.projectStatus || 'unknown')}"
+          data-project="${escapeHtml(projectName)}"
+          data-status="${escapeHtml(projectStatus)}"
           data-date="${escapeHtml(data.isoDate ? data.isoDate.split('T')[0] : '')}"
         >
           <div class="release-header">
-            <span class="project-name">${escapeHtml(data.projectName || data.feedTitle || 'Unknown Project')}</span>
-            ${projectStatus}
+            <img 
+              src="${logoPath}" 
+              alt="${escapeHtml(projectName)} logo"
+              class="project-logo"
+              width="32"
+              height="32"
+              loading="lazy"
+              onerror="this.style.display='none'"
+            />
+            <span class="project-name">${escapeHtml(projectName)}</span>
+            ${projectStatusHtml}
           </div>
-          ${projectDescription}
+          ${projectDescriptionHtml}
           <h2 class="release-title">
             <a href="${escapeHtml(data.link)}" target="_blank" rel="noopener noreferrer">
-              ${escapeHtml(data.title)}
+              ${escapeHtml(projectName)} ${escapeHtml(data.title)}
             </a>
           </h2>
           ${dateHtml}
@@ -113,6 +131,59 @@
       const div = document.createElement('div');
       div.textContent = text;
       return div.innerHTML;
+    }
+    
+    // Get project logo path (client-side version of logoMapper.ts)
+    function getProjectLogoPath(projectName: string): string {
+      if (!projectName) {
+        return '/firehose/logos/placeholder.svg';
+      }
+      
+      // Normalize project name to match cncf/artwork structure
+      const normalized = projectName
+        .toLowerCase()
+        .replace(/\s+/g, '-')      // Spaces to hyphens
+        .replace(/[()]/g, '')      // Remove parentheses
+        .replace(/\./g, '');       // Remove dots
+      
+      // Known edge cases (project name doesn't match artwork directory)
+      const specialCases: Record<string, string> = {
+        'in-toto': 'in-toto',
+        'open-policy-agent': 'opa',
+        'the-update-framework': 'tuf',
+      };
+      
+      const logoDir = specialCases[normalized] || normalized;
+      
+      // Use icon format (square) for compact display in card headers
+      return `/firehose/logos/${logoDir}/icon-color.svg`;
+    }
+    
+    // Truncate description to 2 sentences (client-side version of truncate.ts)
+    function truncateToSentences(text: string | undefined, sentenceCount: number = 2): string | undefined {
+      if (!text || text.trim().length === 0) {
+        return text;
+      }
+      
+      // Split on sentence boundaries
+      const sentenceRegex = /[.!?](?:\s+|$)/g;
+      const matches = [];
+      let match;
+      
+      while ((match = sentenceRegex.exec(text)) !== null) {
+        matches.push(match.index + 1);
+      }
+      
+      // If fewer sentences than requested, return original
+      if (matches.length <= sentenceCount) {
+        return text;
+      }
+      
+      // Get position of nth sentence ending
+      const truncateAt = matches[sentenceCount - 1];
+      const truncated = text.slice(0, truncateAt).trim();
+      
+      return truncated + '...';
     }
     
     // Get active filters
