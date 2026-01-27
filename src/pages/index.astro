@@ -6,6 +6,7 @@ import ErrorBanner from '../components/ErrorBanner.astro';
 import KeyboardHelp from '../components/KeyboardHelp.astro';
 import SearchBar from '../components/SearchBar.astro';
 import FilterBar from '../components/FilterBar.astro';
+import InfoBox from '../components/InfoBox.astro';
 
 // Fetch all releases from the content collection
 const releases = await getCollection('releases');
@@ -99,6 +100,17 @@ const remainingReleasesData = remainingReleases.map(r => ({
     <div class="page-layout">
       <!-- Sidebar -->
       <aside class="sidebar">
+        <!-- About CNCF box -->
+        <InfoBox 
+          title="About" 
+          description="The Firehose aggregates release notes from CNCF projects."
+          links={[
+            { text: 'CNCF Homepage', url: 'https://www.cncf.io/', external: true },
+            { text: 'CNCF Landscape', url: 'https://landscape.cncf.io/', external: true },
+            { text: 'GitHub Repository', url: 'https://github.com/castrojo/firehose', external: true }
+          ]}
+        />
+        
         <!-- Stats box -->
         <div class="stats">
           <h2 class="sidebar-heading">Statistics</h2>
