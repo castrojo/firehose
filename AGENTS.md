@@ -4,13 +4,16 @@ This document provides guidelines for AI agents and AI-assisted development tool
 
 ## Overview
 
-The Firehose is an RSS feed reader for CNCF and cloud native content. It is meant to summarize releases across the ecosystem
+The Firehose is an Astro-based RSS feed aggregator for CNCF and cloud native project releases. It aggregates 610+ releases from 62 CNCF projects with full-text search, filtering, keyboard navigation, and automated daily updates.
 
-## Guidance
+**Live Site:** https://castrojo.github.io/firehose/
 
-- @cncf/landscape is the single source of truth for all projects, it MUST always take priority
-- Use the github MCP server for interfacing with the @cncf/landscape, do not use the web search
-- Keep this site as simple and straightforward to maintain as possible. Be surgical and not verbose.
+## Core Principles
+
+- **@cncf/landscape is the single source of truth** - It MUST always take priority for project metadata
+- **Use the github MCP server** for interfacing with @cncf/landscape, do not use web search
+- **Keep it simple** - Be surgical and not verbose. Minimize dependencies.
+- **Maintain responsive design** - Support 320px to 1920px viewports
 
 ## Attribution Requirements
 
@@ -23,7 +26,7 @@ Assisted-by: [Model Name] via [Tool Name]
 Example:
 
 ```text
-Assisted-by: Claude 3.5 Sonnet via GitHub Copilot
+Assisted-by: Claude 3.5 Sonnet via Cline
 ```
 
 ## Commit Message Format
@@ -46,334 +49,498 @@ feat: add support for new RSS feed format
 This change adds support for RSS 2.0 feeds in addition
 to the existing Atom feed support.
 
-Assisted-by: Claude 3.5 Sonnet via GitHub Copilot
+Assisted-by: Claude 3.5 Sonnet via Cline
 ```
+
+Commit types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
 
 ## Project-Specific Guidance
 
-### Architecture Understanding
+### Architecture Understanding (v1.0+)
 
-Before making changes, agents should understand:
+The Firehose is built with **Astro v5** using a modern, build-time aggregation architecture:
 
-1. **Build-time processing**: HTML content is extracted during build, not at runtime
-2. **Template system**: Uses Handlebars (`includes/index.hbs`)
-3. **Custom styling**: GitHub Primer-inspired CSS in `static/index.css`
-4. **Build pipeline**: `osmosfeed` → `fetch-landscape-data.js` → `extract-html.js` → `create-html-data.js`
-5. **Client-side enhancement**: JavaScript loaders inject HTML and project metadata after page load
+1. **Build-time aggregation**: Astro Content Layer API fetches and processes feeds during build
+2. **Custom RSS loader**: `src/content/loader.ts` handles parallel feed fetching with error handling
+3. **Static site generation**: All content is pre-rendered as static HTML
+4. **Client-side enhancement**: Search (Pagefind), filters, and keyboard nav work after page load
+5. **Daily automation**: GitHub Actions runs scheduled builds at 6 AM UTC
 
-### Key Files
+**Key architectural decisions:**
+- Astro v5 Content Layer API (not osmosfeed - that was the prototype)
+- Build-time processing for performance
+- Static deployment to GitHub Pages
+- Client-side features for interactivity
+- CNCF Landscape integration for project metadata
 
-- `osmosfeed.yaml` - Feed configuration
-- `includes/index.hbs` - Handlebars template
-- `static/index.css` - Custom CSS styling
-- `static/html-loader.js` - Client-side HTML injector
-- `static/project-info-loader.js` - Client-side project metadata loader
-- `scripts/fetch-landscape-data.js` - CNCF Landscape data fetcher
-- `scripts/extract-html.js` - Build-time HTML extraction
-- `scripts/create-html-data.js` - JSON cache generator
-- `public/landscape-data.json` - Cached CNCF project metadata (generated)
+### Key Files and Directories
+
+**Core Application:**
+- `src/pages/index.astro` - Main page with sidebar layout and release feed
+- `src/content/loader.ts` - Custom RSS loader with parallel fetching and error handling
+- `src/content/config.ts` - Content collection schema definition
+- `src/config/feeds.ts` - Feed source configuration (62 CNCF projects)
+
+**Components:**
+- `src/components/ReleaseCard.astro` - Individual release display with markdown rendering
+- `src/components/SearchBar.astro` - Pagefind search integration
+- `src/components/FilterBar.astro` - Client-side filtering (project/status/date)
+- `src/components/KeyboardHelp.astro` - Vim-style keyboard shortcuts modal
+- `src/components/InfiniteScroll.astro` - Performance optimization for large feeds
+
+**Libraries:**
+- `src/lib/schemas.ts` - Zod schemas for validation
+- `src/lib/markdown.ts` - GitHub-compatible markdown rendering (marked.js)
+- `src/lib/landscape.ts` - CNCF Landscape data fetcher and parser
+
+**Build and Deployment:**
+- `astro.config.mjs` - Astro configuration with GitHub Pages settings
+- `.github/workflows/deploy.yml` - GitHub Actions workflow (build + deploy)
+- `package.json` - Dependencies and scripts
+
+**Planning Documents:**
+- `.planning/STATE.md` - Current project status and session continuity
+- `.planning/ROADMAP.md` - Phase breakdown and success criteria
+- `.planning/backlog.md` - Future enhancements and known issues
+- `.planning/PROJECT.md` - Requirements and design decisions
+
+### Architecture Deep Dive
+
+#### Feed Loading Pipeline
+
+1. **Build starts** → Astro invokes Content Layer API
+2. **Custom loader** (`src/content/loader.ts`) executes:
+   - Fetches CNCF landscape data from GitHub
+   - Parses landscape.yml for project metadata
+   - Fetches 62 feeds in parallel (Promise.allSettled)
+   - Retries transient errors (5xx, timeouts) with exponential backoff
+   - Skips permanent errors (404, 403)
+   - Enriches entries with project name, description, status
+   - Validates with Zod schemas
+3. **Content collection** populated with release entries
+4. **Static pages generated** by Astro
+5. **Pagefind indexes** content for search
+6. **Deploy** to GitHub Pages
+
+**Error handling:** Graceful degradation - build succeeds if 50%+ feeds succeed. Failed feeds tracked with `feedStatus: 'error'`.
+
+#### Client-Side Features
+
+**Search (Pagefind):**
+- Static search index generated at build time
+- No backend required, works offline after first load
+- Term highlighting in results
+- Located in `src/components/SearchBar.astro`
+
+**Filtering:**
+- Client-side JavaScript reads `data-*` attributes on release cards
+- Instant filtering (<10ms) by project, status, date range
+- No page reload required
+- Located in `src/components/FilterBar.astro`
+
+**Keyboard Navigation:**
+- Vim-style shortcuts: `j` (down), `k` (up), `o`/`Enter` (open), `/` (search), `?` (help)
+- Focus indicator with subtle shadow
+- Screen reader support
+- Located in `src/pages/index.astro` (inline script)
+
+### Current State (v1.1)
+
+**Status:** Production-ready, all core features working ✅
+
+**Completed Milestones:**
+- ✅ v1.0 - All 5 phases complete (Core Infrastructure → Deployment)
+- ✅ v1.0 UI Enhancements - Sidebar layout, larger project names, improved navigation
+- ✅ v1.1 Bug Fixes - Search functionality fixed after layout changes
+
+**Performance Metrics:**
+- 610 releases from 62 CNCF projects
+- 100% feed success rate
+- Build time: ~3-5 seconds
+- Daily automated updates at 6 AM UTC
+
+**Known Issues:** None! 🎉
+
+**Optional Enhancements (Backlog):**
+1. Truncate long project descriptions (Medium priority)
+2. Collapse minor releases (High priority)
+3. CNCF branding (Future milestone)
 
 ### Common Tasks
 
 #### Adding a New Feed
 
-1. Edit `osmosfeed.yaml`
-2. Add the feed URL under `sources`
-3. Run `npm run build` to test
+1. Edit `src/config/feeds.ts`
+2. Add feed URL to the appropriate array (graduated or incubating)
+3. Format: `'https://github.com/org/repo/releases.atom'`
+4. Run `npm run build` to test
+5. Verify feed loads successfully in build logs
 
-#### Modifying Template
+**Note:** Only add CNCF projects. Check https://landscape.cncf.io first.
 
-1. Edit `includes/index.hbs`
-2. Follow Handlebars best practices (see README.md)
-3. Use `{{}}` for escaped content, `{{{}}}` for trusted HTML
-4. Test with `npm run build`
+#### Modifying the Layout
 
-#### Updating Styles
+1. Edit `src/pages/index.astro` for main page structure
+2. Current layout: Two-column grid with sidebar (320px) + main content
+3. Sidebar contains: Stats and Filters
+4. Main content contains: Search and release cards
+5. Responsive breakpoints:
+   - Desktop (1024px+): Two-column with sticky sidebar
+   - Tablet (below 1024px): Single column, sidebar stacks
+   - Mobile (480px and below): Fully vertical
+6. Test with `npm run build` and `npm run preview`
 
-1. Edit `static/index.css`
-2. Follow GitHub Primer conventions
-3. Ensure responsive design
-4. Test on multiple screen sizes
+#### Updating Component Styling
+
+1. Edit the relevant component in `src/components/`
+2. Styles are scoped to each Astro component
+3. Use CSS variables from `:root` in `src/pages/index.astro`:
+   - `--color-bg-default`, `--color-bg-secondary`
+   - `--color-border-default`
+   - `--color-text-primary`, `--color-text-secondary`, `--color-text-tertiary`
+   - `--color-text-link`, `--color-accent-emphasis`
+4. Follow GitHub Primer design conventions
+5. Ensure responsive design (test at 320px, 768px, 1024px, 1920px)
+
+#### Modifying Release Card Display
+
+1. Edit `src/components/ReleaseCard.astro`
+2. Structure: Project header → Description → Title → Date → Content
+3. Content is rendered as GitHub-compatible markdown (via `marked.js`)
+4. Project metadata comes from CNCF Landscape enrichment
+5. Maintain accessibility (semantic HTML, ARIA labels)
 
 ### Testing Changes
 
-Always run the full build pipeline:
-
+**Local Development:**
 ```bash
-npm run build
-cd public
-python3 -m http.server 8080
+npm run dev
+# Visit http://localhost:4321/firehose
 ```
 
-Visit http://localhost:8080 to verify changes.
+**Full Build Test:**
+```bash
+npm run build
+npm run preview
+# Visit http://localhost:4321/firehose
+```
+
+**What to verify:**
+- [ ] Build completes without errors
+- [ ] All 62 feeds load successfully (check build logs)
+- [ ] Search works (type in search box)
+- [ ] Filters work (project, status, date range)
+- [ ] Keyboard navigation works (j/k/o/?)
+- [ ] Responsive design works (resize browser)
+- [ ] Infinite scroll works (scroll to bottom)
+- [ ] Links open in new tabs
 
 ### Code Quality Standards
 
-1. **JavaScript**: Follow existing code style (no linters configured)
-2. **CSS**: Use existing variable naming conventions
-3. **Handlebars**: Follow semantic HTML and accessibility practices
-4. **Dependencies**: Minimize external dependencies (currently only osmosfeed)
+1. **TypeScript**: Use proper types, follow existing patterns
+2. **Astro components**: Scoped styles, semantic HTML
+3. **CSS**: Use CSS variables, mobile-first responsive design
+4. **JavaScript**: Vanilla JS for client-side features (no frameworks)
+5. **Accessibility**: ARIA labels, keyboard navigation, screen reader support
+6. **Dependencies**: Minimize additions (current stack is intentionally lean)
 
-## Pull Request Guidelines
+### Current Dependencies
 
-### PR Description Template
+**Core:**
+- `astro@5.x` - Static site generator
+- `rss-parser@3.x` - RSS/Atom feed parsing
+- `marked@17.x` - Markdown rendering
+- `zod@3.x` - Schema validation
 
-```markdown
-## Description
-[Brief description of changes]
-```
+**Search:**
+- `pagefind@1.x` - Static search (dev dependency)
 
-### Review Process
+**Build:**
+- Node.js 20 (LTS)
+- GitHub Actions for CI/CD
 
-1. Ensure all commits include "Assisted-by" footer
-2. Verify build completes successfully
-3. Test locally before submitting
-4. Include screenshots for visual changes
-5. Reference related issues if applicable
+**Do NOT add** without discussion:
+- UI frameworks (React, Vue, Svelte)
+- CSS frameworks (Tailwind, Bootstrap)
+- State management libraries
+- Additional build tools
 
 ## Best Practices for AI Agents
 
 ### Do's
 
-- Understand the full context before making changes  
-- Follow existing code patterns and conventions  
-- Test changes with `npm run build`  
-- Include proper attribution in commits  
-- Document significant changes  
-- Preserve existing functionality  
-- Use semantic commit messages  
+✅ Read `.planning/STATE.md` first to understand current status  
+✅ Check `.planning/backlog.md` for known issues and future work  
+✅ Follow existing code patterns and conventions  
+✅ Test changes with `npm run build`  
+✅ Include proper attribution in commits  
+✅ Maintain responsive design (320px-1920px)  
+✅ Preserve accessibility features  
+✅ Update planning documents when completing work  
+✅ Use semantic commit messages  
+✅ Keep the site simple and maintainable  
 
 ### Don'ts
 
-❌ Don't modify core osmosfeed behavior (it's a dependency)  
 ❌ Don't add unnecessary dependencies  
-❌ Don't break existing feed sources  
+❌ Don't break existing features without testing  
 ❌ Don't remove attribution from existing commits  
 ❌ Don't make breaking changes without discussion  
 ❌ Don't skip the build process  
+❌ Don't modify GitHub Actions workflow without testing  
+❌ Don't change Astro configuration without understanding impacts  
+❌ Don't break responsive design  
+❌ **CRITICAL:** Don't run `astro check` in build (breaks content collection in CI/CD)  
 
 ## Debugging Common Issues
 
 ### Build Failures
 
-If `npm run build` fails:
+**Symptom:** `npm run build` fails
 
-1. Check network connectivity (extract-html.js fetches remote feeds)
-2. Verify osmosfeed.yaml syntax
-3. Check for rate limiting on GitHub feeds
-4. Review error messages in extract-html.js output
+**Check:**
+1. Network connectivity (loader fetches 62 feeds + landscape data)
+2. Feed URL changes (projects may rename repos)
+3. TypeScript errors (run `npm run dev` to see errors)
+4. Content collection errors (check `src/content/loader.ts`)
+5. Zod validation failures (check schemas in `src/lib/schemas.ts`)
+
+**Common causes:**
+- GitHub API rate limiting (rare, we use releases.atom)
+- Feed URL 404 (project moved/renamed)
+- Landscape.yml structure changed
+- TypeScript type errors
+
+### Search Not Working
+
+**Symptom:** Search input doesn't show results
+
+**Check:**
+1. Browser console for JavaScript errors
+2. Pagefind index files in `dist/pagefind/` after build
+3. SearchBar component loaded correctly
+4. Search input width/positioning (should fill available space)
+5. Network tab: `/pagefind/pagefind.js` loads successfully
+
+**Recent fix (v1.1):** SearchBar width constraints removed for sidebar layout
+
+### Filters Not Working
+
+**Symptom:** Filter dropdowns don't filter releases
+
+**Check:**
+1. Browser console for JavaScript errors
+2. `data-project`, `data-status`, `data-date` attributes on `.release-card` elements
+3. FilterBar script loaded
+4. Event listeners attached correctly
 
 ### Styling Issues
 
-If styles don't apply:
+**Symptom:** Layout broken or styles not applied
 
-1. Clear browser cache
-2. Verify CSS file is in `public/` after build
-3. Check browser console for errors
-4. Validate CSS syntax
+**Check:**
+1. Browser cache (hard refresh: Ctrl+Shift+R / Cmd+Shift+R)
+2. CSS scoping (Astro components have scoped styles by default)
+3. CSS variable usage (must be defined in `:root`)
+4. Responsive breakpoints (test at multiple widths)
+5. Grid/flexbox issues (check browser DevTools)
 
-### Template Issues
+**Recent changes (v1.0):**
+- Two-column grid layout with sidebar
+- Container width increased to 1400px
+- Stats and filters moved to sidebar
 
-If template doesn't render:
+### Keyboard Navigation Issues
 
-1. Validate Handlebars syntax
-2. Check data structure matches template expectations
-3. Verify osmosfeed successfully generated data
-4. Review browser console for JavaScript errors
+**Symptom:** j/k navigation doesn't work
+
+**Check:**
+1. Focus on input fields (keyboard nav disabled when typing)
+2. `.kbd-focused` class applied correctly
+3. `scrollIntoView({ behavior: 'smooth', block: 'start' })` working
+4. Keyboard event listeners attached
 
 ## CNCF Landscape Integration
 
 ### Overview
 
-The Firehose integrates with the CNCF Landscape to display project names and descriptions instead of generic feed titles like "Release notes from dapr". This integration happens in two stages:
+The Firehose enriches feed entries with CNCF Landscape metadata (project name, description, status). This happens at build time through the custom content loader.
 
-1. **Build-time**: Fetch and parse landscape data
-2. **Runtime**: Client-side JavaScript updates the DOM with project metadata
+### Landscape Data Pipeline
 
-### Landscape File Structure
+1. **Fetch** (`src/lib/landscape.ts:fetchLandscapeData`)
+   - Downloads `landscape.yml` from cncf/landscape repository
+   - Returns raw YAML text
 
-The CNCF Landscape is stored at `https://raw.githubusercontent.com/cncf/landscape/master/landscape.yml`.
+2. **Parse** (`src/lib/landscape.ts:parseLandscapeYaml`)
+   - Custom line-by-line parser (not js-yaml)
+   - Handles specific indentation structure
+   - Extracts: name, repo_url, project status, summary_use_case
 
-**IMPORTANT**: Always use the GitHub MCP to fetch this file. Use:
+3. **Map** (`src/lib/landscape.ts:createProjectMap`)
+   - Creates lookup by `org/repo` key
+   - Structure: `{ "dapr/dapr": { name, description, status, ... } }`
+
+4. **Enrich** (`src/content/loader.ts:enrichEntry`)
+   - Matches feed URL to landscape project
+   - Adds projectName, projectDescription, projectStatus to entry
+   - Falls back to feed title if no match
+
+### Landscape YAML Structure
+
+**IMPORTANT:** Always use GitHub MCP to fetch landscape.yml:
 ```
 github-mcp-server-get_file_contents owner:cncf repo:landscape path:landscape.yml
 ```
 
-#### YAML Structure
+**Indentation is critical:**
+- Item marker (`- item:`): 10 spaces
+- Item fields (`name:`, `repo_url:`, `extra:`): 12 spaces
+- Extra fields (`summary_use_case:`): 14 spaces
+- Field content: 16 spaces
 
-The landscape.yml file uses the following indentation structure:
+**Parsing rules:**
+- Match exact indentation with regex
+- Multi-line content at 16 spaces belongs to field at 14 spaces
+- New field at 14 spaces terminates previous field
+- Section ends when indentation decreases to ≤13 spaces
 
-```yaml
-landscape:
-  - category:
-    subcategories:
-      - subcategory:
-        items:
-          - item:                                    # 10 spaces
-            name: Project Name                       # 12 spaces (item fields)
-            homepage_url: https://example.com        # 12 spaces
-            project: graduated                       # 12 spaces
-            repo_url: https://github.com/org/repo    # 12 spaces
-            logo: project.svg                        # 12 spaces
-            extra:                                   # 12 spaces
-              lfx_slug: project                      # 14 spaces (extra fields)
-              summary_use_case: >-                   # 14 spaces
-                Description text continues here      # 16 spaces (content)
-                across multiple lines with           # 16 spaces
-                consistent indentation.              # 16 spaces
-              summary_business_use_case: >-          # 14 spaces (next field)
-                Another description field            # 16 spaces
-```
+**See:** Detailed parsing logic in `src/lib/landscape.ts`
 
-#### Key Indentation Levels
+### Troubleshooting Landscape Integration
 
-- **Item marker** (`- item:`): 10 spaces
-- **Item fields** (`name:`, `repo_url:`, `extra:`): 12 spaces
-- **Extra fields** (`summary_use_case:`): 14 spaces  
-- **Field content**: 16 spaces
-
-#### Critical Parsing Rules
-
-1. **Match exact indentation**: Use `^\s{12}name:\s+(.+)$` for item fields, `^\s{14}summary_use_case:` for extra fields
-2. **Multi-line content**: Content at 16 spaces belongs to the field at 14 spaces
-3. **Field termination**: A new field at 14 spaces ends the previous field's content
-4. **Section termination**: Indentation at 13 spaces or less exits the extra section
-5. **Repository matching**: Extract `org/repo` from `repo_url` for lookup key
-
-#### Example Parsing Logic
-
-```javascript
-// Item field (12 spaces)
-if (line.match(/^\s{12}name:\s+(.+)$/)) {
-  currentItem.name = line.match(/^\s{12}name:\s+(.+)$/)[1].trim();
-}
-
-// Extra section start (12 spaces)
-if (line.match(/^\s{12}extra:\s*$/)) {
-  inExtra = true;
-}
-
-// Summary field start (14 spaces)
-if (line.match(/^\s{14}summary_use_case:\s+>-?\s*$/)) {
-  inSummaryUseCase = true;
-  summaryLines = [];
-}
-
-// Content lines (16 spaces)
-if (line.match(/^\s{16}\S/)) {
-  summaryLines.push(line.trim());
-}
-
-// Field ends when new field starts (14 spaces)
-if (line.match(/^\s{14}\S/)) {
-  currentItem.description = summaryLines.join(' ').trim();
-  inSummaryUseCase = false;
-}
-```
-
-### Data Pipeline
-
-#### 1. Fetch Landscape Data (`scripts/fetch-landscape-data.js`)
-
-**Purpose**: Download and parse CNCF Landscape YAML, extract project metadata
-
-**Key Functions**:
-- `fetchUrl(url)` - Downloads the landscape.yml file
-- `parseYaml(text)` - Parses YAML with specific indentation rules
-- `createProjectMap(projects)` - Creates lookup by name and org/repo
-
-**Output**: `public/landscape-data.json` with structure:
-```json
-{
-  "dapr/dapr": {
-    "name": "Dapr",
-    "description": "The Distributed Application Runtime (Dapr) provides APIs...",
-    "repo_url": "https://github.com/dapr/dapr",
-    "homepage_url": "https://dapr.io"
-  }
-}
-```
-
-**When to modify**: When landscape structure changes or different fields are needed
-
-#### 2. Enrich Cache with Project Data (`scripts/extract-html.js`)
-
-**Purpose**: Match feeds to landscape projects and enrich cache.json
-
-**Key Functions**:
-- `matchProject(feedUrl, landscapeData)` - Matches GitHub URL to project
-- Extracts `org/repo` from feed URL
-- Adds `projectName` and `projectDescription` to source objects
-
-**Input**: `public/cache.json`, `public/landscape-data.json`  
-**Output**: Enriched `public/cache.json`
-
-**When to modify**: When changing how feeds are matched to projects
-
-#### 3. Client-Side Loading (`static/project-info-loader.js`)
-
-**Purpose**: Update DOM with project information after page load
-
-**Why client-side?**: Osmosfeed doesn't pass custom fields like `projectName` through to the Handlebars template. It has a fixed schema and transforms the data during the build process.
-
-**How it works**:
-1. Fetches `landscape-data.json` on page load
-2. Finds all `.source-header` elements
-3. Extracts `org/repo` from the link URL
-4. Updates project name from "Release notes from X" to actual project name
-5. Injects project description paragraph
-
-**When to modify**: When changing the display format or adding new metadata
-
-### Common Operations
-
-#### Adding New Landscape Fields
-
-1. Update `parseYaml()` in `scripts/fetch-landscape-data.js` to extract new field
-2. Update the data structure in `createProjectMap()` to include the field
-3. Update `static/project-info-loader.js` to display the field
-4. Update CSS in `static/index.css` for styling
-
-#### Troubleshooting Landscape Data
-
-**No descriptions showing:**
-- Check `public/landscape-data.json` exists and has data
-- Verify indentation parsing in `parseYaml()`
-- Check browser console for JavaScript errors
-- Confirm `project-info-loader.js` is loaded
+**No project names showing:**
+- Check build logs for "Fetching CNCF landscape data" and "Parsed X projects"
+- Verify `parseLandscapeYaml()` regex patterns match current indentation
+- Check browser console for errors
 
 **Wrong project names:**
-- Verify org/repo extraction logic in `matchProject()`
-- Check that GitHub URL format matches expected pattern
-- Ensure landscape-data.json has the correct keys
+- Verify org/repo extraction from feed URL
+- Check landscape data map keys match feed URLs
+- Ensure project exists in landscape.yml
 
-**Build fails on landscape fetch:**
-- Check network connectivity to GitHub
-- Verify landscape.yml URL is correct
-- Check for YAML parsing errors in console output
+**Build fails fetching landscape:**
+- Check network connectivity to raw.githubusercontent.com
+- Verify landscape.yml URL still correct
+- Check for parsing errors in build logs
 
-### Performance Considerations
+## Planning Document Workflow
 
-- Landscape data is cached at build time (~570KB JSON file)
-- Client-side loader runs once on page load
-- DOM updates are performed synchronously (small dataset)
-- No runtime API calls to CNCF landscape
+### When to Update Planning Docs
+
+**Always update when:**
+- Starting new work (update STATE.md with current focus)
+- Completing milestones (update STATE.md and ROADMAP.md)
+- Finding bugs (add to backlog.md)
+- Finishing session (update STATE.md with resume point)
+
+**Files to update:**
+
+1. **`.planning/STATE.md`** - Current status, last activity, next steps
+2. **`.planning/ROADMAP.md`** - Phase completion, milestones
+3. **`.planning/backlog.md`** - Known issues, future enhancements
+4. **`.planning/PROJECT.md`** - Requirements, decisions (rarely changes)
+
+### STATE.md Format
+
+```markdown
+# Project State
+
+## Project Reference
+See: .planning/PROJECT.md
+**Core value:** [one-line value prop]
+**Current focus:** [what you're working on]
+
+## Current Position
+Phase: [current milestone]
+Status: [brief status]
+Last activity: [date] — [what was done]
+Next: [next step]
+
+## [Milestone] Summary
+**Completed:** [date]
+**Duration:** [time]
+**Achievements:** [bullet list]
+
+## Known Issues
+[List of issues or "None!"]
+
+## Accumulated Context
+### Decisions
+[Key technology/architecture decisions]
+
+### Next Steps
+[Prioritized list]
+
+## Session Continuity
+Last session: [timestamp]
+Stopped at: [where to resume]
+Resume file: [relevant file]
+Next step: [concrete action]
+```
+
+### Backlog Format
+
+```markdown
+# Backlog
+
+## Current Milestone: [Name]
+
+### [Issue Title]
+**Priority:** Critical/High/Medium/Low
+**Effort:** Small/Medium/Large
+**Context:** [Why this matters]
+
+[Description and implementation notes]
+
+**Location:** [files to modify]
+
+---
+
+## Future Milestone: [Name]
+
+[Same format as above]
+```
 
 ## Resources
 
+### Documentation
+- [Project STATE.md](.planning/STATE.md) - Current status and session continuity
+- [Project ROADMAP.md](.planning/ROADMAP.md) - Phase breakdown and milestones
+- [Project Backlog](.planning/backlog.md) - Known issues and future work
 - [Project README](README.md) - Comprehensive technical documentation
-- [Osmosfeed Documentation](https://github.com/osmoscraft/osmosfeed)
-- [Handlebars Guide](https://handlebarsjs.com/guide/)
-- [GitHub Primer CSS](https://primer.style/css/)
+
+### External Documentation
+- [Astro Documentation](https://docs.astro.build/) - Astro v5 official docs
+- [Astro Content Layer API](https://docs.astro.build/en/reference/content-layer-api/) - Custom loader reference
+- [Pagefind](https://pagefind.app/) - Static search documentation
 - [CNCF Landscape](https://landscape.cncf.io) - Interactive landscape viewer
 - [CNCF Landscape GitHub](https://github.com/cncf/landscape) - Source repository
+- [GitHub Primer CSS](https://primer.style/css/) - Design system reference
+- [marked.js](https://marked.js.org/) - Markdown rendering
+
+### Useful Commands
+
+```bash
+# Development
+npm run dev              # Start dev server (localhost:4321)
+npm run build            # Full production build
+npm run preview          # Preview production build
+
+# Testing
+npm run build && npm run preview  # Full build + preview
+
+# Deployment
+git push origin main     # Triggers GitHub Actions deploy
+gh run list --limit 5    # Check recent deployments
+```
 
 ## Questions?
 
 For questions about these guidelines or AI-assisted contributions:
 
-1. Review the [README.md](README.md) for technical details
-2. Check existing issues and PRs for examples
+1. Review the planning documents in `.planning/`
+2. Check existing commits for examples
 3. File an issue on the [GitHub repository](https://github.com/castrojo/firehose/issues)
 
 ## License
