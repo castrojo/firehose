@@ -344,6 +344,19 @@ const remainingReleasesData = remainingReleases.map(r => ({
     --color-text-tertiary: #6e7781;
     --color-text-link: #0969da;
     --color-accent-emphasis: #0969da;
+    
+    /* CNCF Brand Colors */
+    /* Source: https://www.cncf.io/brand-guidelines/ */
+    --color-cncf-blue: #0086FF;
+    --color-cncf-black: #000000;
+    --color-cncf-turquoise: #93EAFF;
+    --color-cncf-pink: #D62293;
+    --color-cncf-stone: #E5E5E5;
+    --color-cncf-white: #FFFFFF;
+    
+    /* Map CNCF colors to existing variables */
+    --color-accent-emphasis: var(--color-cncf-blue);
+    --color-text-link: var(--color-cncf-blue);
   }
   
   * {
