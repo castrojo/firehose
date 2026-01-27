@@ -5,57 +5,61 @@
 See: .planning/PROJECT.md (updated 2026-01-26)
 
 **Core value:** CNCF maintainers can discover all ecosystem releases in one place with proper formatting and project context
-**Current focus:** All 5 phases complete - v1.0 production ready! 🚀
+**Current focus:** v1.0 complete! Working on v1.1 bug fixes (search broken)
 
 ## Current Position
 
-Phase: 5 of 5 (Deployment & Automation)
-Plan: 3 of 3 in current phase
-Status: Phase complete - all deployment automation verified
-Last activity: 2026-01-26 — Completed 05-03-PLAN.md (Build progress & statistics)
+Phase: Post v1.0 - UI Enhancement Milestone Complete
+Status: UI enhancements deployed successfully
+Last activity: 2026-01-27 — Completed all 7 user-requested UI enhancements
+Next milestone: v1.1 - Fix broken search (CRITICAL)
 
-Progress: [██████████] 100% (Phase 5: 3/3 plans complete)
+Progress: v1.0 Milestone [██████████] 100% complete
+         v1.0 UI Enhancements [██████████] 100% complete
+
+## v1.0 UI Enhancement Milestone Summary
+
+**Completed:** 2026-01-27  
+**Duration:** ~30 minutes
+
+**Achievements:**
+- ✅ Enlarged project names (1.125rem → 1.5rem)
+- ✅ Fixed keyboard navigation scroll alignment (j/k to top)
+- ✅ Made focus indicator more subtle (soft shadow)
+- ✅ Redesigned filters with modern styling
+- ✅ Created responsive sidebar layout (320px sidebar + flexible content)
+- ✅ Moved stats to sidebar
+- ✅ Moved filters to sidebar
+- ✅ Container width increased (900px → 1400px)
+- ✅ Responsive breakpoints: Desktop (1024px+) two-column, Tablet/Mobile stack
+
+**Deployed:** https://castrojo.github.io/firehose/
+**Commit:** 2d39703 "feat(ui): enhance visual hierarchy and add sidebar layout"
+
+## Known Issues
+
+**CRITICAL:** Search is completely broken (user reported)
+- Investigation needed: Check Pagefind integration after layout changes
+- May need to adjust SearchBar placement or Pagefind configuration
+- Need to verify search index is being built correctly
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 25
-- Average duration: ~8 minutes per plan
-- Total execution time: ~4 hours
+- Total plans completed: 26 (all 5 phases + UI enhancements)
+- v1.0 execution time: ~4 hours
+- UI enhancement time: ~30 minutes
 
 **By Phase:**
 
-| Phase | Plans | Total | Avg/Plan | Status |
-|-------|-------|-------|----------|--------|
-| 1 | 8 | 2.0h | 15min | ✅ Complete |
-| 2 | 9 | 4.75h | 32min | ✅ Complete |
-| 3 | 3 | 0.2h | 4min | ✅ Complete |
-| 4 | 3 | 0.3h | 6min | ✅ Complete |
-| 5 | 3 | ~9min | ~3min | ✅ Complete |
-
-**Recent Trend:**
-- Last 5 plans: All successful
-- Phase 4: Very fast (avg 6min per plan)
-- Trend: Well-defined tasks enable quick execution
-
-*Updated: 2026-01-26 after Phase 4 completion*
-
-## Phase 4 Summary
-
-**Completed:** 2026-01-26  
-**Duration:** ~18 minutes (3 plans executed very quickly)
-
-**Achievements:**
-- ✅ Pagefind static search with instant results (<300ms)
-- ✅ SearchBar component with term highlighting
-- ✅ FilterBar with project/status/date filtering
-- ✅ Client-side filtering with real-time updates
-- ✅ Keyboard navigation (j/k/o/?) vim-style shortcuts
-- ✅ KeyboardHelp modal with visual reference
-- ✅ Screen reader support and accessibility
-- ✅ All features work offline after initial load
-
-**Evidence:** See .planning/phases/04-search-and-filtering/04-0{1,2,3}-SUMMARY.md
+| Phase | Plans | Status |
+|-------|-------|--------|
+| 1 | 8 | ✅ Complete |
+| 2 | 9 | ✅ Complete |
+| 3 | 3 | ✅ Complete |
+| 4 | 3 | ✅ Complete |
+| 5 | 3 | ✅ Complete |
+| UI Enhancements | 7 | ✅ Complete |
 
 ## Accumulated Context
 
@@ -66,37 +70,44 @@ Recent technology stack decisions:
 - rss-parser + js-yaml for robust parsing ✅ Working
 - marked@17.0.1 for GitHub-compatible markdown ✅ Working
 - Intersection Observer for infinite scroll ✅ Working
-- Pagefind for search ✅ Working (04-01)
-- Data attributes for client-side filtering ✅ Working (04-02)
-- Inline Astro scripts for client-side logic ✅ Working (04-03)
-- Vim-style keyboard shortcuts (j/k/o/?) ✅ Working (04-03)
+- Pagefind for search ⚠️ BROKEN (needs investigation)
+- Data attributes for client-side filtering ✅ Working
+- Inline Astro scripts for client-side logic ✅ Working
+- Vim-style keyboard shortcuts (j/k/o/?) ✅ Working
 - Promise.allSettled() for graceful degradation ✅ Working
 - Graduated + Incubating projects only for v1 (~100 feeds)
 - Atom feeds only (GitHub releases don't support RSS)
-- Node.js 20 (LTS) for GitHub Actions ✅ Working (05-02)
-- Modern GitHub Actions v4 with two-job workflow ✅ Working (05-02)
-- Daily builds at 6 AM UTC ✅ Configured (05-02)
-- @ts-nocheck for inline Astro scripts ✅ Working (05-01)
-- Type assertions for Set-based deduplication ✅ Working (05-01)
+- Node.js 20 (LTS) for GitHub Actions ✅ Working
+- Modern GitHub Actions v4 with two-job workflow ✅ Working
+- Daily builds at 6 AM UTC ✅ Configured
+- Sidebar layout with sticky positioning (desktop) ✅ Working
+- Two-column grid layout (320px sidebar + flexible content) ✅ Working
 
 See PROJECT.md Key Decisions table for full details and rationale.
 
-### Pending Todos
+### Next Steps
 
-All roadmap phases complete! 🎉
+**v1.1 Milestone - Bug Fixes:**
+1. **[CRITICAL]** Investigate and fix broken search
+   - Check SearchBar component placement in new layout
+   - Verify Pagefind index generation
+   - Test search functionality end-to-end
+   - Check browser console for errors
 
-Optional enhancements (from backlog):
-- Truncate long project descriptions (2-3 sentences max)
-- Collapse minor releases (show major releases prominently)
-- Future: CNCF branding (separate milestone)
+2. **[Optional]** Truncate long project descriptions (2-3 sentences max)
+
+3. **[Optional]** Collapse minor releases (show major releases prominently)
 
 ### Blockers/Concerns
 
-None. All 5 phases complete with all success criteria met.
+**CRITICAL BLOCKER:** Search is completely broken
+- User reported after UI enhancement deployment
+- Need to investigate impact of sidebar layout on Pagefind integration
+- May have broken SearchBar component integration or Pagefind selectors
 
 ## Session Continuity
 
-Last session: 2026-01-26 23:50 UTC
-Stopped at: Phase 5 verified complete (8/8 success criteria met, 100%)
-Resume file: .planning/phases/05-deployment-automation/05-VERIFICATION.md
-Next step: Deploy to production! Push commits to trigger GitHub Actions deployment.
+Last session: 2026-01-27 00:28 UTC
+Stopped at: UI enhancements deployed, user reported search broken
+Resume file: .planning/backlog.md (updated with search fix as top priority)
+Next step: Debug and fix search functionality
