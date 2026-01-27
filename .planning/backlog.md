@@ -2,25 +2,33 @@
 
 ## Optional Enhancements
 
-### Collapse Minor Releases
-**Priority:** High  
-**Effort:** Medium  
-**Context:** User feedback - reduce visual clutter
-
-When projects do a minor release (e.g., v1.2.3 → v1.2.4), collapse the section so it doesn't take up as much room. Users care more about major releases but still want to know if minor releases come out.
-
-**Implementation ideas:**
-- Parse version numbers from release titles
-- Detect minor vs major releases (semver)
-- Show collapsed/summary view for minor releases
-- Expand on click to see full details
-- Major releases always expanded by default
-
-**Location:** `src/components/ReleaseCard.astro`
+(None currently planned - all major enhancements complete!)
 
 ---
 
 ## Completed Enhancements
+
+### ✅ Collapse Minor Releases (v1.3)
+**Completed:** 2026-01-27  
+**Issue:** Projects with frequent releases dominated the feed  
+**Solution:** Smart grouping by project and minor version series with expand/collapse UI  
+**Features:**
+- Semantic version parsing (v1.2.3, 1.2.3, prerelease tags)
+- Groups consecutive releases by project + minor version
+- Most recent release always shown expanded
+- Older releases in same series collapse under "X more releases" button
+- Smooth expand/collapse animation
+- Maintains keyboard navigation and accessibility
+- Search and filters remain functional
+**Algorithm:**
+- Same project + same minor version (e.g., v1.2.3, v1.2.2) → collapse together
+- Different minor/major versions → separate expanded groups
+- Non-semver releases → show all (no grouping)
+**Files:**
+- `src/lib/semver.ts` (version parsing utility)
+- `src/lib/releaseGrouping.ts` (grouping logic)
+- `src/components/CollapsibleReleaseGroup.astro` (UI component)
+- `src/pages/index.astro` (integration)
 
 ### ✅ Fix Broken Search (v1.1)
 **Completed:** 2026-01-27  

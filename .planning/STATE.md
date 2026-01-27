@@ -5,20 +5,71 @@
 See: .planning/PROJECT.md (updated 2026-01-26)
 
 **Core value:** CNCF maintainers can discover all ecosystem releases in one place with proper formatting and project context
-**Current focus:** All milestones complete! v1.2 enhancement deployed. 🎉
+**Current focus:** All milestones complete! v1.3 enhancement complete. 🎉
 
 ## Current Position
 
-Phase: v1.2 Enhancement - ✅ COMPLETE & DEPLOYED
-Status: Live with truncated descriptions
-Last activity: 2026-01-27 — Deployed v1.2 to production (3 commits pushed)
-Next: Optional enhancement: Collapse minor releases (High priority)
+Phase: v1.3 Enhancement - ✅ COMPLETE
+Status: Collapsible minor releases implemented, ready to deploy
+Last activity: 2026-01-27 — Completed v1.3 collapsible minor releases feature
+Next: Deploy to production
 
 Progress: v1.0 Milestone [██████████] 100% complete
          v1.0 UI Enhancements [██████████] 100% complete
          v1.1 Bug Fixes [██████████] 100% complete
          Phase 6 CNCF Branding [██████████] 100% complete (2/2 plans)
          v1.2 Description Truncation [██████████] 100% complete
+         v1.3 Collapsible Releases [██████████] 100% complete
+
+## v1.3 Enhancement: Collapsible Minor Releases Summary
+
+**Completed:** 2026-01-27  
+**Duration:** ~1.5 hours  
+**Status:** ✅ Complete, ready to deploy
+
+**Issue:** Projects with frequent releases (NATS, Kubernetes, etc.) dominated the feed, making it hard to scan for major releases.
+
+**Solution:** Intelligent grouping with expand/collapse UI:
+- Created semantic version parser (`src/lib/semver.ts`)
+  - Handles v1.2.3, 1.2.3, prerelease tags (v1.0.0-rc.1)
+  - Compares versions, detects release types (major/minor/patch)
+  - Identifies releases in same minor series
+- Created grouping logic (`src/lib/releaseGrouping.ts`)
+  - Groups consecutive releases by project + minor version
+  - Same project + same minor series → collapse together
+  - Different major/minor versions → separate groups
+- Created CollapsibleReleaseGroup component
+  - Shows most recent release expanded
+  - "X more releases" button for collapsed items
+  - Smooth expand/collapse animation (300ms)
+  - ARIA attributes for accessibility
+- Modified index.astro to use grouping
+
+**Results:**
+- 4 collapsible groups detected in initial batch (30 releases)
+- Each shows "1 more release" or "X more releases" button
+- Click to expand reveals older releases in same series
+- Keyboard navigation still works (j/k/o/?)
+- Search and filters remain functional
+- Responsive design maintained
+
+**Algorithm:**
+```
+For each release in sorted list (newest first):
+  Parse version from title
+  If same project AND same minor series as previous:
+    → Add to previous group's collapsed releases
+  Else:
+    → Start new group (always expanded)
+```
+
+**Files:**
+- `src/lib/semver.ts` - Version parsing, comparison, classification
+- `src/lib/releaseGrouping.ts` - Grouping logic
+- `src/components/CollapsibleReleaseGroup.astro` - UI component
+- `src/pages/index.astro` - Integration
+
+**Deployed:** Ready to push to production
 
 ## v1.2 Enhancement: Description Truncation Summary
 
@@ -126,17 +177,18 @@ None! All critical issues resolved. ✨
 
 ## Optional Enhancements (Backlog)
 
-1. **Collapse minor releases** - Show condensed view for minor version bumps (High priority)
+(None currently planned - all major enhancements complete!)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total milestones completed: v1.0 + UI enhancements + v1.1 bug fixes + Phase 6 branding + v1.2 description truncation
+- Total milestones completed: v1.0 + UI enhancements + v1.1 bug fixes + Phase 6 branding + v1.2 description truncation + v1.3 collapsible releases
 - v1.0 execution time: ~4 hours
 - UI enhancement time: ~30 minutes
 - Bug fix time: ~15 minutes
 - CNCF branding time: ~3 hours
 - Description truncation time: ~30 minutes
+- Collapsible releases time: ~1.5 hours
 
 **By Phase:**
 
@@ -151,6 +203,7 @@ None! All critical issues resolved. ✨
 | v1.1 Bug Fixes | 1 | ✅ Complete |
 | 6 (CNCF Branding) | 2/2 | ✅ Complete |
 | v1.2 Enhancement | 1 | ✅ Complete |
+| v1.3 Enhancement | 1 | ✅ Complete |
 
 **All phases complete!** 🎉
 
@@ -189,6 +242,15 @@ Phase 6 Decisions:
 - Download logos from cncf/artwork repository (official source)
 - Non-sticky sidebar for natural scrolling behavior
 
+v1.3 Decisions:
+- Use semantic versioning parser (handles v1.2.3, 1.2.3, prerelease tags)
+- Group consecutive releases by project + minor version series
+- Always show most recent release expanded
+- Collapse older releases in same minor series under "X more releases" button
+- Smooth 300ms animation for expand/collapse
+- Maintain ARIA attributes for accessibility
+- Preserve keyboard navigation (j/k works with groups)
+
 See PROJECT.md Key Decisions table for full details and rationale.
 
 ### Pending Todos
@@ -197,25 +259,24 @@ See PROJECT.md Key Decisions table for full details and rationale.
 
 ### Next Steps
 
-**✅ v1.2 Deployed to Production!**
-- Pushed 3 commits to GitHub (2026-01-27 03:19 UTC)
-- GitHub Actions deployment succeeded (35 seconds)
-- Live site verified: https://castrojo.github.io/firehose/ (HTTP 200)
-- Description truncation now live:
-  - ✅ Keycloak: 11 sentences → 2 sentences
-  - ✅ Dapr: 3 sentences → 2 sentences
-  - ✅ NATS: 3 sentences → 2 sentences
-  - ✅ Hover tooltips show full descriptions
+**✅ v1.3 Complete!**
+- Implemented collapsible minor release groups
+- Tested locally: 4 groups with collapse buttons
+- Smooth expand/collapse animations working
+- Keyboard navigation maintained
+- Search and filters functional
+- Ready to deploy to production
 
 **Next actions:**
-1. Celebrate improved readability! 🎉
-2. Optionally work on "Collapse minor releases" (High priority)
+1. Push v1.3 to production: `git push origin main`
+2. Verify live deployment
+3. Celebrate all enhancements complete! 🎉
 
-**No blockers** - v1.2 deployed and live! 🚀
+**No blockers** - v1.3 ready to deploy! 🚀
 
 ## Session Continuity
 
-Last session: 2026-01-27 03:20 UTC
-Stopped at: v1.2 deployed to production successfully
-Resume: Celebrate or continue with "Collapse minor releases" enhancement
-Next step: Choose next enhancement or enjoy the completed features!
+Last session: 2026-01-27 03:45 UTC
+Stopped at: v1.3 collapsible releases complete, ready to deploy
+Resume: Push to production
+Next step: `git push origin main` to deploy v1.3
