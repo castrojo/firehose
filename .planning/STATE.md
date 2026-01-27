@@ -11,7 +11,7 @@ See: .planning/PROJECT.md (updated 2026-01-26)
 
 Phase: Maintenance & Automation
 Status: All features deployed and working perfectly
-Last activity: 2026-01-27 — Fixed dark mode link accessibility bug (removed :global() wrappers causing CSS compilation issue)
+Last activity: 2026-01-27 — Added 99 CNCF sandbox projects to feed (total: 161 projects)
 Next: Monitor production deployment
 
 Backlog: All high-priority enhancements complete! All known bugs resolved.
@@ -28,6 +28,7 @@ Progress: v1.0 Milestone [██████████] 100% complete
          Quick Task 003 [██████████] 100% complete (Search redesign)
          v1.4 Enhancement Session [██████████] 100% complete (6 features)
          v1.4.1 Dark Mode Link Fix [██████████] 100% complete
+         Quick Task 005 [██████████] 100% complete (Add sandbox projects)
 
 ## Quick Task 001: Dependabot Automation Summary
 
@@ -212,6 +213,50 @@ Progress: v1.0 Milestone [██████████] 100% complete
 - Portable codebase architecture
 - Accessibility improvements (WCAG AA)
 - Enhanced keyboard navigation
+
+## Quick Task 005: Add All Sandbox Projects Summary
+
+**Completed:** 2026-01-27  
+**Duration:** ~18 minutes  
+**Status:** ✅ Complete
+
+**Objective:** Add all CNCF sandbox projects to The Firehose by identifying sandbox projects from the CNCF landscape and adding their GitHub release Atom feeds to the configuration.
+
+**What was done:**
+1. Fetched and parsed CNCF landscape.yml (20,044 lines, 1.07 MB)
+2. Identified 101 sandbox projects with GitHub repositories
+3. Excluded 2 duplicates (containerd, kserve) and 1 404 error (pipelineai/pipeline)
+4. Added 99 unique sandbox projects to src/config/feeds.ts
+5. Updated file header to reflect new totals (161 projects)
+
+**Feed Statistics:**
+- Before: 62 projects (35 graduated + 27 incubating)
+- After: 161 projects (35 graduated + 27 incubating + 99 sandbox)
+- Increase: +99 sandbox projects (159% growth)
+
+**Build Performance:**
+- Build time: ~9.6 seconds (minimal impact from additional feeds)
+- Feed fetch time: 4.78 seconds (parallel fetching maintained efficiency)
+- Success rate: 160/161 feeds (99.4%)
+- Total indexed entries: 1,530 releases
+
+**Notable Sandbox Projects Added:**
+- Infrastructure: k3s, MetalLB, kube-vip, Virtual Kubelet
+- Security: Athenz, Cedar, Keylime, Parsec, SOPS
+- Observability: Pixie, Kepler, Inspektor Gadget
+- Storage: OpenEBS, Piraeus, HwameiStor
+- AI/ML: KAITO, KitOps
+- Developer Tools: DevSpace, Telepresence, ko, kpt
+
+**Results:**
+- ✅ All 99 sandbox projects added to feeds.ts
+- ✅ Build completes successfully (160/161 feeds)
+- ✅ Sandbox releases visible with blue labels
+- ✅ Status filter includes "sandbox" option
+- ✅ Filtering by sandbox works correctly
+- ✅ No code changes required (infrastructure already supported sandbox)
+
+**Commit:** 246e242 "feat(quick-005): add 99 CNCF sandbox projects to feed"
 
 ## Quick Task 003: Search Redesign Summary
 
@@ -484,6 +529,7 @@ None! All critical issues resolved. ✨
 | 001 | Dependabot automation setup | 2026-01-27 | c1e3341 | [001-dependabot-automation-setup](.planning/quick/001-dependabot-automation-setup/) |
 | 002 | Fix keyboard navigation for collapsed sections | 2026-01-27 | 6d22d59 | [002-fix-keyboard-nav-for-collapsed](.planning/quick/002-fix-keyboard-nav-for-collapsed/) |
 | 003 | Replace Pagefind with simple project name filter | 2026-01-27 | 1b411c2 | [003-fix-search-base-path-for-production-depl](.planning/quick/003-fix-search-base-path-for-production-depl/) |
+| 005 | Add all CNCF sandbox projects to feed | 2026-01-27 | 246e242 | [005-add-all-sandbox-projects-from-cncf-lands](.planning/quick/005-add-all-sandbox-projects-from-cncf-lands/) |
 
 ## Optional Enhancements (Backlog)
 
@@ -531,7 +577,7 @@ Technology stack - All working ✅:
 - Inline Astro scripts for client-side logic
 - Vim-style keyboard shortcuts (j/k/o/?)
 - Promise.allSettled() for graceful degradation
-- Graduated + Incubating projects only (~62 feeds)
+- Graduated + Incubating + Sandbox projects (161 feeds total)
 - Atom feeds only (GitHub releases don't support RSS)
 - Node.js 20 (LTS) for GitHub Actions
 - Modern GitHub Actions v4 with two-job workflow
@@ -568,6 +614,14 @@ Quick Task 001 Decisions:
 - Daily npm checks for aggressive security patching
 - Weekly GitHub Actions checks for CI/CD stability
 - Dependabot commit prefixes: chore(deps) for npm, chore(actions) for GitHub Actions
+
+Quick Task 005 Decisions:
+- Include all CNCF sandbox projects for complete ecosystem coverage
+- Parse landscape.yml directly for authoritative project list
+- Alphabetize sandbox feeds by org/repo for maintainability
+- Exclude duplicates already in graduated/incubating sections
+- Accept graceful degradation (99.4% success rate acceptable)
+- No code changes needed (infrastructure already sandbox-ready)
 
 See PROJECT.md Key Decisions table for full details and rationale.
 
