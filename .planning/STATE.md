@@ -11,7 +11,7 @@ See: .planning/PROJECT.md (updated 2026-01-26)
 
 Phase: Maintenance & Automation
 Status: All features deployed and working perfectly
-Last activity: 2026-01-27 — Completed quick task 005: Add all sandbox projects from CNCF landscape with sandbox label
+Last activity: 2026-01-27 — Completed sandbox projects enhancement: Added 98 sandbox projects, improved label contrast, redesigned statistics with 2-column grid
 Next: Monitor production deployment
 
 Backlog: All high-priority enhancements complete! All known bugs resolved.
@@ -27,10 +27,68 @@ Progress: v1.0 Milestone [██████████] 100% complete
          Quick Task 002 [██████████] 100% complete (Keyboard nav fix)
          Quick Task 003 [██████████] 100% complete (Search redesign)
          Quick Task 004 [██████████] 100% complete (Missing quick task)
-         Quick Task 005 [██████████] 100% complete (Sandbox projects)
+         Quick Task 005 [██████████] 100% complete (Sandbox projects expansion)
          v1.4 Enhancement Session [██████████] 100% complete (6 features)
          v1.4.1 Dark Mode Link Fix [██████████] 100% complete
          Quick Task 005 [██████████] 100% complete (Add sandbox projects)
+
+## Quick Task 005: Sandbox Projects Enhancement Summary
+
+**Completed:** 2026-01-27  
+**Duration:** ~1 hour  
+**Status:** ✅ Complete & Deployed
+
+**Objective:** Add all CNCF sandbox projects to The Firehose and enhance statistics display with complete maturity-level coverage.
+
+**What was done:**
+1. **Added 98 sandbox projects** from CNCF landscape (161 → 160 total after removing pipelineai/pipeline 404)
+   - Fetched landscape.yml and parsed all projects with `project: sandbox` status
+   - Feed count expanded from 62 to 160 projects (159% growth)
+   - Build success rate: 100% (160/160 feeds)
+   - Total releases indexed: 1,530 entries
+
+2. **Improved sandbox label accessibility**
+   - Changed text color from `var(--color-accent-emphasis)` to `#0969da` (darker blue)
+   - Ensures WCAG AA compliance with better contrast against light blue background
+   - Matches accessibility level of graduated/incubating labels
+
+3. **Redesigned statistics with 2-column grid**
+   - Row 1: Total Projects (160) | Graduated (35)
+   - Row 2: Incubating (27) | Sandbox (98)
+   - Row 3: Total Releases (1,530) | Last 30 Days
+   - Each stat in bordered card with light background
+   - Responsive: 2 columns on desktop/tablet, 1 column on mobile portrait
+
+4. **Added CNCF attribution box**
+   - "Made with **<3** by your CNCF Projects Team"
+   - Positioned below filters in sidebar
+   - Centered text with secondary color styling
+
+**Results:**
+- ✅ Complete CNCF ecosystem coverage (graduated, incubating, sandbox)
+- ✅ 100% feed success rate (no failed feeds)
+- ✅ Improved label accessibility (WCAG AA compliant)
+- ✅ Enhanced statistics with clear 2-column layout
+- ✅ CNCF team attribution prominently displayed
+
+**Notable Sandbox Projects Added:**
+- Infrastructure: k3s, MetalLB, kube-vip, Virtual Kubelet
+- Security: Cedar, SOPS, Keylime, Parsec, Athenz
+- Observability: Pixie, Kepler, Inspektor Gadget
+- Storage: OpenEBS, Piraeus, HwameiStor
+- AI/ML: KAITO, KitOps
+- Developer tools: DevSpace, Telepresence, ko, kpt
+
+**Commits:**
+- 246e242 "feat(quick-005): add 99 CNCF sandbox projects to feed"
+- 159a9a8 "docs(quick-005): complete sandbox projects quick task"
+- 67e8698 "fix: remove pipelineai/pipeline feed (404 error)"
+- 8d7740b "fix: improve sandbox label contrast for accessibility"
+- 219202c "feat: enhance statistics with sandbox projects and activity metrics"
+- 5bd37c8 "feat: redesign statistics with 2-column grid and activity metrics"
+- ebaa51f "refactor: simplify stats and add CNCF attribution box"
+
+**Deployed:** https://castrojo.github.io/firehose/ (2026-01-27 20:54 UTC)
 
 ## Quick Task 001: Dependabot Automation Summary
 
@@ -531,8 +589,7 @@ None! All critical issues resolved. ✨
 | 001 | Dependabot automation setup | 2026-01-27 | c1e3341 | [001-dependabot-automation-setup](.planning/quick/001-dependabot-automation-setup/) |
 | 002 | Fix keyboard navigation for collapsed sections | 2026-01-27 | 6d22d59 | [002-fix-keyboard-nav-for-collapsed](.planning/quick/002-fix-keyboard-nav-for-collapsed/) |
 | 003 | Replace Pagefind with simple project name filter | 2026-01-27 | 1b411c2 | [003-fix-search-base-path-for-production-depl](.planning/quick/003-fix-search-base-path-for-production-depl/) |
-| 005 | Add all sandbox projects from CNCF landscape with sandbox label | 2026-01-27 | 159a9a8 | [005-add-all-sandbox-projects-from-cncf-lands](.planning/quick/005-add-all-sandbox-projects-from-cncf-lands/) |
-| 005 | Add all CNCF sandbox projects to feed | 2026-01-27 | 246e242 | [005-add-all-sandbox-projects-from-cncf-lands](.planning/quick/005-add-all-sandbox-projects-from-cncf-lands/) |
+| 005 | Add all sandbox projects with enhanced statistics | 2026-01-27 | ebaa51f | [005-add-all-sandbox-projects-from-cncf-lands](.planning/quick/005-add-all-sandbox-projects-from-cncf-lands/) |
 
 ## Optional Enhancements (Backlog)
 
