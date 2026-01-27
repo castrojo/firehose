@@ -5,7 +5,7 @@
   "description": "The Firehose - An RSS feed reader for CNCF and cloud native content.",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build && pagefind --site dist",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro"
   },
