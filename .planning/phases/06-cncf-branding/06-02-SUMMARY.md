@@ -1,8 +1,8 @@
 # Plan 06-02 Summary: CNCF Branding Visual Integration
 
 **Status:** ✅ Complete  
-**Completed:** 2026-01-27  
-**Duration:** ~2 hours  
+**Completed:** 2026-01-26  
+**Duration:** ~3 hours  
 **Plan Type:** Execute  
 
 ## Objective Achieved
@@ -200,12 +200,16 @@ npm run build
    - Tiny (320px): Logos 20px
 4. **Approve or provide feedback**
 
-### After Approval
+### Post-Approval Fixes (2026-01-26)
+1. **Logo paths corrected:** Added `/firehose` base path to all logo URLs in `logoMapper.ts`
+2. **Sidebar scroll behavior fixed:** Removed `position: sticky` to allow natural scrolling with page content
+3. **Human verification:** APPROVED - All branding elements working correctly
+
+### Next Steps
 1. Push to GitHub: `git push origin main`
-2. Wait for GitHub Actions deployment
+2. Wait for GitHub Actions deployment (~2 minutes)
 3. Verify live site at https://castrojo.github.io/firehose/
-4. Update `.planning/STATE.md` to mark Phase 6 complete
-5. Create celebratory announcement 🎉
+4. Phase 6 complete! 🎉
 
 ## Performance Impact
 
