@@ -11,7 +11,7 @@ See: .planning/PROJECT.md (updated 2026-01-26)
 
 Phase: Maintenance & Automation
 Status: All features deployed and working perfectly
-Last activity: 2026-01-27 — Added 99 CNCF sandbox projects to feed (total: 161 projects)
+Last activity: 2026-01-27 — Completed quick task 005: Add all sandbox projects from CNCF landscape with sandbox label
 Next: Monitor production deployment
 
 Backlog: All high-priority enhancements complete! All known bugs resolved.
@@ -26,6 +26,8 @@ Progress: v1.0 Milestone [██████████] 100% complete
          Quick Task 001 [██████████] 100% complete (Dependabot automation)
          Quick Task 002 [██████████] 100% complete (Keyboard nav fix)
          Quick Task 003 [██████████] 100% complete (Search redesign)
+         Quick Task 004 [██████████] 100% complete (Missing quick task)
+         Quick Task 005 [██████████] 100% complete (Sandbox projects)
          v1.4 Enhancement Session [██████████] 100% complete (6 features)
          v1.4.1 Dark Mode Link Fix [██████████] 100% complete
          Quick Task 005 [██████████] 100% complete (Add sandbox projects)
@@ -529,6 +531,7 @@ None! All critical issues resolved. ✨
 | 001 | Dependabot automation setup | 2026-01-27 | c1e3341 | [001-dependabot-automation-setup](.planning/quick/001-dependabot-automation-setup/) |
 | 002 | Fix keyboard navigation for collapsed sections | 2026-01-27 | 6d22d59 | [002-fix-keyboard-nav-for-collapsed](.planning/quick/002-fix-keyboard-nav-for-collapsed/) |
 | 003 | Replace Pagefind with simple project name filter | 2026-01-27 | 1b411c2 | [003-fix-search-base-path-for-production-depl](.planning/quick/003-fix-search-base-path-for-production-depl/) |
+| 005 | Add all sandbox projects from CNCF landscape with sandbox label | 2026-01-27 | 159a9a8 | [005-add-all-sandbox-projects-from-cncf-lands](.planning/quick/005-add-all-sandbox-projects-from-cncf-lands/) |
 | 005 | Add all CNCF sandbox projects to feed | 2026-01-27 | 246e242 | [005-add-all-sandbox-projects-from-cncf-lands](.planning/quick/005-add-all-sandbox-projects-from-cncf-lands/) |
 
 ## Optional Enhancements (Backlog)
