@@ -213,12 +213,15 @@ const remainingReleasesData = remainingReleases.map(r => ({
     items = [];
     /** @type {HTMLElement | null} */
     searchInput = null;
+    /** @type {string} */
+    itemSelector = '';
     
     /**
      * @param {string} itemSelector
      * @param {string} searchInputSelector
      */
     constructor(itemSelector, searchInputSelector) {
+      this.itemSelector = itemSelector;
       this.items = Array.from(document.querySelectorAll(itemSelector));
       this.searchInput = document.querySelector(searchInputSelector);
       this.attachListeners();
@@ -296,6 +299,14 @@ const remainingReleasesData = remainingReleases.map(r => ({
     openFocused() {
       const item = this.items[this.focusedIndex];
       if (!item) return;
+      
+      // Check if focused item is a collapse button
+      if (item.classList.contains('collapse-button')) {
+        item.click();
+        return;
+      }
+      
+      // Otherwise, open the release link
       const link = item.querySelector('a[href]');
       if (link) window.open(link.href, '_blank', 'noopener,noreferrer');
     }
@@ -341,14 +352,18 @@ const remainingReleasesData = remainingReleases.map(r => ({
     }
     
     refresh() {
-      this.items = Array.from(document.querySelectorAll('.release-card'));
+      this.items = Array.from(document.querySelectorAll(this.itemSelector));
       console.log(`[KeyboardNav] Refreshed, now tracking ${this.items.length} items`);
     }
   }
 
   let navigator = null;
   document.addEventListener('DOMContentLoaded', () => {
-    navigator = new KeyboardNavigator('.release-card', '#search-input, .search-bar input');
+    navigator = new KeyboardNavigator('.release-card:not([aria-hidden="true"] .release-card), .collapse-button', '#search-input, .search-bar input');
+    
+    // Refresh navigator when collapse state changes
+    document.addEventListener('collapseStateChanged', () => navigator?.refresh());
+    
     const observer = new MutationObserver(() => navigator?.refresh());
     const releaseList = document.getElementById('release-list');
     if (releaseList) observer.observe(releaseList, { childList: true });
@@ -617,6 +632,11 @@ const remainingReleasesData = remainingReleases.map(r => ({
   }
   
   :global(.release-card.kbd-focused) {
+    box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #0969da;
+  }
+  
+  :global(.collapse-button.kbd-focused) {
     box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
     border-color: #0969da;
   }
