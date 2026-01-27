@@ -116,7 +116,9 @@ const remainingReleasesData = remainingReleases.map(r => ({
     <div class="container">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <div>
-          <h1 class="site-title">🔥 The Firehose</h1>
+          <h1 class="site-title">
+            <a href={baseUrl} id="home-link" class="home-link">🔥 The Firehose</a>
+          </h1>
           <p class="site-subtitle">CNCF Project Releases</p>
         </div>
         <div style="display: flex; gap: 0.5rem; align-items: center;">
@@ -231,6 +233,44 @@ const remainingReleasesData = remainingReleases.map(r => ({
   document.getElementById('help-button')?.addEventListener('click', () => {
     document.getElementById('keyboard-help-modal')?.classList.add('visible');
     document.getElementById('keyboard-help-backdrop')?.classList.add('visible');
+  });
+</script>
+
+<script>
+  // @ts-nocheck
+  // Home link handler - clear filters and scroll to top
+  document.getElementById('home-link')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    
+    // Clear all filters
+    const projectSelect = document.getElementById('filter-project') as HTMLSelectElement;
+    const statusSelect = document.getElementById('filter-status') as HTMLSelectElement;
+    if (projectSelect) projectSelect.value = '';
+    if (statusSelect) statusSelect.value = '';
+    
+    // Reset date range buttons
+    document.querySelectorAll('.date-range-buttons button').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    const allButton = document.querySelector('[data-days="all"]');
+    allButton?.classList.add('active');
+    
+    // Clear search
+    const searchInput = document.getElementById('search-input') as HTMLInputElement;
+    if (searchInput) {
+      searchInput.value = '';
+      // Trigger search clear event
+      const clearButton = document.getElementById('search-clear');
+      if (clearButton && clearButton.style.display !== 'none') {
+        clearButton.click();
+      }
+    }
+    
+    // Trigger filter update by clicking clear filters button
+    document.getElementById('clear-filters')?.click();
+    
+    // Scroll to top smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 </script>
 
@@ -514,6 +554,16 @@ const remainingReleasesData = remainingReleases.map(r => ({
     font-size: 2rem;
     font-weight: 600;
     margin-bottom: 0.25rem;
+  }
+  
+  .home-link {
+    color: var(--color-text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  
+  .home-link:hover {
+    color: var(--color-text-link);
   }
   
   .site-subtitle {
