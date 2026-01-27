@@ -225,6 +225,45 @@ npm run preview
 # Visit http://localhost:4321/firehose
 ```
 
+**IMPORTANT: Restarting Preview Server Reliably**
+
+When asking the user to test changes, **ALWAYS** restart the preview server properly to avoid "server down" errors:
+
+```bash
+# Use the reliable restart script
+.dev-tools/restart-preview.sh
+```
+
+**Manual restart process (if script unavailable):**
+```bash
+# 1. Kill all existing Astro processes
+pkill -9 -f "astro preview" 2>/dev/null
+pkill -9 -f "node.*preview" 2>/dev/null
+pkill -9 -f "node.*astro" 2>/dev/null
+sleep 2
+
+# 2. Free up ports if needed
+for port in 4321 4322 4323 4324; do
+    lsof -ti:$port | xargs kill -9 2>/dev/null
+done
+sleep 1
+
+# 3. Start server in background
+cd /var/home/jorge/src/firehose
+nohup npm run preview > /tmp/astro-preview.log 2>&1 &
+sleep 4
+
+# 4. Verify server is responding
+curl -s -o /dev/null -w "%{http_code}" http://localhost:4321/firehose/
+# Should return 200
+```
+
+**Why this matters:**
+- Astro preview servers can linger after timeouts
+- Ports may remain occupied even after process termination
+- Users get "connection refused" errors if server isn't fully restarted
+- Always verify server is responding (HTTP 200) before telling user to test
+
 **What to verify:**
 - [ ] Build completes without errors
 - [ ] All 62 feeds load successfully (check build logs)
