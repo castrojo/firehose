@@ -10,18 +10,22 @@ updates:
     commit-message:
       prefix: "chore(deps)"
     groups:
+      # Group ALL production updates (including major)
       production-dependencies:
         dependency-type: "production"
         update-types:
+          - "major"
           - "minor"
           - "patch"
+      # Group ALL development updates (including major)
       development-dependencies:
         dependency-type: "development"
         update-types:
+          - "major"
           - "minor"
           - "patch"
 
-  # GitHub Actions updates
+  # GitHub Actions updates - group all together
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -29,3 +33,7 @@ updates:
     open-pull-requests-limit: 5
     commit-message:
       prefix: "chore(actions)"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
