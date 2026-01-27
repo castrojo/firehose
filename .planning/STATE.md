@@ -368,7 +368,8 @@ See PROJECT.md Key Decisions table for full details and rationale.
 
 ### Pending Todos
 
-4 todos captured in `.planning/todos/pending/` for future work.
+4 todos captured in `.planning/todos/pending/` for future work:
+- **CRITICAL:** Fix search functionality on production (base path issue)
 
 ### Next Steps
 
