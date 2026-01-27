@@ -4,7 +4,7 @@
  */
 export function getProjectLogo(projectName: string | undefined): string {
   if (!projectName) {
-    return '/logos/placeholder.svg';
+    return '/firehose/logos/placeholder.svg';
   }
   
   // Normalize project name to match cncf/artwork structure
@@ -25,7 +25,8 @@ export function getProjectLogo(projectName: string | undefined): string {
   const logoDir = specialCases[normalized] || normalized;
   
   // Use icon format (square) for compact display in card headers
-  return `/logos/${logoDir}/icon-color.svg`;
+  // Include Astro base path for GitHub Pages deployment
+  return `/firehose/logos/${logoDir}/icon-color.svg`;
 }
 
 /**

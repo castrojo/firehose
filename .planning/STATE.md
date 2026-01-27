@@ -133,7 +133,7 @@ See PROJECT.md Key Decisions table for full details and rationale.
 
 ### Pending Todos
 
-3 todos captured in `.planning/todos/pending/` for future work.
+4 todos captured in `.planning/todos/pending/` for future work.
 
 ### Next Steps (Optional)
 
