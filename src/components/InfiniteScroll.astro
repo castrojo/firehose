@@ -137,9 +137,10 @@
     function getProjectLogoPath(projectName: string): string {
       // Get base URL from page (injected via data attribute)
       const baseUrl = document.documentElement.getAttribute('data-base-url') || '/';
+      const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
       
       if (!projectName) {
-        return `${baseUrl}logos/placeholder.svg`;
+        return `${normalizedBaseUrl}/logos/placeholder.svg`;
       }
       
       // Normalize project name to match cncf/artwork structure
@@ -159,7 +160,7 @@
       const logoDir = specialCases[normalized] || normalized;
       
       // Use icon format (square) for compact display in card headers
-      return `${baseUrl}logos/${logoDir}/icon-color.svg`;
+      return `${normalizedBaseUrl}/logos/${logoDir}/icon-color.svg`;
     }
     
     // Truncate description to 2 sentences (client-side version of truncate.ts)
