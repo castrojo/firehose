@@ -11,8 +11,8 @@ See: .planning/PROJECT.md (updated 2026-01-26)
 
 Phase: Maintenance & Automation
 Status: All features deployed and working perfectly
-Last activity: 2026-01-27 — Completed Quick Task 001: Dependabot automation setup
-Next: Push changes to enable Dependabot automation
+Last activity: 2026-01-27 — Completed Quick Task 002: Fix keyboard navigation for collapsed sections
+Next: Push changes to production (Quick Tasks 001 + 002)
 
 Backlog: 2 high-value future ideas documented (RSS feed output, dark mode)
 
@@ -24,24 +24,7 @@ Progress: v1.0 Milestone [██████████] 100% complete
          v1.3 Collapsible Releases [██████████] 100% complete
          v1.3.1 Prerelease Grouping Fix [██████████] 100% complete
          Quick Task 001 [██████████] 100% complete (Dependabot automation)
-
-## Current Position
-
-Phase: Maintenance & Automation
-Status: All features deployed and working perfectly
-Last activity: 2026-01-27 — Completed Quick Task 001: Dependabot automation setup
-Next: Push changes to enable Dependabot automation
-
-Backlog: 2 high-value future ideas documented (RSS feed output, dark mode)
-
-Progress: v1.0 Milestone [██████████] 100% complete
-         v1.0 UI Enhancements [██████████] 100% complete
-         v1.1 Bug Fixes [██████████] 100% complete
-         Phase 6 CNCF Branding [██████████] 100% complete (2/2 plans)
-         v1.2 Description Truncation [██████████] 100% complete
-         v1.3 Collapsible Releases [██████████] 100% complete
-         v1.3.1 Prerelease Grouping Fix [██████████] 100% complete
-         Quick Task 001 [██████████] 100% complete (Dependabot automation)
+         Quick Task 002 [██████████] 100% complete (Keyboard nav fix)
 
 ## Quick Task 001: Dependabot Automation Summary
 
@@ -69,6 +52,42 @@ Progress: v1.0 Milestone [██████████] 100% complete
 **Next:** Push to origin to enable Dependabot automation
 
 **Commit:** c1e3341 "chore(deps): automate dependency updates via dependabot"
+
+## Quick Task 002: Keyboard Navigation Fix Summary
+
+**Completed:** 2026-01-27  
+**Duration:** ~6 minutes  
+**Status:** ✅ Complete, ready to push
+
+**Objective:** Fix keyboard navigation to skip hidden cards in collapsed sections, allow j/k to focus collapse buttons, and enable Enter to expand/collapse.
+
+**What was done:**
+1. Updated KeyboardNavigator selector to exclude hidden cards: `.release-card:not([aria-hidden="true"] .release-card), .collapse-button`
+2. Modified `openFocused()` to detect collapse buttons and trigger click instead of opening link
+3. Added `collapseStateChanged` event dispatching after expand/collapse animations
+4. Added event listener in KeyboardNavigator to refresh on state changes
+5. Extended CSS focus styling to collapse buttons
+
+**Problem solved:**
+- Before: j/k iterated through hidden cards inside collapsed sections, making navigation feel broken
+- After: j/k skips hidden cards and focuses collapse buttons, providing natural navigation flow
+
+**Results:**
+- ✅ j/k navigation skips hidden cards inside collapsed sections
+- ✅ Collapse buttons receive focus and show visual indicator
+- ✅ Enter/o expands/collapses focused collapse button
+- ✅ Navigation automatically refreshes after state changes
+- ✅ Human verification: All scenarios tested and approved
+
+**Technical approach:**
+- CSS selector filtering (`:not([aria-hidden="true"] .release-card)`) for performance
+- CustomEvent pattern for decoupled component communication
+- Type detection pattern for handling different navigable item types
+
+**Commits:**
+- f96ebd0 "docs(quick-002): create plan for keyboard nav with collapsed sections"
+- 4df7b83 "feat(quick-002): update keyboard navigation to track visible items only"
+- 6d22d59 "feat(quick-002): add collapse state change event dispatching"
 
 ## v1.3.1 Bugfix: Prerelease Grouping Fix
 
@@ -254,6 +273,13 @@ For each release in sorted list (newest first):
 
 None! All critical issues resolved. ✨
 
+## Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 001 | Dependabot automation setup | 2026-01-27 | c1e3341 | [001-dependabot-automation-setup](.planning/quick/001-dependabot-automation-setup/) |
+| 002 | Fix keyboard navigation for collapsed sections | 2026-01-27 | 6d22d59 | [002-fix-keyboard-nav-for-collapsed](.planning/quick/002-fix-keyboard-nav-for-collapsed/) |
+
 ## Optional Enhancements (Backlog)
 
 (None currently planned - all major enhancements complete!)
@@ -346,30 +372,50 @@ See PROJECT.md Key Decisions table for full details and rationale.
 
 ### Next Steps
 
-**🎯 Quick Task 001 Complete - Ready to Push!**
+**🎯 Quick Tasks 001 + 002 Complete - Ready to Push!**
 
 **What's ready:**
+
+**Quick Task 001 (Dependabot):**
 - ✅ Dependabot configuration created (.github/dependabot.yml)
 - ✅ GitHub Actions converted to SHA-pinned versions
 - ✅ Changes committed locally (c1e3341)
 - ✅ Summary documentation created
 
-**Next action:** Push to GitHub to enable Dependabot automation
+**Quick Task 002 (Keyboard Navigation):**
+- ✅ KeyboardNavigator updated to track visible items only
+- ✅ Collapse buttons now keyboard-accessible with j/k
+- ✅ Enter/o expands/collapses focused sections
+- ✅ Navigation refreshes on state changes
+- ✅ Changes committed locally (4df7b83, 6d22d59)
+- ✅ Summary documentation created
+- ✅ Human verification: Approved
+
+**Next action:** Push to GitHub to deploy both enhancements
 ```bash
 git push origin main
 ```
 
 **After push:**
-- Dependabot will start monitoring within minutes
+
+**Dependabot automation:**
+- Will start monitoring within minutes
 - First PRs expected within 24 hours (npm packages)
 - GitHub Actions PRs within 7 days if updates available
 - Monitor: Repository → Insights → Dependency graph → Dependabot
 
-**Expected benefits:**
-- Automatic security patches (including lodash vulnerability fix)
-- Reduced manual maintenance burden
-- SHA-pinned actions prevent tag hijacking
-- Grouped updates reduce PR noise
+**Keyboard navigation fix:**
+- Will deploy immediately via GitHub Actions
+- Users can navigate collapsed sections naturally with j/k
+- Collapse buttons become keyboard-accessible
+- Navigation stays synchronized with DOM changes
+
+**Combined benefits:**
+- ✅ Automatic security patches (including lodash vulnerability fix)
+- ✅ SHA-pinned actions prevent tag hijacking
+- ✅ Reduced manual maintenance burden
+- ✅ Better keyboard navigation UX for power users
+- ✅ Improved accessibility for collapsed sections
 
 **🎉 ALL PREVIOUS ENHANCEMENTS STILL DEPLOYED! 🎉**
 
@@ -380,15 +426,15 @@ The Firehose continues to feature:
 - 📦 Smart collapsible release groups
 - 🔍 Full-text search (Pagefind)
 - 🎛️ Client-side filtering
-- ⌨️ Vim-style keyboard navigation
+- ⌨️ Vim-style keyboard navigation (now with collapse button support!)
 - 📱 Responsive design (320px-1920px)
 - 🤖 Daily automated updates
 
-**No blockers** - ready to enable Dependabot automation! 🚀
+**No blockers** - ready to push to production! 🚀
 
 ## Session Continuity
 
-Last session: 2026-01-27 03:49 UTC
-Stopped at: Quick Task 001 complete - Dependabot automation ready to push
-Resume: All work complete! Ready to push c1e3341
-Next step: Push to GitHub to enable Dependabot automation
+Last session: 2026-01-27 10:52 UTC
+Stopped at: Quick Tasks 001 + 002 complete - Ready to push to production
+Resume: All work complete! Ready to push both quick tasks
+Next step: Push to GitHub to deploy keyboard navigation fix and enable Dependabot automation
