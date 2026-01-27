@@ -10,8 +10,8 @@ See: .planning/PROJECT.md (updated 2026-01-26)
 ## Current Position
 
 Phase: v1.2 Enhancement - ✅ COMPLETE & DEPLOYED
-Status: Live with improved descriptions
-Last activity: 2026-01-27 — Completed v1.2 description truncation enhancement
+Status: Live with truncated descriptions
+Last activity: 2026-01-27 — Deployed v1.2 to production (3 commits pushed)
 Next: Optional enhancement: Collapse minor releases (High priority)
 
 Progress: v1.0 Milestone [██████████] 100% complete
@@ -46,7 +46,7 @@ Progress: v1.0 Milestone [██████████] 100% complete
 - `src/lib/truncate.ts` - New truncation utility
 - `src/components/ReleaseCard.astro` - Integration and title attribute
 
-**Deployed:** Ready to push to production
+**Deployed:** https://castrojo.github.io/firehose/ (2026-01-27 03:20 UTC)
 
 ## Phase 6: CNCF Branding Summary
 
@@ -197,21 +197,25 @@ See PROJECT.md Key Decisions table for full details and rationale.
 
 ### Next Steps
 
-**✅ v1.2 Enhancement Complete!**
-- Implemented description truncation (2 sentences max)
-- Tested with real CNCF data (Keycloak, Dapr, NATS, Falco)
-- Ready to push to production
+**✅ v1.2 Deployed to Production!**
+- Pushed 3 commits to GitHub (2026-01-27 03:19 UTC)
+- GitHub Actions deployment succeeded (35 seconds)
+- Live site verified: https://castrojo.github.io/firehose/ (HTTP 200)
+- Description truncation now live:
+  - ✅ Keycloak: 11 sentences → 2 sentences
+  - ✅ Dapr: 3 sentences → 2 sentences
+  - ✅ NATS: 3 sentences → 2 sentences
+  - ✅ Hover tooltips show full descriptions
 
 **Next actions:**
-1. Push v1.2 to production: `git push origin main`
-2. Verify live deployment
-3. Optionally work on "Collapse minor releases" (High priority)
+1. Celebrate improved readability! 🎉
+2. Optionally work on "Collapse minor releases" (High priority)
 
-**No blockers** - v1.2 ready to deploy! 🚀
+**No blockers** - v1.2 deployed and live! 🚀
 
 ## Session Continuity
 
-Last session: 2026-01-27 03:40 UTC
-Stopped at: v1.2 description truncation complete, ready to deploy
-Resume: Push to production or continue with "Collapse minor releases" enhancement
-Next step: `git push origin main` to deploy v1.2
+Last session: 2026-01-27 03:20 UTC
+Stopped at: v1.2 deployed to production successfully
+Resume: Celebrate or continue with "Collapse minor releases" enhancement
+Next step: Choose next enhancement or enjoy the completed features!
