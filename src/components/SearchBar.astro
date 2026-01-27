@@ -73,31 +73,6 @@
       return projects;
     }
     
-    // Get releases for a specific project
-    function getProjectReleases(projectName: string): Array<{ title: string, url: string }> {
-      const releases: Array<{ title: string, url: string }> = [];
-      const cards = document.querySelectorAll(`.release-card[data-project="${CSS.escape(projectName)}"]`);
-      
-      // Limit to 5 most recent releases
-      const limit = Math.min(5, cards.length);
-      
-      for (let i = 0; i < limit; i++) {
-        const card = cards[i] as HTMLElement;
-        const titleElement = card.querySelector('.release-title a');
-        
-        if (titleElement) {
-          const title = titleElement.textContent?.trim() || '';
-          const url = titleElement.getAttribute('href') || '';
-          
-          if (title && url) {
-            releases.push({ title, url });
-          }
-        }
-      }
-      
-      return releases;
-    }
-    
     // Perform project name search
     function performSearch(query: string) {
       if (query.length < MIN_CHARS) {
@@ -123,34 +98,14 @@
       displayResults(matchingProjects, query);
     }
     
-    // Display search results - projects with their releases
+    // Display search results - just project names
     function displayResults(projects: Array<[string, { count: number, status: string }]>, query: string) {
       searchResultsList.innerHTML = projects.map(([projectName]) => {
-        const releases = getProjectReleases(projectName);
-        
-        // Build project header (clickable to filter)
-        let html = `
-          <div class="search-result-group">
-            <div class="search-result project-header" data-project-name="${escapeHtml(projectName)}">
-              <span class="project-name">${escapeHtml(projectName)}</span>
-            </div>
+        return `
+          <div class="search-result" data-project-name="${escapeHtml(projectName)}">
+            <span class="project-name">${escapeHtml(projectName)}</span>
+          </div>
         `;
-        
-        // Add release links under the project
-        if (releases.length > 0) {
-          html += `<div class="release-list">`;
-          releases.forEach(release => {
-            html += `
-              <div class="release-item" data-release-url="${escapeHtml(release.url)}">
-                <span class="release-link">${escapeHtml(projectName)} ${escapeHtml(release.title)}</span>
-              </div>
-            `;
-          });
-          html += `</div>`;
-        }
-        
-        html += `</div>`;
-        return html;
       }).join('');
       
       searchCount.textContent = `${projects.length} project${projects.length === 1 ? '' : 's'}`;
@@ -162,10 +117,9 @@
     
     // Attach click handlers to search results
     function attachResultClickHandlers() {
-      // Project headers - click to filter
-      const projectHeaders = document.querySelectorAll('.search-result.project-header[data-project-name]');
+      const resultElements = document.querySelectorAll('.search-result[data-project-name]');
       
-      projectHeaders.forEach(result => {
+      resultElements.forEach(result => {
         result.addEventListener('click', () => {
           const projectName = (result as HTMLElement).dataset.projectName || '';
           
@@ -180,20 +134,6 @@
             clearSearch();
             
             console.log(`[SearchBar] Applied filter for project: ${projectName}`);
-          }
-        });
-      });
-      
-      // Release items - click to open release URL
-      const releaseItems = document.querySelectorAll('.release-item[data-release-url]');
-      
-      releaseItems.forEach(item => {
-        item.addEventListener('click', () => {
-          const releaseUrl = (item as HTMLElement).dataset.releaseUrl || '';
-          
-          if (releaseUrl) {
-            window.open(releaseUrl, '_blank', 'noopener,noreferrer');
-            console.log(`[SearchBar] Opened release: ${releaseUrl}`);
           }
         });
       });
@@ -362,56 +302,19 @@
     overflow-y: auto;
   }
   
-  .search-result-group {
-    border-bottom: 1px solid var(--color-border-default, #d0d7de);
-  }
-  
-  .search-result-group:last-child {
-    border-bottom: none;
-  }
-  
   .search-result {
     padding: 0.75rem 1rem;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  
-  .search-result.project-header {
-    background: var(--color-bg-secondary, #f6f8fa);
-    font-weight: 600;
     border-bottom: 1px solid var(--color-border-default, #d0d7de);
-  }
-  
-  .search-result.project-header:hover {
-    background: #eaeef2;
-  }
-  
-  .release-list {
-    background: var(--color-bg-default, #ffffff);
-  }
-  
-  .release-item {
-    padding: 0.625rem 1rem 0.625rem 2rem;
     cursor: pointer;
     transition: background 0.2s;
-    border-bottom: 1px solid #f6f8fa;
   }
   
-  .release-item:last-child {
+  .search-result:last-child {
     border-bottom: none;
   }
   
-  .release-item:hover {
+  .search-result:hover {
     background: var(--color-bg-secondary, #f6f8fa);
-  }
-  
-  .release-link {
-    font-size: 0.875rem;
-    color: var(--color-text-secondary, #57606a);
-  }
-  
-  .release-item:hover .release-link {
-    color: var(--color-text-link, #D62293);
   }
   
   .project-name {
@@ -420,7 +323,7 @@
     font-size: 0.9375rem;
   }
   
-  .project-header:hover .project-name {
+  .search-result:hover .project-name {
     color: var(--color-text-link, #D62293);
   }
   
