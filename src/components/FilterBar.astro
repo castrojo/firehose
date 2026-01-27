@@ -70,6 +70,17 @@ const { projects, statuses, totalCount } = Astro.props;
       if (visible) visibleCount++;
     });
     
+    // Hide empty release groups (prevents orphaned releases from showing)
+    const groups = document.querySelectorAll('.release-group');
+    groups.forEach((group) => {
+      const groupCards = group.querySelectorAll('.release-card');
+      const hasVisibleCard = Array.from(groupCards).some(
+        card => (card as HTMLElement).style.display !== 'none'
+      );
+      
+      (group as HTMLElement).style.display = hasVisibleCard ? '' : 'none';
+    });
+    
     // Update result count
     const totalCount = releases.length;
     const resultCount = document.getElementById('result-count');
