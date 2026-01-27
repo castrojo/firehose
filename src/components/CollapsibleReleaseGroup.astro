@@ -189,6 +189,7 @@ const summary = getCollapsedSummary(group);
             collapsedSection.setAttribute('aria-hidden', 'true');
             collapsedSection.classList.remove('collapsing');
             btn.setAttribute('aria-expanded', 'false');
+            document.dispatchEvent(new CustomEvent('collapseStateChanged'));
           }, 300);
         } else {
           // Expand
@@ -200,6 +201,7 @@ const summary = getCollapsedSummary(group);
           
           setTimeout(() => {
             collapsedSection.classList.remove('expanding');
+            document.dispatchEvent(new CustomEvent('collapseStateChanged'));
           }, 300);
         }
       });
