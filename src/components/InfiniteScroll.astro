@@ -135,8 +135,11 @@
     
     // Get project logo path (client-side version of logoMapper.ts)
     function getProjectLogoPath(projectName: string): string {
+      // Get base URL from page (injected via data attribute)
+      const baseUrl = document.documentElement.getAttribute('data-base-url') || '/';
+      
       if (!projectName) {
-        return '/firehose/logos/placeholder.svg';
+        return `${baseUrl}logos/placeholder.svg`;
       }
       
       // Normalize project name to match cncf/artwork structure
@@ -156,7 +159,7 @@
       const logoDir = specialCases[normalized] || normalized;
       
       // Use icon format (square) for compact display in card headers
-      return `/firehose/logos/${logoDir}/icon-color.svg`;
+      return `${baseUrl}logos/${logoDir}/icon-color.svg`;
     }
     
     // Truncate description to 2 sentences (client-side version of truncate.ts)
