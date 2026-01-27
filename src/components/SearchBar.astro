@@ -1,6 +1,6 @@
 ---
-// SearchBar component with Pagefind integration
-// Provides instant search (<300ms) with term highlighting
+// SearchBar component for project name search
+// Shows matching projects, clicking a project applies the filter
 ---
 
 <div class="search-container">
@@ -9,8 +9,8 @@
       type="search"
       id="search-input"
       class="search-input"
-      placeholder="Search releases..."
-      aria-label="Search releases"
+      placeholder="Search projects..."
+      aria-label="Search projects"
       autocomplete="off"
     />
     <button
@@ -33,133 +33,121 @@
 </div>
 
 <script>
-  // Pagefind search implementation
-  (async function() {
+  // Project name search - shows matching projects, click to filter
+  (function() {
     const searchInput = document.getElementById('search-input') as HTMLInputElement;
     const searchClear = document.getElementById('search-clear') as HTMLButtonElement;
     const searchResults = document.getElementById('search-results') as HTMLElement;
     const searchResultsList = document.getElementById('search-results-list') as HTMLElement;
     const searchCount = document.getElementById('search-count') as HTMLElement;
+    const projectFilterSelect = document.getElementById('filter-project') as HTMLSelectElement;
     
     if (!searchInput || !searchClear || !searchResults || !searchResultsList || !searchCount) {
       console.error('[SearchBar] Required elements not found');
       return;
     }
     
-    // Load Pagefind
-    let pagefind: any = null;
-    try {
-      // Use Astro's base path for GitHub Pages compatibility
-      const basePath = import.meta.env.BASE_URL || '/';
-      // @ts-ignore - Pagefind is loaded dynamically
-      pagefind = await import(`${basePath}pagefind/pagefind.js`);
-      await pagefind.options({
-        excerptLength: 15,
-      });
-      console.log('[SearchBar] Pagefind loaded successfully');
-    } catch (error) {
-      console.error('[SearchBar] Failed to load Pagefind:', error);
-      return;
-    }
+    console.log('[SearchBar] Project search initialized');
     
     let debounceTimer: number | null = null;
     const DEBOUNCE_MS = 300;
-    const MIN_CHARS = 2;
-    const MAX_RESULTS = 50;
+    const MIN_CHARS = 1;
     
-    // Perform search
-    async function performSearch(query: string) {
-      if (!pagefind) return;
+    // Get unique project names from all releases
+    function getUniqueProjects(): Map<string, { count: number, status: string }> {
+      const projects = new Map<string, { count: number, status: string }>();
+      const allCards = document.querySelectorAll('.release-card[data-project]');
       
+      allCards.forEach(card => {
+        const projectName = (card as HTMLElement).dataset.project || '';
+        const projectStatus = (card as HTMLElement).dataset.status || '';
+        
+        if (projectName) {
+          if (!projects.has(projectName)) {
+            projects.set(projectName, { count: 0, status: projectStatus });
+          }
+          projects.get(projectName)!.count++;
+        }
+      });
+      
+      return projects;
+    }
+    
+    // Perform project name search
+    function performSearch(query: string) {
       if (query.length < MIN_CHARS) {
         searchResults.style.display = 'none';
         return;
       }
       
-      try {
-        const startTime = performance.now();
-        const results = await pagefind.search(query);
-        const endTime = performance.now();
-        const duration = Math.round(endTime - startTime);
-        
-        console.log(`[SearchBar] Search completed in ${duration}ms, found ${results.results.length} results`);
-        
-        if (results.results.length === 0) {
-          showNoResults();
-          return;
-        }
-        
-        // Limit results for performance
-        const limitedResults = results.results.slice(0, MAX_RESULTS);
-        
-        // Load result data
-        const resultData = await Promise.all(
-          limitedResults.map((r: any) => r.data())
-        );
-        
-        displayResults(resultData, results.results.length);
-      } catch (error) {
-        console.error('[SearchBar] Search error:', error);
-        showError();
+      const queryLower = query.toLowerCase();
+      const allProjects = getUniqueProjects();
+      
+      // Filter projects by name (case-insensitive partial match)
+      const matchingProjects = Array.from(allProjects.entries())
+        .filter(([projectName]) => projectName.toLowerCase().includes(queryLower))
+        .sort(([a], [b]) => a.localeCompare(b));
+      
+      console.log(`[SearchBar] Found ${matchingProjects.length} projects matching "${query}"`);
+      
+      if (matchingProjects.length === 0) {
+        showNoResults(query);
+        return;
       }
+      
+      displayResults(matchingProjects, query);
     }
     
-    // Display search results
-    function displayResults(results: any[], totalCount: number) {
-      searchResultsList.innerHTML = results.map(result => {
-        const projectName = result.meta?.project || 'Unknown Project';
-        const projectStatus = result.meta?.status || '';
-        
-        const statusBadge = projectStatus
-          ? `<span class="project-status ${projectStatus}">${projectStatus}</span>`
-          : '';
-        
+    // Display search results - just project names
+    function displayResults(projects: Array<[string, { count: number, status: string }]>, query: string) {
+      searchResultsList.innerHTML = projects.map(([projectName]) => {
         return `
-          <article class="search-result">
-            <div class="result-header">
-              <span class="project-name">${escapeHtml(projectName)}</span>
-              ${statusBadge}
-            </div>
-            <h3 class="result-title">
-              <a href="${escapeHtml(result.url)}" target="_blank" rel="noopener noreferrer">
-                ${escapeHtml(result.meta?.title || result.url)}
-              </a>
-            </h3>
-            <div class="result-excerpt">${result.excerpt}</div>
-          </article>
+          <div class="search-result" data-project-name="${escapeHtml(projectName)}">
+            <span class="project-name">${escapeHtml(projectName)}</span>
+          </div>
         `;
       }).join('');
       
-      const displayCount = results.length;
-      const countText = totalCount > MAX_RESULTS
-        ? `Showing ${displayCount} of ${totalCount} results`
-        : `${totalCount} result${totalCount === 1 ? '' : 's'}`;
-      
-      searchCount.textContent = countText;
+      searchCount.textContent = `${projects.length} project${projects.length === 1 ? '' : 's'}`;
       searchResults.style.display = 'block';
+      
+      // Attach click handlers to results
+      attachResultClickHandlers();
+    }
+    
+    // Attach click handlers to search results
+    function attachResultClickHandlers() {
+      const resultElements = document.querySelectorAll('.search-result[data-project-name]');
+      
+      resultElements.forEach(result => {
+        result.addEventListener('click', () => {
+          const projectName = (result as HTMLElement).dataset.projectName || '';
+          
+          if (projectName && projectFilterSelect) {
+            // Set the project filter
+            projectFilterSelect.value = projectName;
+            
+            // Trigger the filter change event
+            projectFilterSelect.dispatchEvent(new Event('change'));
+            
+            // Clear and hide search
+            clearSearch();
+            
+            console.log(`[SearchBar] Applied filter for project: ${projectName}`);
+          }
+        });
+      });
     }
     
     // Show no results message
-    function showNoResults() {
+    function showNoResults(query: string) {
       searchResultsList.innerHTML = `
         <div class="no-results">
-          <p>No results found</p>
-          <p class="no-results-hint">Try different keywords or check spelling</p>
+          <p>No projects found matching "${escapeHtml(query)}"</p>
+          <p class="no-results-hint">Try a different project name</p>
         </div>
       `;
-      searchCount.textContent = '0 results';
-      searchResults.style.display = 'block';
-    }
-    
-    // Show error message
-    function showError() {
-      searchResultsList.innerHTML = `
-        <div class="no-results">
-          <p>Search error occurred</p>
-          <p class="no-results-hint">Please try again</p>
-        </div>
-      `;
-      searchCount.textContent = '';
+      searchCount.textContent = '0 projects';
       searchResults.style.display = 'block';
     }
     
@@ -175,7 +163,6 @@
       searchInput.value = '';
       searchResults.style.display = 'none';
       searchClear.style.display = 'none';
-      searchInput.focus();
     }
     
     // Event handlers
@@ -209,11 +196,24 @@
       }
     });
     
-    // Focus search on '/' key
+    // Focus search on '/' key (but not when already typing)
     document.addEventListener('keydown', (e) => {
-      if (e.key === '/' && document.activeElement !== searchInput) {
+      if (e.key === '/' && document.activeElement !== searchInput && 
+          !(document.activeElement instanceof HTMLInputElement) &&
+          !(document.activeElement instanceof HTMLTextAreaElement)) {
         e.preventDefault();
         searchInput.focus();
+      }
+    });
+    
+    // Close search results when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!searchResults.contains(e.target as Node) && 
+          !searchInput.contains(e.target as Node) &&
+          !searchClear.contains(e.target as Node)) {
+        if (searchResults.style.display === 'block') {
+          searchResults.style.display = 'none';
+        }
       }
     });
   })();
@@ -303,10 +303,10 @@
   }
   
   .search-result {
-    padding: 1rem;
+    padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--color-border-default, #d0d7de);
-    transition: background 0.2s;
     cursor: pointer;
+    transition: background 0.2s;
   }
   
   .search-result:last-child {
@@ -317,17 +317,14 @@
     background: var(--color-bg-secondary, #f6f8fa);
   }
   
-  .result-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
+  .project-name {
+    font-weight: 500;
+    color: var(--color-text-primary, #24292f);
+    font-size: 0.9375rem;
   }
   
-  .project-name {
-    font-weight: 600;
-    color: var(--color-text-primary, #24292f);
-    font-size: 0.875rem;
+  .search-result:hover .project-name {
+    color: var(--color-text-link, #D62293);
   }
   
   .project-status {
@@ -353,38 +350,6 @@
   .sandbox {
     background: #ddf4ff;
     color: #0969da;
-  }
-  
-  .result-title {
-    font-size: 0.9375rem;
-    margin: 0.25rem 0;
-    line-height: 1.4;
-  }
-  
-  .result-title a {
-    color: var(--color-text-primary, #24292f);
-    text-decoration: none;
-    font-weight: 500;
-  }
-  
-  .result-title a:hover {
-    color: var(--color-text-link, #0969da);
-    text-decoration: underline;
-  }
-  
-  .result-excerpt {
-    font-size: 0.875rem;
-    color: var(--color-text-secondary, #57606a);
-    line-height: 1.5;
-  }
-  
-  /* Highlight matched terms in excerpts (Pagefind adds <mark> tags) */
-  .result-excerpt :global(mark) {
-    background: #fff8c5;
-    color: #24292f;
-    font-weight: 600;
-    padding: 0.125rem 0.25rem;
-    border-radius: 2px;
   }
   
   .no-results {
