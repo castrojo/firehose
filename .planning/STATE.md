@@ -9,10 +9,10 @@ See: .planning/PROJECT.md (updated 2026-01-26)
 
 ## Current Position
 
-Phase: v1.3 Enhancement - ✅ COMPLETE & DEPLOYED
-Status: Live with collapsible minor releases
-Last activity: 2026-01-27 — Deployed v1.3 to production (2 commits pushed)
-Next: All major enhancements complete! 🎉
+Phase: v1.3.1 Bugfix - ✅ COMPLETE & DEPLOYED
+Status: Live with prerelease grouping fix
+Last activity: 2026-01-27 — Deployed v1.3.1 prerelease grouping fix (1 commit pushed)
+Next: All enhancements complete! 🎉
 
 Progress: v1.0 Milestone [██████████] 100% complete
          v1.0 UI Enhancements [██████████] 100% complete
@@ -20,6 +20,37 @@ Progress: v1.0 Milestone [██████████] 100% complete
          Phase 6 CNCF Branding [██████████] 100% complete (2/2 plans)
          v1.2 Description Truncation [██████████] 100% complete
          v1.3 Collapsible Releases [██████████] 100% complete
+         v1.3.1 Prerelease Grouping Fix [██████████] 100% complete
+
+## v1.3.1 Bugfix: Prerelease Grouping Fix
+
+**Completed:** 2026-01-27  
+**Duration:** ~20 minutes  
+**Status:** ✅ Complete & Deployed
+
+**Issue:** Parallel prerelease tracks (e.g., NATS v2.11.12-RC.X and v2.12.4-RC.X) were not grouped together, creating separate groups and defeating the purpose of collapse.
+
+**Root Cause:** Algorithm grouped by project + minor version series, treating v2.11.12 and v2.12.4 as different series.
+
+**Solution:** Added special handling for prerelease versions:
+- Modified `groupReleases()` in `src/lib/releaseGrouping.ts`
+- If both releases are prereleases from same project → always group together
+- If both are stable releases → group by minor series (unchanged)
+- Handles parallel development tracks correctly
+
+**Results:**
+- NATS now shows "3 more releases" (was separate groups)
+- All RC versions collapse together: v2.11.12-RC.7, RC.6, v2.12.4-RC.5, RC.4
+- User-reported issue fixed
+
+**Algorithm:**
+```typescript
+canCollapse = 
+  sameProject &&
+  (bothPrereleases || (bothStable && sameMinorSeries))
+```
+
+**Deployed:** https://castrojo.github.io/firehose/ (2026-01-27 03:35 UTC)
 
 ## v1.3 Enhancement: Collapsible Minor Releases Summary
 
