@@ -182,10 +182,11 @@ Plans:
 5. All CNCF branding elements maintain WCAG AA accessibility standards
 6. Site is visually recognizable as part of the CNCF ecosystem
 
-**Plans**: To be created
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (created by /gsd-plan-phase)
+- [ ] 06-01-PLAN.md — CNCF branding infrastructure (color system, InfoBox component, logo mapper)
+- [ ] 06-02-PLAN.md — Branding integration and visual assets (download logos, integrate InfoBox, add logos to cards)
 
 ---
 
@@ -201,7 +202,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. User Interface | 3/3 | ✅ Complete | 2026-01-26 |
 | 4. Search & Filtering | 3/3 | ✅ Complete | 2026-01-26 |
 | 5. Deployment & Automation | 3/3 | ✅ Complete | 2026-01-26 |
-| 6. CNCF Branding | 0/0 | ○ Planning | - |
+| 6. CNCF Branding | 0/2 | ⏳ Ready | - |
 
 ---
 
