@@ -1,0 +1,145 @@
+---
+// KubeCon Event Banner component
+// Displays upcoming CNCF events with banner image and details
+// Auto-hides when event has passed (based on end date)
+
+interface Props {
+  name: string;
+  start: string;      // YYYY-MM-DD format
+  end: string;        // YYYY-MM-DD format
+  bannerUrl: string;  // Recommended dimensions: 2400x300
+  detailsUrl: string;
+}
+
+const { name, start, end, bannerUrl, detailsUrl } = Astro.props;
+
+// Check if event is still upcoming/active
+const now = new Date();
+const endDate = new Date(end);
+const isActive = endDate >= now;
+
+// Format dates for display
+const startDate = new Date(start);
+const formattedStart = startDate.toLocaleDateString('en-US', { 
+  month: 'long', 
+  day: 'numeric', 
+  year: 'numeric' 
+});
+const formattedEnd = endDate.toLocaleDateString('en-US', { 
+  month: 'long', 
+  day: 'numeric', 
+  year: 'numeric' 
+});
+
+// Don't render if event has passed
+if (!isActive) {
+  return null;
+}
+---
+
+<div class="kubecon-banner">
+  <a 
+    href={detailsUrl} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="banner-link"
+    aria-label={`${name} - ${formattedStart} to ${formattedEnd}`}
+  >
+    <img 
+      src={bannerUrl} 
+      alt={`${name} banner`}
+      class="banner-image"
+      loading="lazy"
+    />
+    <div class="banner-text">
+      <span class="banner-name">{name}</span>
+      <span class="banner-dates">{formattedStart} - {formattedEnd}</span>
+    </div>
+  </a>
+</div>
+
+<style>
+  .kubecon-banner {
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .kubecon-banner:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  .banner-link {
+    display: block;
+    position: relative;
+    text-decoration: none;
+    overflow: hidden;
+  }
+  
+  .banner-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 8 / 1; /* 2400x300 ratio */
+  }
+  
+  .banner-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    padding: 1rem 1.5rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  .banner-link:hover .banner-text {
+    opacity: 1;
+  }
+  
+  .banner-name {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .banner-dates {
+    font-size: 0.875rem;
+    opacity: 0.9;
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 1024px) {
+    .kubecon-banner {
+      margin-bottom: 1rem;
+    }
+    
+    .banner-text {
+      opacity: 1; /* Always show on mobile */
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6));
+      padding: 0.75rem 1rem;
+    }
+    
+    .banner-name {
+      font-size: 0.875rem;
+    }
+    
+    .banner-dates {
+      font-size: 0.75rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .banner-image {
+      aspect-ratio: 4 / 1; /* Taller on mobile for better visibility */
+    }
+  }
+</style>
