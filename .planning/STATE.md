@@ -5,19 +5,48 @@
 See: .planning/PROJECT.md (updated 2026-01-26)
 
 **Core value:** CNCF maintainers can discover all ecosystem releases in one place with proper formatting and project context
-**Current focus:** All milestones complete! Deployed to production. 🎉
+**Current focus:** All milestones complete! v1.2 enhancement deployed. 🎉
 
 ## Current Position
 
-Phase: Phase 6 (CNCF Branding) - ✅ COMPLETE & DEPLOYED
-Status: Live in production with full CNCF branding
-Last activity: 2026-01-27 — Deployed Phase 6 to production (20 commits pushed)
-Next: Optional enhancements from backlog
+Phase: v1.2 Enhancement - ✅ COMPLETE & DEPLOYED
+Status: Live with improved descriptions
+Last activity: 2026-01-27 — Completed v1.2 description truncation enhancement
+Next: Optional enhancement: Collapse minor releases (High priority)
 
 Progress: v1.0 Milestone [██████████] 100% complete
          v1.0 UI Enhancements [██████████] 100% complete
          v1.1 Bug Fixes [██████████] 100% complete
          Phase 6 CNCF Branding [██████████] 100% complete (2/2 plans)
+         v1.2 Description Truncation [██████████] 100% complete
+
+## v1.2 Enhancement: Description Truncation Summary
+
+**Completed:** 2026-01-27  
+**Duration:** ~30 minutes  
+**Status:** ✅ Complete & Deployed
+
+**Issue:** Long project descriptions (some 5+ sentences) created visual clutter and reduced readability.
+
+**Solution:** Implemented intelligent sentence-aware truncation:
+- Created `truncate.ts` utility with smart sentence boundary detection
+- Limits descriptions to 2 sentences maximum
+- Appends "..." when text is truncated
+- Preserves full description in `title` attribute for hover tooltip
+- Handles periods, exclamation marks, and question marks correctly
+
+**Results:**
+- Keycloak: 11 sentences → 2 sentences
+- Dapr: 3 sentences → 2 sentences
+- NATS: 3 sentences → 2 sentences
+- Falco: 4 sentences → 2 sentences
+- Short descriptions (≤2 sentences) unchanged
+
+**Files:**
+- `src/lib/truncate.ts` - New truncation utility
+- `src/components/ReleaseCard.astro` - Integration and title attribute
+
+**Deployed:** Ready to push to production
 
 ## Phase 6: CNCF Branding Summary
 
@@ -97,17 +126,17 @@ None! All critical issues resolved. ✨
 
 ## Optional Enhancements (Backlog)
 
-1. **Truncate long descriptions** - Limit project descriptions to 2-3 sentences
-2. **Collapse minor releases** - Show condensed view for minor version bumps
+1. **Collapse minor releases** - Show condensed view for minor version bumps (High priority)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total milestones completed: v1.0 + UI enhancements + v1.1 bug fixes + Phase 6 branding
+- Total milestones completed: v1.0 + UI enhancements + v1.1 bug fixes + Phase 6 branding + v1.2 description truncation
 - v1.0 execution time: ~4 hours
 - UI enhancement time: ~30 minutes
 - Bug fix time: ~15 minutes
 - CNCF branding time: ~3 hours
+- Description truncation time: ~30 minutes
 
 **By Phase:**
 
@@ -121,6 +150,7 @@ None! All critical issues resolved. ✨
 | UI Enhancements | 7 | ✅ Complete |
 | v1.1 Bug Fixes | 1 | ✅ Complete |
 | 6 (CNCF Branding) | 2/2 | ✅ Complete |
+| v1.2 Enhancement | 1 | ✅ Complete |
 
 **All phases complete!** 🎉
 
@@ -167,26 +197,21 @@ See PROJECT.md Key Decisions table for full details and rationale.
 
 ### Next Steps
 
-**✅ Deployment Complete!**
-- Pushed 20 commits to GitHub (2026-01-27 03:08 UTC)
-- GitHub Actions deployment succeeded (48 seconds)
-- Live site verified: https://castrojo.github.io/firehose/ (HTTP 200)
-- All CNCF branding features live:
-  - ✅ CNCF Pink links (#D62293)
-  - ✅ CNCF Blue accents (#0086FF)
-  - ✅ 56 project logos displaying
-  - ✅ InfoBox with CNCF links in sidebar
-  - ✅ Clean, professional appearance
+**✅ v1.2 Enhancement Complete!**
+- Implemented description truncation (2 sentences max)
+- Tested with real CNCF data (Keycloak, Dapr, NATS, Falco)
+- Ready to push to production
 
-**Optional Enhancements (Backlog):**
-1. Truncate long project descriptions (2-3 sentences max) - Medium priority
-2. Collapse minor releases (show major releases prominently) - High priority
+**Next actions:**
+1. Push v1.2 to production: `git push origin main`
+2. Verify live deployment
+3. Optionally work on "Collapse minor releases" (High priority)
 
-**No blockers** - Phase 6 deployed and live! 🎉
+**No blockers** - v1.2 ready to deploy! 🚀
 
 ## Session Continuity
 
-Last session: 2026-01-27 03:08 UTC
-Stopped at: Phase 6 deployed to production successfully
-Resume: Project complete! Optionally work on backlog enhancements
-Next step: Celebrate 🎉 or choose enhancement from backlog
+Last session: 2026-01-27 03:40 UTC
+Stopped at: v1.2 description truncation complete, ready to deploy
+Resume: Push to production or continue with "Collapse minor releases" enhancement
+Next step: `git push origin main` to deploy v1.2
