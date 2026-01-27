@@ -5,17 +5,35 @@
 See: .planning/PROJECT.md (updated 2026-01-26)
 
 **Core value:** CNCF maintainers can discover all ecosystem releases in one place with proper formatting and project context
-**Current focus:** v1.0 complete! Working on v1.1 bug fixes (search broken)
+**Current focus:** v1.1 complete - Search fixed! Optional enhancements remain.
 
 ## Current Position
 
-Phase: Post v1.0 - UI Enhancement Milestone Complete
-Status: UI enhancements deployed successfully
-Last activity: 2026-01-27 — Completed all 7 user-requested UI enhancements
-Next milestone: v1.1 - Fix broken search (CRITICAL)
+Phase: v1.1 Bug Fixes - COMPLETE ✅
+Status: Search fixed and deployed
+Last activity: 2026-01-27 — Fixed broken search after sidebar layout changes
+Next: Optional enhancements (description truncation, minor release collapsing)
 
 Progress: v1.0 Milestone [██████████] 100% complete
          v1.0 UI Enhancements [██████████] 100% complete
+         v1.1 Bug Fixes [██████████] 100% complete
+
+## v1.1 Bug Fix Milestone Summary
+
+**Completed:** 2026-01-27  
+**Duration:** ~15 minutes
+
+**Issue:** Search completely broken after UI enhancement deployment
+**Root Cause:** SearchBar CSS assumed full-width layout, failed in grid column context
+**Fix:** Removed max-width constraints, let SearchBar fill available width
+
+**Changes:**
+- `.search-wrapper`: Changed from `max-width: 600px; margin: 0 auto` to `width: 100%`
+- `.search-results`: Removed `max-width: 600px; margin: 0 auto`, added `width: 100%`
+- Search now works correctly in sidebar layout
+
+**Deployed:** https://castrojo.github.io/firehose/
+**Commit:** 2f78c8d "fix(search): adjust SearchBar width for sidebar layout"
 
 ## v1.0 UI Enhancement Milestone Summary
 
@@ -38,17 +56,21 @@ Progress: v1.0 Milestone [██████████] 100% complete
 
 ## Known Issues
 
-**CRITICAL:** Search is completely broken (user reported)
-- Investigation needed: Check Pagefind integration after layout changes
-- May need to adjust SearchBar placement or Pagefind configuration
-- Need to verify search index is being built correctly
+None! All critical issues resolved. ✨
+
+## Optional Enhancements (Backlog)
+
+1. **Truncate long descriptions** - Limit project descriptions to 2-3 sentences
+2. **Collapse minor releases** - Show condensed view for minor version bumps
+3. **CNCF branding** - Apply official CNCF style guidelines (future milestone)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 26 (all 5 phases + UI enhancements)
+- Total milestones completed: v1.0 + UI enhancements + v1.1 bug fixes
 - v1.0 execution time: ~4 hours
 - UI enhancement time: ~30 minutes
+- Bug fix time: ~15 minutes
 
 **By Phase:**
 
@@ -60,54 +82,44 @@ Progress: v1.0 Milestone [██████████] 100% complete
 | 4 | 3 | ✅ Complete |
 | 5 | 3 | ✅ Complete |
 | UI Enhancements | 7 | ✅ Complete |
+| v1.1 Bug Fixes | 1 | ✅ Complete |
 
 ## Accumulated Context
 
 ### Decisions
 
-Recent technology stack decisions:
-- Astro v5 Content Layer API for build-time aggregation ✅ Working
-- rss-parser + js-yaml for robust parsing ✅ Working
-- marked@17.0.1 for GitHub-compatible markdown ✅ Working
-- Intersection Observer for infinite scroll ✅ Working
-- Pagefind for search ⚠️ BROKEN (needs investigation)
-- Data attributes for client-side filtering ✅ Working
-- Inline Astro scripts for client-side logic ✅ Working
-- Vim-style keyboard shortcuts (j/k/o/?) ✅ Working
-- Promise.allSettled() for graceful degradation ✅ Working
-- Graduated + Incubating projects only for v1 (~100 feeds)
+Technology stack - All working ✅:
+- Astro v5 Content Layer API for build-time aggregation
+- rss-parser + js-yaml for robust parsing
+- marked@17.0.1 for GitHub-compatible markdown
+- Intersection Observer for infinite scroll
+- Pagefind for search (fixed in v1.1)
+- Data attributes for client-side filtering
+- Inline Astro scripts for client-side logic
+- Vim-style keyboard shortcuts (j/k/o/?)
+- Promise.allSettled() for graceful degradation
+- Graduated + Incubating projects only (~62 feeds)
 - Atom feeds only (GitHub releases don't support RSS)
-- Node.js 20 (LTS) for GitHub Actions ✅ Working
-- Modern GitHub Actions v4 with two-job workflow ✅ Working
-- Daily builds at 6 AM UTC ✅ Configured
-- Sidebar layout with sticky positioning (desktop) ✅ Working
-- Two-column grid layout (320px sidebar + flexible content) ✅ Working
+- Node.js 20 (LTS) for GitHub Actions
+- Modern GitHub Actions v4 with two-job workflow
+- Daily builds at 6 AM UTC
+- Sidebar layout with sticky positioning (desktop)
+- Two-column grid layout (320px sidebar + flexible content)
 
 See PROJECT.md Key Decisions table for full details and rationale.
 
-### Next Steps
+### Next Steps (Optional)
 
-**v1.1 Milestone - Bug Fixes:**
-1. **[CRITICAL]** Investigate and fix broken search
-   - Check SearchBar component placement in new layout
-   - Verify Pagefind index generation
-   - Test search functionality end-to-end
-   - Check browser console for errors
+**Optional Enhancements:**
+1. Truncate long project descriptions (2-3 sentences max) - Medium priority
+2. Collapse minor releases (show major releases prominently) - High priority
+3. CNCF branding (future milestone) - High priority for production
 
-2. **[Optional]** Truncate long project descriptions (2-3 sentences max)
-
-3. **[Optional]** Collapse minor releases (show major releases prominently)
-
-### Blockers/Concerns
-
-**CRITICAL BLOCKER:** Search is completely broken
-- User reported after UI enhancement deployment
-- Need to investigate impact of sidebar layout on Pagefind integration
-- May have broken SearchBar component integration or Pagefind selectors
+**No blockers** - all core functionality working!
 
 ## Session Continuity
 
-Last session: 2026-01-27 00:28 UTC
-Stopped at: UI enhancements deployed, user reported search broken
-Resume file: .planning/backlog.md (updated with search fix as top priority)
-Next step: Debug and fix search functionality
+Last session: 2026-01-27 00:46 UTC
+Stopped at: v1.1 complete, search fixed and deployed
+Resume file: .planning/backlog.md
+Next step: Optional enhancements or CNCF branding milestone
