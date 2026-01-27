@@ -115,6 +115,29 @@
       return div.innerHTML;
     }
     
+    // Get active filters
+    function getActiveFilters() {
+      const projectFilterSelect = document.getElementById('filter-project') as HTMLSelectElement;
+      const statusFilterSelect = document.getElementById('filter-status') as HTMLSelectElement;
+      
+      return {
+        project: projectFilterSelect?.value || '',
+        status: statusFilterSelect?.value || ''
+      };
+    }
+    
+    // Check if release matches active filters
+    function releaseMatchesFilters(release: any, filters: { project: string, status: string }): boolean {
+      const data = release.data;
+      const projectName = data.projectName || data.feedTitle || 'Unknown';
+      const status = data.projectStatus || 'unknown';
+      
+      const matchesProject = !filters.project || projectName === filters.project;
+      const matchesStatus = !filters.status || status === filters.status;
+      
+      return matchesProject && matchesStatus;
+    }
+    
     // Load next batch of releases
     function loadMoreReleases() {
       if (isLoading || currentIndex >= allReleases.length) {
@@ -124,14 +147,19 @@
       isLoading = true;
       if (loadingIndicator) loadingIndicator.style.display = 'block';
       
+      const filters = getActiveFilters();
+      
       // Simulate network delay for smooth UX (even though data is local)
       setTimeout(() => {
         const batch = allReleases.slice(currentIndex, currentIndex + BATCH_SIZE);
         
         batch.forEach(release => {
-          const html = renderReleaseCard(release);
-          if (releaseList) {
-            releaseList.insertAdjacentHTML('beforeend', html);
+          // Only render if matches active filters
+          if (releaseMatchesFilters(release, filters)) {
+            const html = renderReleaseCard(release);
+            if (releaseList) {
+              releaseList.insertAdjacentHTML('beforeend', html);
+            }
           }
         });
         
@@ -148,6 +176,25 @@
         
         console.log(`[InfiniteScroll] Loaded batch, now showing ${Math.min(currentIndex + BATCH_SIZE, currentIndex + allReleases.length)}/${BATCH_SIZE + allReleases.length} releases`);
       }, 300);
+    }
+    
+    // Apply filters to already-loaded infinite scroll cards
+    function applyFiltersToInfiniteScrollCards() {
+      const filters = getActiveFilters();
+      
+      // Only filter cards that were added by infinite scroll (not server-side or groups)
+      const cards = releaseList?.querySelectorAll('.release-card[data-pagefind-ignore]');
+      
+      cards?.forEach(card => {
+        const cardEl = card as HTMLElement;
+        const project = cardEl.dataset.project || '';
+        const status = cardEl.dataset.status || '';
+        
+        const matchesProject = !filters.project || project === filters.project;
+        const matchesStatus = !filters.status || status === filters.status;
+        
+        cardEl.style.display = (matchesProject && matchesStatus) ? '' : 'none';
+      });
     }
     
     // Set up Intersection Observer
@@ -167,6 +214,16 @@
     );
     
     observer.observe(scrollTrigger);
+    
+    // Listen for filter changes and apply to infinite scroll cards
+    document.getElementById('filter-project')?.addEventListener('change', applyFiltersToInfiniteScrollCards);
+    document.getElementById('filter-status')?.addEventListener('change', applyFiltersToInfiniteScrollCards);
+    
+    // Listen for clear filters button
+    document.getElementById('clear-filters')?.addEventListener('click', () => {
+      // Small delay to let FilterBar clear the selects first
+      setTimeout(applyFiltersToInfiniteScrollCards, 50);
+    });
     
     // Cleanup on page unload
     window.addEventListener('beforeunload', () => {
