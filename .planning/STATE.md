@@ -108,6 +108,10 @@ Technology stack - All working ✅:
 
 See PROJECT.md Key Decisions table for full details and rationale.
 
+### Pending Todos
+
+1 todo captured in `.planning/todos/pending/` for future work.
+
 ### Next Steps (Optional)
 
 **Optional Enhancements:**
