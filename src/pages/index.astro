@@ -41,8 +41,26 @@ const errorEntries = releases
   }));
 
 // Count by project status
-const graduatedCount = validReleases.filter(r => r.data.projectStatus === 'graduated').length;
-const incubatingCount = validReleases.filter(r => r.data.projectStatus === 'incubating').length;
+const graduatedCount = new Set(validReleases.filter(r => r.data.projectStatus === 'graduated').map(r => r.data.projectName)).size;
+const incubatingCount = new Set(validReleases.filter(r => r.data.projectStatus === 'incubating').map(r => r.data.projectName)).size;
+const sandboxCount = new Set(validReleases.filter(r => r.data.projectStatus === 'sandbox').map(r => r.data.projectName)).size;
+
+// Calculate additional metrics
+const totalProjects = new Set(validReleases.map(r => r.data.projectName)).size;
+const last7Days = sortedReleases.filter(r => {
+  const releaseDate = r.data.isoDate ? new Date(r.data.isoDate) : null;
+  if (!releaseDate) return false;
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  return releaseDate >= sevenDaysAgo;
+}).length;
+const last30Days = sortedReleases.filter(r => {
+  const releaseDate = r.data.isoDate ? new Date(r.data.isoDate) : null;
+  if (!releaseDate) return false;
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  return releaseDate >= thirtyDaysAgo;
+}).length;
 
 // Group releases for collapsible display
 const releaseGroups = groupReleases(sortedReleases);
@@ -160,12 +178,28 @@ const remainingReleasesData = remainingReleases.map(r => ({
             <div class="stat-label">Total Releases</div>
           </div>
           <div class="stat">
+            <div class="stat-value">{totalProjects}</div>
+            <div class="stat-label">Total Projects</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{last7Days}</div>
+            <div class="stat-label">Last 7 Days</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{last30Days}</div>
+            <div class="stat-label">Last 30 Days</div>
+          </div>
+          <div class="stat">
             <div class="stat-value">{graduatedCount}</div>
             <div class="stat-label">Graduated Projects</div>
           </div>
           <div class="stat">
             <div class="stat-value">{incubatingCount}</div>
             <div class="stat-label">Incubating Projects</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{sandboxCount}</div>
+            <div class="stat-label">Sandbox Projects</div>
           </div>
           {errorCount > 0 && (
             <div class="stat stat-error">
