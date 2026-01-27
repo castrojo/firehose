@@ -347,16 +347,6 @@ const remainingReleasesData = remainingReleases.map(r => ({
 
 <style>
   :root {
-    /* Colors - GitHub Primer inspired */
-    --color-bg-default: #ffffff;
-    --color-bg-secondary: #f6f8fa;
-    --color-border-default: #d0d7de;
-    --color-text-primary: #24292f;
-    --color-text-secondary: #57606a;
-    --color-text-tertiary: #6e7781;
-    --color-text-link: #0969da;
-    --color-accent-emphasis: #0969da;
-    
     /* CNCF Brand Colors */
     /* Source: https://www.cncf.io/brand-guidelines/ */
     --color-cncf-blue: #0086FF;
@@ -366,9 +356,15 @@ const remainingReleasesData = remainingReleases.map(r => ({
     --color-cncf-stone: #E5E5E5;
     --color-cncf-white: #FFFFFF;
     
-    /* Map CNCF colors to existing variables */
-    --color-accent-emphasis: var(--color-cncf-blue);
-    --color-text-link: var(--color-cncf-blue);
+    /* Colors - GitHub Primer inspired with CNCF branding */
+    --color-bg-default: #ffffff;
+    --color-bg-secondary: #f6f8fa;
+    --color-border-default: #d0d7de;
+    --color-text-primary: #24292f;
+    --color-text-secondary: #57606a;
+    --color-text-tertiary: #6e7781;
+    --color-text-link: #0086FF; /* CNCF blue */
+    --color-accent-emphasis: #0086FF; /* CNCF blue */
   }
   
   * {
