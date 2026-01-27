@@ -2,6 +2,7 @@
 import type { FeedEntry } from '../lib/schemas';
 import { renderMarkdown } from '../lib/markdown';
 import { getProjectLogo } from '../lib/logoMapper';
+import { truncateToSentences } from '../lib/truncate';
 
 interface Props {
   release: {
@@ -18,6 +19,9 @@ const htmlContent = renderMarkdown(data.content || data.contentSnippet);
 
 // Get project logo path
 const projectLogo = getProjectLogo(data.projectName);
+
+// Truncate long project descriptions to 2 sentences
+const displayDescription = truncateToSentences(data.projectDescription, 2);
 
 // Format date
 const formattedDate = data.isoDate
@@ -54,8 +58,10 @@ const formattedDate = data.isoDate
     )}
   </div>
   
-  {data.projectDescription && (
-    <p class="project-description">{data.projectDescription}</p>
+  {displayDescription && (
+    <p class="project-description" title={data.projectDescription}>
+      {displayDescription}
+    </p>
   )}
   
   <h2 class="release-title">
