@@ -38,7 +38,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.6",
     "@types/js-yaml": "^4.0.9",
-    "@types/marked": "^5.0.2",
+    "@types/marked": "^6.0.0",
     "pagefind": "^1.4.0"
   }
 }
