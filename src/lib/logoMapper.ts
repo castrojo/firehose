@@ -3,11 +3,13 @@
  * Falls back to a placeholder if logo doesn't exist
  */
 export function getProjectLogo(projectName: string | undefined): string {
-  // Get base URL from Astro environment (e.g., /firehose for GitHub Pages)
+  // Astro's BASE_URL (e.g., /firehose) is used for GitHub Pages deployment
+  // Public assets need the base path prepended
   const baseUrl = import.meta.env.BASE_URL || '/';
+  const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
   
   if (!projectName) {
-    return `${baseUrl}logos/placeholder.svg`;
+    return `${normalizedBaseUrl}/logos/placeholder.svg`;
   }
   
   // Normalize project name to match cncf/artwork structure
@@ -28,7 +30,7 @@ export function getProjectLogo(projectName: string | undefined): string {
   const logoDir = specialCases[normalized] || normalized;
   
   // Use icon format (square) for compact display in card headers
-  return `${baseUrl}logos/${logoDir}/icon-color.svg`;
+  return `${normalizedBaseUrl}/logos/${logoDir}/icon-color.svg`;
 }
 
 /**
