@@ -83,6 +83,7 @@ const remainingReleasesData = remainingReleases.map(r => ({
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="CNCF project releases aggregated in one place">
+  <link rel="alternate" type="application/rss+xml" title="The Firehose - CNCF Releases" href="/firehose/feed.xml">
   <title>The Firehose - CNCF Releases</title>
 </head>
 <body>
@@ -114,6 +115,7 @@ const remainingReleasesData = remainingReleases.map(r => ({
           title="About" 
           description="The Firehose aggregates release notes from CNCF projects."
           links={[
+            { text: 'Subscribe', url: '/firehose/feed.xml', external: false, rss: true },
             { text: 'CNCF Homepage', url: 'https://www.cncf.io/', external: true },
             { text: 'CNCF Landscape', url: 'https://landscape.cncf.io/', external: true },
             { text: 'GitHub Repository', url: 'https://github.com/castrojo/firehose', external: true }

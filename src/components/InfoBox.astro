@@ -3,6 +3,7 @@ interface Link {
   text: string;
   url: string;
   external?: boolean;
+  rss?: boolean;
 }
 
 interface Props {
@@ -24,8 +25,15 @@ const { title, description, links } = Astro.props;
           href={link.url} 
           target={link.external ? "_blank" : undefined}
           rel={link.external ? "noopener noreferrer" : undefined}
-          class="info-link"
+          class={link.rss ? "info-link rss-link" : "info-link"}
         >
+          {link.rss && (
+            <span class="rss-icon" aria-label="RSS feed">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248-1.796 0-3.252-1.454-3.252-3.248 0-1.794 1.456-3.248 3.252-3.248 1.795.001 3.251 1.454 3.251 3.248zm-6.503-12.572v4.811c6.05.062 10.96 4.966 11.022 11.009h4.817c-.062-8.71-7.118-15.758-15.839-15.82zm0-3.368c10.58.046 19.152 8.594 19.183 19.188h4.817c-.03-13.231-10.755-23.954-24-24v4.812z"/>
+              </svg>
+            </span>
+          )}
           {link.text}
           {link.external && (
             <span class="external-icon" aria-label="Opens in new tab">
@@ -92,6 +100,20 @@ const { title, description, links } = Astro.props;
   .external-icon {
     display: inline-flex;
     opacity: 0.6;
+  }
+  
+  .rss-link {
+    color: #ff6600; /* Orange RSS color */
+    font-weight: 600;
+  }
+  
+  .rss-link:hover {
+    color: #ff4500; /* Darker orange on hover */
+  }
+  
+  .rss-icon {
+    display: inline-flex;
+    margin-right: 0.375rem;
   }
   
   /* Mobile responsiveness */
