@@ -1,37 +1,6 @@
 # Backlog
 
-## Current Milestone: v1.1 - Bug Fixes
-
-### Fix Broken Search (CRITICAL)
-**Priority:** Critical  
-**Effort:** Medium  
-**Context:** User reported search is completely broken after sidebar layout changes
-
-The search functionality stopped working after the UI enhancements were deployed. Need to investigate and fix.
-
-**Investigation needed:**
-- Check if Pagefind integration broke with new layout
-- Verify SearchBar component is properly integrated in sidebar layout
-- Test search input focus and functionality
-- Check browser console for JavaScript errors
-- Verify Pagefind build output and index files
-
-**Location:** `src/components/SearchBar.astro`, `src/pages/index.astro`
-
----
-
-## Phase 3 Follow-up
-
-### Truncate Long Project Descriptions
-**Priority:** Medium  
-**Effort:** Small  
-
-Project descriptions from landscape.yml can be very long. Truncate to 2-3 sentences maximum in ReleaseCard display.
-
-**Location:** `src/components/ReleaseCard.astro`  
-**Implementation:** Add truncation helper or CSS line-clamp
-
----
+## Optional Enhancements
 
 ### Collapse Minor Releases
 **Priority:** High  
@@ -51,21 +20,32 @@ When projects do a minor release (e.g., v1.2.3 → v1.2.4), collapse the section
 
 ---
 
-## Future Milestone: CNCF Branding
+## Completed Enhancements
 
-### Implement CNCF Website Style Guidelines
-**Priority:** High (for production)  
-**Effort:** Medium  
-**Context:** This is a prototype for CNCF organization
+### ✅ Fix Broken Search (v1.1)
+**Completed:** 2026-01-27  
+**Issue:** Search completely broken after UI enhancement deployment  
+**Solution:** Removed max-width constraints from SearchBar to work in grid layout  
+**Files:** `src/components/SearchBar.astro`
 
-Apply official CNCF website style guidelines to make this look like an official CNCF site.
+### ✅ Truncate Long Project Descriptions (v1.2)
+**Completed:** 2026-01-27  
+**Issue:** Project descriptions were too long (some 5+ sentences)  
+**Solution:** Created truncation utility to limit descriptions to 2 sentences with "..."  
+**Features:**
+- Intelligently splits on sentence boundaries (. ! ?)
+- Preserves full description in title attribute for hover tooltip
+- Maintains readability and professionalism
+**Files:** 
+- `src/lib/truncate.ts` (new utility)
+- `src/components/ReleaseCard.astro` (integration)
 
-**Reference:** @cncf/website style guidelines  
-**Scope:**
-- Colors and typography
-- Layout and spacing
-- Component styles (buttons, badges, cards)
-- Header/footer branding
-- CNCF logo and assets
-
-**Note:** Should be separate milestone after core functionality complete
+### ✅ CNCF Branding (Phase 6)
+**Completed:** 2026-01-27  
+**Scope:** Full CNCF visual identity integration  
+**Features:**
+- CNCF Pink (#D62293) for links
+- CNCF Blue (#0086FF) for accents
+- 56 project logos from cncf/artwork
+- InfoBox component with CNCF links
+- Clean, professional appearance
