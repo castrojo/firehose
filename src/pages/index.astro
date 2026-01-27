@@ -1,12 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
 import ReleaseCard from '../components/ReleaseCard.astro';
+import CollapsibleReleaseGroup from '../components/CollapsibleReleaseGroup.astro';
 import InfiniteScroll from '../components/InfiniteScroll.astro';
 import ErrorBanner from '../components/ErrorBanner.astro';
 import KeyboardHelp from '../components/KeyboardHelp.astro';
 import SearchBar from '../components/SearchBar.astro';
 import FilterBar from '../components/FilterBar.astro';
 import InfoBox from '../components/InfoBox.astro';
+import { groupReleases } from '../lib/releaseGrouping';
 
 // Fetch all releases from the content collection
 const releases = await getCollection('releases');
@@ -38,10 +40,17 @@ const errorEntries = releases
 const graduatedCount = validReleases.filter(r => r.data.projectStatus === 'graduated').length;
 const incubatingCount = validReleases.filter(r => r.data.projectStatus === 'incubating').length;
 
+// Group releases for collapsible display
+const releaseGroups = groupReleases(sortedReleases);
+
 // Pagination: Initial batch for server-side render
 const INITIAL_BATCH = 30;
-const initialReleases = sortedReleases.slice(0, INITIAL_BATCH);
-const remainingReleases = sortedReleases.slice(INITIAL_BATCH);
+const initialGroups = releaseGroups.slice(0, INITIAL_BATCH);
+const remainingGroups = releaseGroups.slice(INITIAL_BATCH);
+
+// For backward compatibility: flatten groups back to releases for filters/search
+const initialReleases = initialGroups.flatMap(g => [g.leadRelease, ...g.collapsedReleases]);
+const remainingReleases = remainingGroups.flatMap(g => [g.leadRelease, ...g.collapsedReleases]);
 
 // Extract unique project names (sorted alphabetically)
 const uniqueProjects = [...new Set(sortedReleases.map(r => r.data.projectName || r.data.feedTitle).filter(p => p !== undefined))] as string[];
@@ -158,9 +167,12 @@ const remainingReleasesData = remainingReleases.map(r => ({
         <!-- Infinite scroll container with data hydration -->
         <div class="infinite-scroll-container" data-releases={JSON.stringify(remainingReleasesData)}>
           <InfiniteScroll>
-            <!-- Initial batch rendered server-side -->
-            {initialReleases.map((release) => (
-              <ReleaseCard release={release} />
+            <!-- Initial batch rendered server-side with grouping -->
+            {initialGroups.map((group, index) => (
+              <CollapsibleReleaseGroup 
+                group={group} 
+                groupId={`group-${index}`}
+              />
             ))}
           </InfiniteScroll>
         </div>

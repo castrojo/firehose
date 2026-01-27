@@ -1,0 +1,218 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ReleaseCard from './ReleaseCard.astro';
+import { isCollapsible, getCollapsedSummary } from '../lib/releaseGrouping';
+
+interface Props {
+  group: {
+    project: string;
+    leadRelease: CollectionEntry<'releases'>;
+    collapsedReleases: CollectionEntry<'releases'>[];
+    version?: any;
+  };
+  groupId: string;
+}
+
+const { group, groupId } = Astro.props;
+const collapsible = isCollapsible(group);
+const summary = getCollapsedSummary(group);
+---
+
+<div class="release-group" data-group-id={groupId}>
+  <!-- Lead release (always visible) -->
+  <ReleaseCard release={group.leadRelease} />
+  
+  {collapsible && (
+    <div class="collapse-control">
+      <button
+        class="collapse-button"
+        data-group-id={groupId}
+        aria-expanded="false"
+        aria-controls={`collapsed-${groupId}`}
+      >
+        <span class="collapse-icon">▶</span>
+        <span class="collapse-text">{summary}</span>
+      </button>
+    </div>
+    
+    <div
+      id={`collapsed-${groupId}`}
+      class="collapsed-releases"
+      aria-hidden="true"
+      style="display: none;"
+    >
+      {group.collapsedReleases.map((release) => (
+        <ReleaseCard release={release} />
+      ))}
+    </div>
+  )}
+</div>
+
+<style>
+  .release-group {
+    margin-bottom: 0;
+  }
+  
+  .collapse-control {
+    margin: -0.5rem 0 1.5rem 0;
+    padding: 0 2rem;
+  }
+  
+  .collapse-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--color-bg-secondary, #f6f8fa);
+    border: 1px solid var(--color-border-default, #d0d7de);
+    border-radius: 6px;
+    color: var(--color-text-secondary, #57606a);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    width: 100%;
+    text-align: left;
+  }
+  
+  .collapse-button:hover {
+    background: var(--color-bg-default, #ffffff);
+    border-color: var(--color-text-link, #D62293);
+    color: var(--color-text-link, #D62293);
+  }
+  
+  .collapse-button:focus {
+    outline: 2px solid var(--color-accent-emphasis, #0086FF);
+    outline-offset: 2px;
+  }
+  
+  .collapse-button[aria-expanded="true"] .collapse-icon {
+    transform: rotate(90deg);
+  }
+  
+  .collapse-icon {
+    display: inline-block;
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+    color: var(--color-text-tertiary, #6e7781);
+  }
+  
+  .collapse-text {
+    font-weight: 500;
+  }
+  
+  .collapsed-releases {
+    margin-top: 1rem;
+    padding-left: 1rem;
+    border-left: 3px solid var(--color-border-default, #d0d7de);
+  }
+  
+  .collapsed-releases.expanding {
+    animation: slideDown 0.3s ease-out;
+  }
+  
+  .collapsed-releases.collapsing {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+    }
+    to {
+      opacity: 1;
+      max-height: 10000px;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 1;
+      max-height: 10000px;
+    }
+    to {
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+    }
+  }
+  
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .collapse-control {
+      padding: 0 1rem;
+    }
+    
+    .collapse-button {
+      font-size: 0.8125rem;
+      padding: 0.375rem 0.625rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .collapse-control {
+      padding: 0 0.75rem;
+    }
+    
+    .collapsed-releases {
+      padding-left: 0.5rem;
+      border-left-width: 2px;
+    }
+  }
+</style>
+
+<script>
+  // Handle collapse/expand interactions
+  function initializeCollapseControls() {
+    const buttons = document.querySelectorAll('.collapse-button');
+    
+    buttons.forEach((button) => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        const btn = e.currentTarget as HTMLButtonElement;
+        const groupId = btn.dataset.groupId;
+        const collapsedSection = document.getElementById(`collapsed-${groupId}`);
+        const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+        
+        if (!collapsedSection) return;
+        
+        if (isExpanded) {
+          // Collapse
+          collapsedSection.classList.add('collapsing');
+          collapsedSection.classList.remove('expanding');
+          
+          setTimeout(() => {
+            collapsedSection.style.display = 'none';
+            collapsedSection.setAttribute('aria-hidden', 'true');
+            collapsedSection.classList.remove('collapsing');
+            btn.setAttribute('aria-expanded', 'false');
+          }, 300);
+        } else {
+          // Expand
+          collapsedSection.style.display = 'block';
+          collapsedSection.classList.add('expanding');
+          collapsedSection.classList.remove('collapsing');
+          collapsedSection.setAttribute('aria-hidden', 'false');
+          btn.setAttribute('aria-expanded', 'true');
+          
+          setTimeout(() => {
+            collapsedSection.classList.remove('expanding');
+          }, 300);
+        }
+      });
+    });
+  }
+  
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeCollapseControls);
+  } else {
+    initializeCollapseControls();
+  }
+  
+  // Re-initialize when infinite scroll loads more content
+  document.addEventListener('infiniteScrollLoaded', initializeCollapseControls);
+</script>
