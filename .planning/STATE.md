@@ -11,10 +11,10 @@ See: .planning/PROJECT.md (updated 2026-01-26)
 
 Phase: Maintenance & Automation
 Status: All features deployed and working perfectly
-Last activity: 2026-01-27 — Completed Quick Task 003: Replace Pagefind with simple project name filter
+Last activity: 2026-01-27 — Fixed dark mode link accessibility bug (removed :global() wrappers causing CSS compilation issue)
 Next: Monitor production deployment
 
-Backlog: 2 high-value future ideas documented (RSS feed output, dark mode)
+Backlog: All high-priority enhancements complete! All known bugs resolved.
 
 Progress: v1.0 Milestone [██████████] 100% complete
          v1.0 UI Enhancements [██████████] 100% complete
@@ -26,6 +26,8 @@ Progress: v1.0 Milestone [██████████] 100% complete
          Quick Task 001 [██████████] 100% complete (Dependabot automation)
          Quick Task 002 [██████████] 100% complete (Keyboard nav fix)
          Quick Task 003 [██████████] 100% complete (Search redesign)
+         v1.4 Enhancement Session [██████████] 100% complete (6 features)
+         v1.4.1 Dark Mode Link Fix [██████████] 100% complete
 
 ## Quick Task 001: Dependabot Automation Summary
 
@@ -53,6 +55,163 @@ Progress: v1.0 Milestone [██████████] 100% complete
 **Next:** Push to origin to enable Dependabot automation
 
 **Commit:** c1e3341 "chore(deps): automate dependency updates via dependabot"
+
+## v1.4 Enhancement Session: Six Major Features
+
+**Completed:** 2026-01-27  
+**Duration:** ~4 hours  
+**Status:** ✅ Complete & Deployed
+
+**Objective:** Deliver high-value user features from backlog: RSS feed output, dark mode, site portability, UX improvements, and accessibility enhancements.
+
+### Feature 1: RSS Feed Output ✅
+**Commit:** b21c06c  
+**Files:**
+- NEW: `src/pages/feed.xml.ts` - RSS 2.0 feed endpoint
+- MODIFIED: `src/pages/index.astro` - RSS auto-discovery meta tag
+- MODIFIED: `src/components/InfoBox.astro` - Orange RSS subscribe button
+
+**Features:**
+- `/feed.xml` endpoint serving RSS 2.0 format
+- 100 most recent releases (out of 610 total)
+- Full markdown content converted to HTML
+- Project name + status as categories
+- Orange RSS icon (#ff6600) in About section
+- 1-hour cache (3600s)
+- Auto-discovery meta tag in `<head>`
+
+### Feature 2: Site Portability ✅
+**Commit:** a5b9b45  
+**Files:**
+- MODIFIED: `src/pages/feed.xml.ts` - Dynamic URL construction
+- MODIFIED: `src/pages/index.astro` - BASE_URL usage, data attribute
+- MODIFIED: `src/lib/logoMapper.ts` - BASE_URL for logo paths
+- MODIFIED: `src/components/InfiniteScroll.astro` - Client-side base URL
+- NEW: `DEPLOYMENT.md` - Complete deployment guide
+
+**Problem:** Site had hardcoded URLs that would break if deployed elsewhere.
+
+**Solution:** Use Astro's `import.meta.env.BASE_URL` throughout. Site now portable - change only 2 values in `astro.config.mjs` to deploy anywhere.
+
+### Feature 3: Dark Mode with Theme Toggle ✅
+**Commit:** 9fb2846  
+**Files:**
+- NEW: `src/components/ThemeToggle.astro` - Sun/moon icon toggle
+- MODIFIED: `src/pages/index.astro` - Dark theme CSS variables, theme init script, keyboard shortcut
+- MODIFIED: `src/components/KeyboardHelp.astro` - Added 't' shortcut
+- MODIFIED: `src/components/InfoBox.astro` - CSS variable for RSS orange
+
+**Features:**
+- Full light/dark theme system
+- Toggle button in header (sun/moon icons with smooth animation)
+- Keyboard shortcut: Press `t` to toggle
+- Theme persistence via localStorage
+- System preference detection (`prefers-color-scheme`)
+- No FOUC (Flash of Unstyled Content)
+
+**Color Schemes:**
+- **Light Mode:** CNCF site colors (#ffffff bg, #D62293 pink links, #0086FF blue accents)
+- **Dark Mode:** GitHub-inspired (#0d1117 bg, #ff6bc4 pink links, #79c0ff blue accents)
+
+### Feature 4: Clickable Home Link (Reset All Filters) ✅
+**Commit:** 826eede  
+**File:** `src/pages/index.astro`
+
+**Feature:** "The Firehose" title in header now clickable link that:
+- Clears project filter dropdown
+- Clears status filter dropdown
+- Resets date range to "All"
+- Clears search input and results
+- Scrolls smoothly to top
+- Shows all 610 releases
+
+**UX:** Quick way to reset view without manually clearing each filter.
+
+### Feature 5: Dark Mode Link Accessibility - First Pass ✅
+**Commit:** 0c76290  
+**Files:**
+- MODIFIED: `src/pages/index.astro` - Override `--color-cncf-blue` to #58a6ff in dark mode
+- MODIFIED: `src/components/ReleaseCard.astro` - Use CSS variables for links
+
+**Problem:** Original CNCF blue (#0086FF) too dark on dark background.  
+**Solution:** Override to GitHub blue (#58a6ff) in dark mode.
+
+### Feature 6: Dark Mode Link Accessibility - Second Pass ✅
+**Commit:** 21bf8b4  
+**File:** `src/pages/index.astro`
+
+**Problem:** User reported #58a6ff still too dark.  
+**Solution:** Changed to even brighter blue (#79c0ff - GitHub's lighter link blue).
+
+**Final Dark Mode Colors:**
+- Background: #0d1117
+- Text: #c9d1d9
+- Pink Links: #ff6bc4
+- Blue Links: #79c0ff (FINAL - very bright)
+- Accents: #79c0ff
+- Orange RSS: #ffa657
+
+## v1.4.1 Bugfix: Dark Mode Link Accessibility - CSS Compilation Fix
+
+**Completed:** 2026-01-27  
+**Duration:** ~45 minutes  
+**Status:** ✅ Complete & Deployed
+
+**Issue:** Body content links (PR links, changelog links in release notes) were not displaying the correct bright blue (#79c0ff) in dark mode, despite CSS appearing correct in source code.
+
+**Root Cause:** The `:global()` pseudo-selector wrappers were being preserved in the compiled CSS output. Browsers don't recognize `:global()` as a valid selector - it's an Astro build-time directive that should be removed during compilation. The wrappers were redundant because the `<style is:global>` attribute already makes all selectors global.
+
+**Example of the problem:**
+```css
+/* Source code */
+.markdown-body :global(a) {
+  color: var(--color-cncf-blue);
+}
+
+/* Compiled output (WRONG) */
+.markdown-body :global(a) { /* Browser doesn't understand :global() */
+  color: var(--color-cncf-blue);
+}
+```
+
+**Solution:** Removed all `:global()` wrappers from markdown body selectors in ReleaseCard.astro:
+- `.markdown-body :global(a)` → `.markdown-body a` ✅
+- `.markdown-body :global(h1)` → `.markdown-body h1` ✅
+- `.markdown-body :global(pre)` → `.markdown-body pre` ✅
+- (and all other markdown child selectors)
+
+**Additional fix:** Changed release title links to use `var(--color-cncf-blue)` consistently.
+
+**Results:**
+- ✅ All links now correctly display #79c0ff in dark mode
+- ✅ Sidebar links match title links match body content links
+- ✅ WCAG AA accessibility maintained
+- ✅ No `:global()` in compiled CSS output
+- ✅ User confirmed: "yo got it!"
+
+**Files Modified:**
+- `src/components/ReleaseCard.astro` - Removed 33 instances of `:global()` wrapper
+
+**Commits:**
+- 3501fbb "fix: remove :global() wrappers to fix dark mode link colors"
+
+**Deployed:** https://castrojo.github.io/firehose/ (2026-01-27 18:14 UTC)
+
+**Results:**
+- ✅ All 6 features deployed to production
+- ✅ RSS feed validates: https://castrojo.github.io/firehose/feed.xml
+- ✅ Dark mode fully functional (toggle + keyboard)
+- ✅ Site portable (change 2 config values to deploy elsewhere)
+- ✅ Home link resets all filters
+- ✅ Link colors accessible in dark mode (WCAG compliant)
+- ✅ User confirmed: All features working perfectly
+
+**Technical achievements:**
+- Theme system with no FOUC
+- RSS generation at build time
+- Portable codebase architecture
+- Accessibility improvements (WCAG AA)
+- Enhanced keyboard navigation
 
 ## Quick Task 003: Search Redesign Summary
 
@@ -418,33 +577,42 @@ No pending todos! All critical issues resolved. ✨
 
 ### Next Steps
 
-**🎉 All Quick Tasks Complete and Deployed! 🎉**
+**🎉 All Enhancements Complete! 🎉**
 
 **Recently deployed (2026-01-27):**
-- ✅ Quick Task 001: Dependabot automation (c1e3341)
-- ✅ Quick Task 002: Keyboard navigation for collapsed sections (6d22d59)
-- ✅ Quick Task 003: Simple project name filter search (1b411c2)
+- ✅ v1.4 Enhancement Session (6 features):
+  1. RSS feed output (/feed.xml)
+  2. Site portability (BASE_URL refactoring)
+  3. Dark mode with theme toggle (button + 't' key)
+  4. Clickable home link (reset all filters)
+  5. Dark mode link accessibility (#79c0ff)
+  6. Complete UX polish
 
 **Current production features:**
-- ✨ Professional CNCF branding
-- 🖼️ 56 colorful project logos
-- 📝 Clean, concise descriptions (2 sentences max)
+- ✨ Professional CNCF branding with 56 project logos
+- 📝 Clean descriptions (2 sentences max)
 - 📦 Smart collapsible release groups
-- 🔍 Simple project name filter search (just redesigned!)
+- 🔍 Simple project name filter search
 - 🎛️ Client-side filtering (project, status, date)
-- ⌨️ Vim-style keyboard navigation with collapse button support
+- ⌨️ Vim-style keyboard navigation (j/k/o/?/t/Esc)
+- 🌓 Dark mode with theme persistence
+- 📡 RSS feed output for subscriptions
+- 🔄 Portable codebase (deploy anywhere)
 - 📱 Responsive design (320px-1920px)
-- 🤖 Daily automated updates + Dependabot security patches
+- 🤖 Daily automated updates + Dependabot security
 
-**No pending work** - all enhancements deployed and working! 🚀
+**No pending work** - all backlog items complete! 🚀
 
-**Future ideas (backlog):**
-- RSS feed output (allow users to subscribe)
-- Dark mode toggle
+**Future ideas (if needed):**
+- Additional keyboard shortcuts (e.g., `h` for home)
+- Export/share filtered views (URL params)
+- Project favorites/bookmarks (localStorage)
+- Stats dashboard with visualizations
 
 ## Session Continuity
 
-Last session: 2026-01-27 (Quick Task 003)
-Stopped at: All quick tasks complete and deployed
+Last session: 2026-01-27 (v1.4 Enhancement Session)
+Stopped at: All 6 features complete and deployed
+Status: Production-ready, all backlog items complete
 Resume: Maintenance mode - monitor for issues or new feature requests
-Next step: None - all work complete!
+Next step: None - all planned work complete!

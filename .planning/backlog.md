@@ -2,129 +2,108 @@
 
 ## Future Enhancement Ideas
 
-### RSS Feed Output
-**Priority:** High  
-**Effort:** Medium  
-**Value:** Allow users to subscribe to The Firehose itself via RSS/Atom
+(Currently empty - all high-priority enhancements completed!)
 
-**Context:**
-The Firehose aggregates releases from 62 CNCF projects, but users still need to visit the site to see updates. Creating an RSS feed OF the aggregated content would let users subscribe to The Firehose in their own RSS readers - very meta and useful for staying updated without visiting the site.
-
-**Implementation approach:**
-1. Create `src/pages/feed.xml.ts` (Astro endpoint)
-2. Generate RSS 2.0 or Atom feed at build time
-3. Include all releases (or top 100 most recent)
-4. Feed metadata:
-   - Title: "The Firehose - CNCF Project Releases"
-   - Description: "Aggregated release feed from 62 CNCF projects"
-   - Link: https://castrojo.github.io/firehose/
-5. Entry format:
-   - Title: "[Project] Release Title"
-   - Content: Full release notes (markdown rendered to HTML)
-   - Published date: Release date
-   - GUID: Release URL (unique identifier)
-   - Categories: Project name, project status (graduated/incubating)
-6. Add RSS link to site header with icon
-7. Auto-discovery meta tag: `<link rel="alternate" type="application/rss+xml">`
-
-**Technical considerations:**
-- Use existing release data from content collection
-- Leverage markdown rendering from ReleaseCard
-- Keep feed size reasonable (100-200 items max)
-- Include proper XML escaping
-- Test with multiple RSS readers (Feedly, NetNewsWire, etc.)
-
-**Location:**
-- New file: `src/pages/feed.xml.ts`
-- Update: `src/pages/index.astro` (add feed link/icon in header)
-
-**References:**
-- [Astro RSS guide](https://docs.astro.build/en/guides/rss/)
-- [RSS 2.0 spec](https://www.rssboard.org/rss-specification)
-- [Atom spec](https://datatracker.ietf.org/doc/html/rfc4287)
-
----
-
-### Dark Mode
-**Priority:** High  
-**Effort:** Medium  
-**Value:** Improve accessibility and user preference for developers who prefer dark themes
-
-**Context:**
-Many developers work in dark environments or prefer dark UIs. Adding dark mode would improve readability and reduce eye strain for a significant portion of users. Should integrate CNCF brand colors adapted for dark backgrounds.
-
-**Implementation approach:**
-1. **CSS Variable Strategy:**
-   - Define light theme variables (current state)
-   - Define dark theme variables with CNCF colors adapted
-   - Use `data-theme` attribute on `<html>` or `<body>`
-   - CSS: `[data-theme="dark"] { --color-bg-default: #0d1117; }`
-
-2. **Dark Theme Color Palette:**
-   - Background: GitHub dark (#0d1117, #161b22)
-   - Text: Near-white (#c9d1d9, #8b949e)
-   - Links: CNCF Pink (brighter for contrast: #FF2DA0)
-   - Accents: CNCF Blue (brighter: #58A6FF)
-   - Borders: Subtle gray (#30363d)
-   - Cards: Slightly elevated (#161b22)
-
-3. **Theme Toggle Component:**
-   - Create `src/components/ThemeToggle.astro`
-   - Button with sun/moon icons
-   - Position in header or sidebar
-   - Client-side JS for toggle
-
-4. **Persistence:**
-   - Save preference to localStorage: `theme: 'light' | 'dark' | 'auto'`
-   - Respect system preference: `prefers-color-scheme` media query
-   - Default to 'auto' (follow system)
-   - Apply theme before page renders (prevent flash of wrong theme)
-
-5. **Implementation Files:**
-   - `src/components/ThemeToggle.astro` - Toggle UI component
-   - `src/pages/index.astro` - Integrate toggle, define dark variables
-   - Inline script in `<head>` - Apply theme before render
-   - All component files - Ensure styles use CSS variables (already done)
-
-6. **Keyboard Shortcut:**
-   - Add `t` key to toggle theme
-   - Update KeyboardHelp component
-
-**Technical considerations:**
-- Prevent flash of unstyled content (FOUC)
-- Test contrast ratios for accessibility (WCAG AA minimum)
-- Ensure project logos look good on dark backgrounds
-- Test with Pagefind search UI in dark mode
-- Maintain CNCF branding guidelines
-- Keep CNCF logos visible (may need light variants or backgrounds)
-- Test collapsible release groups animations in dark mode
-- Verify all interactive states (hover, focus, active) have good contrast
-
-**Testing checklist:**
-- [ ] All text readable in both modes
-- [ ] Interactive elements clearly visible
-- [ ] Focus indicators meet contrast requirements
-- [ ] Smooth transitions between themes
-- [ ] No layout shifts during theme change
-- [ ] localStorage persists across sessions
-- [ ] System preference detection works
-- [ ] No flash of wrong theme on page load
-
-**Location:**
-- New file: `src/components/ThemeToggle.astro`
-- Update: `src/pages/index.astro` (add CSS variables, theme script, toggle component)
-- Update: `src/components/KeyboardHelp.astro` (add 't' shortcut)
-
-**References:**
-- [GitHub Primer Dark Theme](https://primer.style/css/support/color-system#dark-mode)
-- [Web.dev Dark Mode Guide](https://web.dev/prefers-color-scheme/)
-- [WCAG Contrast Checker](https://webaim.org/resources/contrastchecker/)
+**Recently Completed:**
+- ✅ RSS Feed Output (2026-01-27)
+- ✅ Dark Mode (2026-01-27)
+- ✅ Site Portability (2026-01-27)
+- ✅ Clickable Home Link (2026-01-27)
 
 ---
 
 ---
 
 ## Completed Enhancements
+
+### ✅ RSS Feed Output (v1.4)
+**Completed:** 2026-01-27  
+**Commit:** b21c06c  
+**Value:** Users can subscribe to The Firehose in their RSS readers
+
+**Implementation:**
+- Created `src/pages/feed.xml.ts` RSS 2.0 endpoint
+- 100 most recent releases with full content
+- Auto-discovery meta tag in `<head>`
+- Orange RSS button in InfoBox sidebar
+- Feed metadata includes project name and status as categories
+- Markdown rendered to HTML for rich content
+
+**Results:**
+- ✅ Feed validates at https://castrojo.github.io/firehose/feed.xml
+- ✅ Auto-discovery works in modern browsers
+- ✅ 1-hour cache for performance
+- ✅ Professional orange RSS icon (#ff6600 light, #ffa657 dark)
+
+---
+
+### ✅ Dark Mode (v1.4)
+**Completed:** 2026-01-27  
+**Commits:** 9fb2846, 0c76290, 21bf8b4  
+**Value:** Improves accessibility for developers who prefer dark themes
+
+**Implementation:**
+- Created `src/components/ThemeToggle.astro` toggle component
+- Full CSS variable system for light/dark themes
+- localStorage persistence + system preference detection
+- No FOUC (theme applied before render)
+- Keyboard shortcut: `t` key
+- CNCF brand colors adapted for dark mode
+
+**Color Schemes:**
+- **Light Mode:** CNCF site colors (#ffffff bg, #D62293 pink, #0086FF blue)
+- **Dark Mode:** GitHub-inspired (#0d1117 bg, #ff6bc4 pink, #79c0ff blue)
+
+**Results:**
+- ✅ Smooth theme transitions
+- ✅ Theme persists across sessions
+- ✅ WCAG AA accessibility (bright link colors)
+- ✅ Project logos look good on both backgrounds
+- ✅ All interactive states have proper contrast
+
+---
+
+### ✅ Site Portability (v1.4)
+**Completed:** 2026-01-27  
+**Commit:** a5b9b45  
+**Value:** Site can be deployed to any organization without code changes
+
+**Problem:** Hardcoded URLs (`/firehose/`, `castrojo.github.io`) would break if deployed elsewhere.
+
+**Solution:**
+- Used `import.meta.env.BASE_URL` throughout codebase
+- Dynamic URL construction in RSS feed
+- Client-side base URL detection for infinite scroll
+- Logo mapper uses BASE_URL for image paths
+- Created `DEPLOYMENT.md` guide
+
+**Results:**
+- ✅ Change 2 values in `astro.config.mjs` to deploy anywhere
+- ✅ All internal links work regardless of base path
+- ✅ RSS feed URLs generated dynamically
+- ✅ Logo images load correctly at any path
+
+---
+
+### ✅ Clickable Home Link (v1.4)
+**Completed:** 2026-01-27  
+**Commit:** 826eede  
+**Value:** Quick way to reset all filters and return to full view
+
+**Implementation:**
+- Made "The Firehose" title in header a clickable link
+- Clears all filter dropdowns (project, status, date)
+- Clears search input and results
+- Scrolls smoothly to top of page
+- Hover effect shows CNCF pink color
+
+**Results:**
+- ✅ One-click reset of entire interface
+- ✅ Shows all 610 releases again
+- ✅ Better UX than manually clearing each filter
+- ✅ Intuitive interaction pattern
+
+---
 
 ### ✅ Collapse Minor Releases (v1.3)
 **Completed:** 2026-01-27  
