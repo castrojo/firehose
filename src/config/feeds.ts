@@ -4,7 +4,7 @@
  * This file contains all CNCF project GitHub release feeds.
  * Feeds are organized by project maturity level (Graduated, Incubating, Sandbox).
  * 
- * Total: 161 projects (35 Graduated, 27 Incubating, 99 Sandbox)
+ * Total: 160 projects (35 Graduated, 27 Incubating, 98 Sandbox)
  * 
  * Structure:
  * - url: GitHub Atom feed URL (required)
@@ -166,7 +166,6 @@ const feeds: FeedConfig[] = [
   { url: 'https://github.com/oxia-db/oxia-client-java/releases.atom' },
   { url: 'https://github.com/parallaxsecond/parsec/releases.atom' },
   { url: 'https://github.com/pipe-cd/pipecd/releases.atom' },
-  { url: 'https://github.com/pipelineai/pipeline/releases.atom' },
   { url: 'https://github.com/piraeusdatastore/piraeus-operator/releases.atom' },
   { url: 'https://github.com/pixie-io/pixie/releases.atom' },
   { url: 'https://github.com/podman-desktop/podman-desktop/releases.atom' },
