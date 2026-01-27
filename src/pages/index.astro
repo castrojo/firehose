@@ -347,7 +347,7 @@ const remainingReleasesData = remainingReleases.map(r => ({
 
 <style>
   :root {
-    /* CNCF Brand Colors */
+    /* CNCF Brand Colors - Official Palette */
     /* Source: https://www.cncf.io/brand-guidelines/ */
     --color-cncf-blue: #0086FF;
     --color-cncf-black: #000000;
@@ -356,15 +356,16 @@ const remainingReleasesData = remainingReleases.map(r => ({
     --color-cncf-stone: #E5E5E5;
     --color-cncf-white: #FFFFFF;
     
-    /* Colors - GitHub Primer inspired with CNCF branding */
+    /* CNCF Site Theme - Matching cncf.io/blog */
     --color-bg-default: #ffffff;
-    --color-bg-secondary: #f6f8fa;
-    --color-border-default: #d0d7de;
-    --color-text-primary: #24292f;
-    --color-text-secondary: #57606a;
-    --color-text-tertiary: #6e7781;
-    --color-text-link: #0086FF; /* CNCF blue */
-    --color-accent-emphasis: #0086FF; /* CNCF blue */
+    --color-bg-secondary: #fdfdfd;  /* Very light gray from CNCF site */
+    --color-bg-tertiary: #f8f8f8;  /* Subtle gray for cards */
+    --color-border-default: #e6e6e6;  /* Softer border than GitHub Primer */
+    --color-text-primary: #000000;  /* Pure black like CNCF */
+    --color-text-secondary: #747474;  /* Gray-700 from CNCF */
+    --color-text-tertiary: #c4c4c4;  /* Gray-500 from CNCF */
+    --color-text-link: #D62293; /* CNCF pink for links */
+    --color-accent-emphasis: #0086FF; /* CNCF blue for accents */
   }
   
   * {
@@ -374,10 +375,11 @@ const remainingReleasesData = remainingReleases.map(r => ({
   }
   
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+    font-family: 'Clarity City', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+    font-weight: 400;
     line-height: 1.6;
     color: var(--color-text-primary);
-    background: var(--color-bg-secondary);
+    background: var(--color-bg-secondary);  /* Light gray background like CNCF */
   }
   
   .container {
