@@ -9,7 +9,7 @@ export function getProjectLogo(projectName: string | undefined): string {
   const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
   
   if (!projectName) {
-    return `${normalizedBaseUrl}/logos/placeholder.svg`;
+    return `${normalizedBaseUrl}/logos/cncf-placeholder.svg`;
   }
   
   // Normalize project name to match cncf/artwork structure

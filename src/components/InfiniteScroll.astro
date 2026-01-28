@@ -71,32 +71,24 @@
         : null;
       
       // Get logo path
+      // Get base URL for placeholder fallback
+      const baseUrl = document.documentElement.getAttribute('data-base-url') || '/';
+      const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+      const placeholderUrl = `${normalizedBaseUrl}/logos/cncf-placeholder.svg`;
+      
       const logoPath = getProjectLogoPath(projectName);
-      
-      // Truncate description to 2 sentences
-      const description = data.projectDescription ? truncateToSentences(data.projectDescription, 2) : '';
-      
-      const projectStatusHtml = projectStatus !== 'unknown'
-        ? `<span class="project-status ${projectStatus}">${projectStatus}</span>`
+      const projectStatusHtml = projectStatus 
+        ? `<span class="project-status ${escapeHtml(projectStatus)}">${escapeHtml(projectStatus)}</span>` 
         : '';
       
-      const projectDescriptionHtml = description
-        ? `<p class="project-description" title="${escapeHtml(data.projectDescription || '')}">${escapeHtml(description)}</p>`
+      // Build project description HTML
+      const projectDescriptionHtml = projectDescription 
+        ? `<p class="project-description" title="${escapeHtml(projectDescription)}">${escapeHtml(truncatedDescription)}</p>` 
         : '';
       
-      const dateHtml = formattedDate
-        ? `<div class="release-date"><time datetime="${data.isoDate}">${formattedDate}</time></div>`
-        : '';
-      
-      // Use contentSnippet for preview (markdown rendering happens server-side for initial batch)
-      const contentPreview = data.contentSnippet
-        ? `<div class="release-content">${escapeHtml(data.contentSnippet.substring(0, 300))}${data.contentSnippet.length > 300 ? '...' : ''}</div>`
-        : '';
-      
-      return `
+      const html = `
         <article 
           class="release-card" 
-          data-pagefind-ignore
           data-project="${escapeHtml(projectName)}"
           data-status="${escapeHtml(projectStatus)}"
           data-date="${escapeHtml(data.isoDate ? data.isoDate.split('T')[0] : '')}"
@@ -109,7 +101,7 @@
               width="32"
               height="32"
               loading="lazy"
-              onerror="this.style.display='none'"
+              onerror="this.onerror=null; this.src='${placeholderUrl}'"
             />
             <span class="project-name">${escapeHtml(projectName)}</span>
             ${projectStatusHtml}
@@ -140,7 +132,7 @@
       const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
       
       if (!projectName) {
-        return `${normalizedBaseUrl}/logos/placeholder.svg`;
+        return `${normalizedBaseUrl}/logos/cncf-placeholder.svg`;
       }
       
       // Normalize project name to match cncf/artwork structure
