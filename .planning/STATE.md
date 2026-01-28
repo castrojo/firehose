@@ -11,8 +11,8 @@ See: .planning/PROJECT.md (updated 2026-01-26)
 
 Phase: Maintenance & Automation
 Status: All features deployed and working perfectly
-Last activity: 2026-01-27 — Completed sandbox projects enhancement: Added 98 sandbox projects, improved label contrast, redesigned statistics with 2-column grid
-Next: Monitor production deployment
+Last activity: 2026-01-28 — Fixed critical search bug: Search now works for all 223 projects (was only searching first 20)
+Next: Update documentation to reflect current project state
 
 Backlog: All high-priority enhancements complete! All known bugs resolved.
 
@@ -28,9 +28,59 @@ Progress: v1.0 Milestone [██████████] 100% complete
          Quick Task 003 [██████████] 100% complete (Search redesign)
          Quick Task 004 [██████████] 100% complete (Missing quick task)
          Quick Task 005 [██████████] 100% complete (Sandbox projects expansion)
+         Quick Task 006 [██████████] 100% complete (Search bug fix)
          v1.4 Enhancement Session [██████████] 100% complete (6 features)
          v1.4.1 Dark Mode Link Fix [██████████] 100% complete
          Quick Task 005 [██████████] 100% complete (Add sandbox projects)
+
+## Quick Task 006: Search Bug Fix - CRITICAL
+
+**Completed:** 2026-01-28  
+**Duration:** ~2 hours  
+**Status:** ✅ Complete & Deployed
+
+**User's concern:** "Search is not robust enough and at risk of removal" — Searches for "podman" and "bootc" returned 0 results.
+
+**Root cause discovered:** SearchBar only searched first ~20 projects (server-rendered batch), not all 223 projects.
+
+**Technical issue:**
+- `index.astro` only server-renders 30 release groups initially (lines 64-66)
+- These contain ~20 unique projects visible in DOM
+- SearchBar read from DOM: `querySelectorAll('.release-card[data-project]')`
+- FilterBar read from `uniqueProjects` prop (all 223 projects)
+- **Mismatch:** Search had 9% coverage (20/223 projects)
+
+**Fix implemented:**
+1. SearchBar.astro now accepts `projects[]` prop from index.astro
+2. Serializes to `data-all-projects` JSON attribute
+3. SearchBar script reads from data attribute instead of DOM
+4. All 223 projects now searchable (100% coverage)
+
+**Verification:**
+- ✅ Build succeeds (2189 releases indexed)
+- ✅ data-all-projects contains 223 projects
+- ✅ Includes: "Podman Container Tools", "Podman Desktop", "bootc"
+- ✅ User verified: "verified, I used other search terms too, well done"
+
+**Audit reflection:**
+- Initial audit incorrectly concluded "search is production-ready"
+- Audit checked integration (DOM elements, scripts) but not functionality
+- Lesson: Integration tests ≠ functional tests. Must verify actual user workflows.
+
+**Files modified:**
+- `src/components/SearchBar.astro` - Accept projects prop, read from data
+- `src/pages/index.astro` - Pass uniqueProjects to SearchBar
+
+**Commits:**
+- 7e469c1 "fix(search): CRITICAL - search all 223 projects instead of only first 20"
+
+**Deployed:** https://castrojo.github.io/firehose/ (2026-01-28 16:40 UTC)
+
+**Documentation:**
+- `.planning/quick/006-comprehensive-search-robustness-audit/006-PLAN.md` - Test plan (28 scenarios)
+- `.planning/quick/006-comprehensive-search-robustness-audit/006-FINDINGS.md` - Original (incorrect) audit
+- `.planning/quick/006-comprehensive-search-robustness-audit/006-CORRECTED-FINDINGS.md` - Post-fix analysis
+- `.planning/quick/006-comprehensive-search-robustness-audit/QUICK-SUMMARY.md` - Executive summary
 
 ## Quick Task 005: Sandbox Projects Enhancement Summary
 
@@ -590,6 +640,7 @@ None! All critical issues resolved. ✨
 | 002 | Fix keyboard navigation for collapsed sections | 2026-01-27 | 6d22d59 | [002-fix-keyboard-nav-for-collapsed](.planning/quick/002-fix-keyboard-nav-for-collapsed/) |
 | 003 | Replace Pagefind with simple project name filter | 2026-01-27 | 1b411c2 | [003-fix-search-base-path-for-production-depl](.planning/quick/003-fix-search-base-path-for-production-depl/) |
 | 005 | Add all sandbox projects with enhanced statistics | 2026-01-27 | ebaa51f | [005-add-all-sandbox-projects-from-cncf-lands](.planning/quick/005-add-all-sandbox-projects-from-cncf-lands/) |
+| 006 | Fix critical search bug (search all 223 projects) | 2026-01-28 | 7e469c1 | [006-comprehensive-search-robustness-audit](.planning/quick/006-comprehensive-search-robustness-audit/) |
 
 ## Optional Enhancements (Backlog)
 
@@ -687,9 +738,7 @@ See PROJECT.md Key Decisions table for full details and rationale.
 
 ### Pending Todos
 
-**1 pending** — Search robustness audit needed
-
-- Search robustness audit and testing (.planning/todos/pending/2026-01-28-comprehensive-search-robustness-audit.md)
+**0 pending** — All critical issues resolved! ✨
 
 ### Next Steps
 
@@ -727,8 +776,8 @@ See PROJECT.md Key Decisions table for full details and rationale.
 
 ## Session Continuity
 
-Last session: 2026-01-27 (v1.4 Enhancement Session)
-Stopped at: All 6 features complete and deployed
-Status: Production-ready, all backlog items complete
-Resume: Maintenance mode - monitor for issues or new feature requests
-Next step: None - all planned work complete!
+Last session: 2026-01-28 (Quick Task 006: Critical Search Bug Fix)
+Stopped at: Fix deployed and verified, documentation updates in progress
+Status: Production-ready, search now works for all 223 projects
+Resume: Complete documentation updates, move todo to completed
+Next step: Finalize Quick-006 documentation and commit updates
