@@ -5,13 +5,14 @@
 
 interface Props {
   name: string;
-  start: string;      // YYYY-MM-DD format
-  end: string;        // YYYY-MM-DD format
-  bannerUrl: string;  // Recommended dimensions: 2400x300
+  start: string;         // YYYY-MM-DD format
+  end: string;           // YYYY-MM-DD format
+  bannerUrl: string;     // Recommended dimensions: 2400x300
   detailsUrl: string;
+  registrationUrl: string; // Direct link to registration page
 }
 
-const { name, start, end, bannerUrl, detailsUrl } = Astro.props;
+const { name, start, end, bannerUrl, detailsUrl, registrationUrl } = Astro.props;
 
 // Check if event is still upcoming/active
 const now = new Date();
@@ -51,9 +52,21 @@ if (!isActive) {
       class="banner-image"
       loading="lazy"
     />
-    <div class="banner-text">
-      <span class="banner-name">{name}</span>
-      <span class="banner-dates">{formattedStart} - {formattedEnd}</span>
+    <div class="banner-overlay">
+      <div class="banner-text">
+        <span class="banner-name">{name}</span>
+        <span class="banner-dates">{formattedStart} - {formattedEnd}</span>
+      </div>
+      <a 
+        href={registrationUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="register-button"
+        aria-label={`Register for ${name}`}
+        onclick="event.stopPropagation();"
+      >
+        Register Now
+      </a>
     </div>
   </a>
 </div>
@@ -87,33 +100,66 @@ if (!isActive) {
     aspect-ratio: 8 / 1; /* 2400x300 ratio */
   }
   
-  .banner-text {
+  .banner-overlay {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.3));
     padding: 1rem 1.5rem;
     color: white;
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
     opacity: 0;
     transition: opacity 0.2s ease;
   }
   
-  .banner-link:hover .banner-text {
+  .banner-link:hover .banner-overlay {
     opacity: 1;
+  }
+  
+  .banner-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
   }
   
   .banner-name {
     font-size: 1rem;
     font-weight: 600;
+    line-height: 1.3;
   }
   
   .banner-dates {
     font-size: 0.875rem;
     opacity: 0.9;
+  }
+  
+  .register-button {
+    background: var(--color-cncf-pink, #D62293);
+    color: white;
+    padding: 0.625rem 1.5rem;
+    border-radius: 6px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+  }
+  
+  .register-button:hover {
+    background: var(--color-cncf-blue, #0086FF);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .register-button:active {
+    transform: translateY(0);
   }
   
   /* Mobile responsiveness */
@@ -122,9 +168,9 @@ if (!isActive) {
       margin-bottom: 1rem;
     }
     
-    .banner-text {
+    .banner-overlay {
       opacity: 1; /* Always show on mobile */
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6));
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5));
       padding: 0.75rem 1rem;
     }
     
@@ -135,11 +181,33 @@ if (!isActive) {
     .banner-dates {
       font-size: 0.75rem;
     }
+    
+    .register-button {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .banner-overlay {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    
+    .register-button {
+      align-self: stretch;
+      text-align: center;
+    }
   }
   
   @media (max-width: 480px) {
     .banner-image {
       aspect-ratio: 4 / 1; /* Taller on mobile for better visibility */
+    }
+    
+    .banner-overlay {
+      padding: 0.625rem 0.875rem;
     }
   }
 </style>

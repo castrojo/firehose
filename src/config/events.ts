@@ -16,10 +16,11 @@
 
 export interface UpcomingEvent {
   name: string;
-  start: string;      // YYYY-MM-DD format
-  end: string;        // YYYY-MM-DD format
+  start: string;         // YYYY-MM-DD format
+  end: string;           // YYYY-MM-DD format
   bannerUrl: string;
   detailsUrl: string;
+  registrationUrl: string; // Direct link to registration page
 }
 
 // All upcoming KubeCon events
@@ -30,14 +31,16 @@ export const events: UpcomingEvent[] = [
     start: "2026-03-23",
     end: "2026-03-27",
     bannerUrl: "https://cncf.github.io/banners/events/Kubecon-EU-2026-2400x300.png",
-    detailsUrl: "https://events.linuxfoundation.org/kubecon-cloudnativecon-europe/?utm_source=firehose&utm_campaign=KubeCon-EU-2026"
+    detailsUrl: "https://events.linuxfoundation.org/kubecon-cloudnativecon-europe/?utm_source=firehose&utm_campaign=KubeCon-EU-2026",
+    registrationUrl: "https://events.linuxfoundation.org/kubecon-cloudnativecon-europe/register/?utm_source=firehose&utm_campaign=KubeCon-EU-2026"
   },
   {
     name: "KubeCon + CloudNativeCon North America 2026",
     start: "2026-11-09",
     end: "2026-11-13",
     bannerUrl: "https://cncf.github.io/banners/events/Kubecon-NA-2026-2400x300.png",
-    detailsUrl: "https://events.linuxfoundation.org/kubecon-cloudnativecon-north-america/?utm_source=firehose&utm_campaign=KubeCon-NA-2026"
+    detailsUrl: "https://events.linuxfoundation.org/kubecon-cloudnativecon-north-america/?utm_source=firehose&utm_campaign=KubeCon-NA-2026",
+    registrationUrl: "https://events.linuxfoundation.org/kubecon-cloudnativecon-north-america/register/?utm_source=firehose&utm_campaign=KubeCon-NA-2026"
   },
   // Add future events here as they are announced
   // China, India, Japan events can be added when available
