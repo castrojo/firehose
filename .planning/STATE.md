@@ -11,8 +11,8 @@ See: .planning/PROJECT.md (updated 2026-01-26)
 
 Phase: Maintenance & Automation
 Status: All features deployed and working perfectly
-Last activity: 2026-01-28 — Completed Quick Task 007: Added keyboard shortcuts for page navigation (Space/Shift+Space/h/s)
-Next: User verification and deployment
+Last activity: 2026-01-28 — Completed Quick Task 009: Fixed markdown dark mode accessibility
+Next: Monitor production deployment
 
 Backlog: All high-priority enhancements complete! All known bugs resolved.
 
@@ -30,9 +30,93 @@ Progress: v1.0 Milestone [██████████] 100% complete
          Quick Task 005 [██████████] 100% complete (Sandbox projects expansion)
          Quick Task 006 [██████████] 100% complete (Search bug fix)
          Quick Task 007 [██████████] 100% complete (Keyboard shortcuts)
+         Quick Task 008 [██████████] 100% complete (KubeCon banner system)
+         Quick Task 009 [██████████] 100% complete (Markdown dark mode)
          v1.4 Enhancement Session [██████████] 100% complete (6 features)
          v1.4.1 Dark Mode Link Fix [██████████] 100% complete
          Quick Task 005 [██████████] 100% complete (Add sandbox projects)
+
+## Quick Task 009: Fix Markdown Dark Mode Accessibility
+
+**Completed:** 2026-01-28  
+**Duration:** ~30 minutes  
+**Status:** ✅ Complete & Deployed
+
+**Objective:** Fix inaccessible markdown table colors in dark mode by implementing theme-aware CSS variables.
+
+**Problem:** User reported that markdown tables (particularly in Falco entries) were unreadable in dark mode due to hardcoded light-mode colors.
+
+**What was done:**
+1. **Added 8 new CSS variables** to index.astro (4 light mode, 4 dark mode)
+2. **Updated 7 hardcoded colors** in ReleaseCard.astro markdown styles
+3. **Fixed all markdown elements:** tables, headings, code blocks, blockquotes, horizontal rules
+4. **Achieved WCAG AA compliance** with proper contrast ratios
+
+**Implementation:**
+- CSS variables for markdown borders, backgrounds, code, and blockquotes
+- Dark mode overrides using GitHub Primer dark theme colors
+- All markdown styling now theme-aware and accessible
+
+**Results:**
+- ✅ Build successful (231/231 feeds, 2189 releases)
+- ✅ All markdown content readable in both light and dark modes
+- ✅ WCAG AA contrast ratios met (4.6:1 to 12.5:1)
+- ✅ No visual regression in light mode
+- ✅ Deployed to production
+
+**Files modified:**
+- `src/pages/index.astro` - Added markdown CSS variables
+- `src/components/ReleaseCard.astro` - Updated markdown styles
+
+**Commits:**
+- 20e6e89 "fix: make markdown tables and content accessible in dark mode"
+
+**Documentation:**
+- `.planning/quick/009-fix-markdown-dark-mode-accessibility/009-PLAN.md` - Task plan
+- `.planning/quick/009-fix-markdown-dark-mode-accessibility/009-SUMMARY.md` - Execution summary
+
+## Quick Task 008: Fix KubeCon Banner System
+
+**Completed:** 2026-01-28  
+**Duration:** ~1 hour  
+**Status:** ✅ Complete & Deployed
+
+**Objective:** Update KubeCon banner system to use official CNCF banners with proper theme support.
+
+**What was done:**
+1. **Created banner fetcher** - Fetches official banners from cncf.io at build time
+2. **Theme-aware display** - Separate light/dark images for proper contrast
+3. **Repositioned banner** - Moved above filters in sidebar for better visibility
+4. **Graceful fallback** - Handles missing/invalid banners without breaking build
+
+**Implementation:**
+- `src/lib/bannerFetcher.ts` - Fetches banner configuration from cncf.io
+- `src/components/BannerBox.astro` - Theme-aware banner display component
+- Updated `src/pages/index.astro` to integrate banner system
+
+**Results:**
+- ✅ Currently displaying: KubeCon CloudNativeCon Europe 2026
+- ✅ Automatic fallback handling
+- ✅ Professional theme-aware presentation
+- ✅ Deployed to production
+
+**Files modified:**
+- `src/lib/bannerFetcher.ts` (new)
+- `src/components/BannerBox.astro` (renamed from KubeConBanner.astro)
+- `src/components/KubeConBanner.astro` (removed)
+- `src/pages/index.astro` - Integrated banner system
+- `src/lib/banners.ts` (removed obsolete config)
+
+**Commits:**
+- a0befca "feat(quick-008): add official CNCF banner fetcher with theme support"
+- aad6fbd "feat(quick-008): update banner component for theme-aware display"
+- 33fb73b "chore(quick-008): remove obsolete event configuration file"
+- dcd794c "docs(quick-008): complete KubeCon banner system quick task"
+- 39da5d2 "feat: move search to header and optimize layout"
+
+**Documentation:**
+- `.planning/quick/008-fix-kubecon-banner-system/008-PLAN.md` - Task plan
+- `.planning/quick/008-fix-kubecon-banner-system/008-SUMMARY.md` - Execution summary
 
 ## Quick Task 007: Keyboard Shortcuts Enhancement
 
@@ -783,7 +867,13 @@ See PROJECT.md Key Decisions table for full details and rationale.
 
 ### Pending Todos
 
-**0 pending** — All critical issues resolved! ✨
+**1 pending:**
+
+1. **Saved filters and custom RSS feeds for filtered views** (area: ui)
+   - `.planning/todos/pending/2026-01-28-saved-filters-and-custom-rss-feeds.md`
+   - Enable saving/sharing filter combinations and subscribing to filtered RSS feeds
+   - Recommended approach: URL query params + custom RSS endpoints
+   - Estimated effort: 4-5 hours for core features (URL params + RSS filtering)
 
 ### Next Steps
 
