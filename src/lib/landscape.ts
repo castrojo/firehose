@@ -61,7 +61,18 @@ function parseLandscapeYaml(data: any): LandscapeData {
           // Extract org/repo from GitHub URL
           const slug = extractRepoSlug(project.repo_url);
           if (slug) {
-            projectMap[slug] = project;
+            // Only overwrite if new project has CNCF status or existing doesn't
+            const existing = projectMap[slug];
+            if (!existing || project.project || !existing.project) {
+              projectMap[slug] = project;
+            }
+            // If both have status, prefer the CNCF one (non-Wasm, non-duplicate)
+            if (existing && existing.project && project.project) {
+              // Keep the one without "(Wasm)" or other suffixes in the name
+              if (!project.name.includes('(') && existing.name.includes('(')) {
+                projectMap[slug] = project;
+              }
+            }
           }
         }
       }
