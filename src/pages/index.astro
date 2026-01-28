@@ -130,12 +130,17 @@ const remainingReleasesData = remainingReleases.map(r => ({
 <body>
   <header class="site-header">
     <div class="container">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <h1 class="site-title">
-            <a href={baseUrl} id="home-link" class="home-link">🔥 The Firehose</a>
-          </h1>
-          <p class="site-subtitle">CNCF Project Releases</p>
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 2rem;">
+        <div style="display: flex; align-items: center; gap: 2rem; flex: 1;">
+          <div>
+            <h1 class="site-title">
+              <a href={baseUrl} id="home-link" class="home-link">🔥 The Firehose</a>
+            </h1>
+            <p class="site-subtitle">CNCF Project Releases</p>
+          </div>
+          <div style="flex: 1; max-width: 600px;">
+            <SearchBar projects={uniqueProjects} />
+          </div>
         </div>
         <div style="display: flex; gap: 0.5rem; align-items: center;">
           <ThemeToggle />
@@ -167,6 +172,16 @@ const remainingReleasesData = remainingReleases.map(r => ({
             { text: 'GitHub Repository', url: 'https://github.com/castrojo/firehose', external: true }
           ]}
         />
+        
+        <!-- KubeCon Event Banner (if active) -->
+        {activeBanner && (
+          <KubeConBanner 
+            name={activeBanner.name}
+            link={activeBanner.link}
+            lightImage={activeBanner.lightImage}
+            darkImage={activeBanner.darkImage}
+          />
+        )}
         
         <!-- Stats box -->
         <div class="stats">
@@ -223,19 +238,6 @@ const remainingReleasesData = remainingReleases.map(r => ({
       
       <!-- Main content area -->
       <div class="main-content">
-        <!-- Search bar -->
-        <SearchBar projects={uniqueProjects} />
-        
-        <!-- KubeCon Event Banner (if active) -->
-        {activeBanner && (
-          <KubeConBanner 
-            name={activeBanner.name}
-            link={activeBanner.link}
-            lightImage={activeBanner.lightImage}
-            darkImage={activeBanner.darkImage}
-          />
-        )}
-        
         <!-- Error banner (if any feeds failed) -->
         {errorCount > 0 && (
           <ErrorBanner errors={errorEntries} />
