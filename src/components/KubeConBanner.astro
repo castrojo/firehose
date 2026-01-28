@@ -114,6 +114,7 @@ if (!isActive) {
     gap: 1rem;
     opacity: 0;
     transition: opacity 0.2s ease;
+    pointer-events: none; /* Allow clicks to pass through to banner link */
   }
   
   .banner-link:hover .banner-overlay {
@@ -150,6 +151,7 @@ if (!isActive) {
     transition: all 0.2s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     flex-shrink: 0;
+    pointer-events: auto; /* Re-enable clicks on button */
   }
   
   .register-button:hover {
