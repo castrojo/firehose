@@ -221,7 +221,7 @@ const remainingReleasesData = remainingReleases.map(r => ({
       <!-- Main content area -->
       <div class="main-content">
         <!-- Search bar -->
-        <SearchBar />
+        <SearchBar projects={uniqueProjects} />
         
         <!-- KubeCon Event Banner (if active) -->
         {upcomingEvent && (

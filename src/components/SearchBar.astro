@@ -1,9 +1,15 @@
 ---
 // SearchBar component for project name search
 // Shows matching projects, clicking a project applies the filter
+
+interface Props {
+  projects: string[];
+}
+
+const { projects } = Astro.props;
 ---
 
-<div class="search-container">
+<div class="search-container" data-all-projects={JSON.stringify(projects)}>
   <div class="search-wrapper">
     <input
       type="search"
@@ -47,31 +53,27 @@
       return;
     }
     
-    console.log('[SearchBar] Project search initialized');
+    // Get all project names from data attribute (passed from server)
+    const searchContainer = document.querySelector('.search-container') as HTMLElement;
+    const allProjectsData = searchContainer?.dataset.allProjects;
+    let allProjectNames: string[] = [];
+    
+    if (allProjectsData) {
+      try {
+        allProjectNames = JSON.parse(allProjectsData);
+        console.log(`[SearchBar] Project search initialized with ${allProjectNames.length} projects`);
+      } catch (e) {
+        console.error('[SearchBar] Failed to parse projects data:', e);
+        return;
+      }
+    } else {
+      console.error('[SearchBar] No projects data found');
+      return;
+    }
     
     let debounceTimer: number | null = null;
     const DEBOUNCE_MS = 300;
     const MIN_CHARS = 1;
-    
-    // Get unique project names from all releases
-    function getUniqueProjects(): Map<string, { count: number, status: string }> {
-      const projects = new Map<string, { count: number, status: string }>();
-      const allCards = document.querySelectorAll('.release-card[data-project]');
-      
-      allCards.forEach(card => {
-        const projectName = (card as HTMLElement).dataset.project || '';
-        const projectStatus = (card as HTMLElement).dataset.status || '';
-        
-        if (projectName) {
-          if (!projects.has(projectName)) {
-            projects.set(projectName, { count: 0, status: projectStatus });
-          }
-          projects.get(projectName)!.count++;
-        }
-      });
-      
-      return projects;
-    }
     
     // Perform project name search
     function performSearch(query: string) {
@@ -81,12 +83,11 @@
       }
       
       const queryLower = query.toLowerCase();
-      const allProjects = getUniqueProjects();
       
       // Filter projects by name (case-insensitive partial match)
-      const matchingProjects = Array.from(allProjects.entries())
-        .filter(([projectName]) => projectName.toLowerCase().includes(queryLower))
-        .sort(([a], [b]) => a.localeCompare(b));
+      const matchingProjects = allProjectNames
+        .filter(projectName => projectName.toLowerCase().includes(queryLower))
+        .sort((a, b) => a.localeCompare(b));
       
       console.log(`[SearchBar] Found ${matchingProjects.length} projects matching "${query}"`);
       
@@ -99,8 +100,8 @@
     }
     
     // Display search results - just project names
-    function displayResults(projects: Array<[string, { count: number, status: string }]>, query: string) {
-      searchResultsList.innerHTML = projects.map(([projectName]) => {
+    function displayResults(projects: string[], query: string) {
+      searchResultsList.innerHTML = projects.map(projectName => {
         return `
           <div class="search-result" data-project-name="${escapeHtml(projectName)}">
             <span class="project-name">${escapeHtml(projectName)}</span>
