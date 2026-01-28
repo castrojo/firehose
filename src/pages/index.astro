@@ -372,6 +372,22 @@ const remainingReleasesData = remainingReleases.map(r => ({
             e.preventDefault();
             this.toggleTheme();
             break;
+          case ' ':
+            e.preventDefault();
+            if (e.shiftKey) {
+              window.scrollBy({ top: -window.innerHeight, behavior: 'smooth' });
+            } else {
+              window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+            }
+            break;
+          case 'h':
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            break;
+          case 's':
+            e.preventDefault();
+            this.focusSearch();
+            break;
           case 'Escape':
             this.handleEscape();
             break;
