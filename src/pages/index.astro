@@ -11,10 +11,13 @@ import InfoBox from '../components/InfoBox.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import KubeConBanner from '../components/KubeConBanner.astro';
 import { groupReleases } from '../lib/releaseGrouping';
-import { upcomingEvent } from '../config/events';
+import { getActiveBanner } from '../lib/banners';
 
 // Base URL from Astro config (e.g., /firehose for GitHub Pages)
 const baseUrl = import.meta.env.BASE_URL;
+
+// Get active KubeCon banner from CNCF
+const activeBanner = await getActiveBanner();
 
 // Fetch all releases from the content collection
 const releases = await getCollection('releases');
@@ -224,14 +227,12 @@ const remainingReleasesData = remainingReleases.map(r => ({
         <SearchBar projects={uniqueProjects} />
         
         <!-- KubeCon Event Banner (if active) -->
-        {upcomingEvent && (
+        {activeBanner && (
           <KubeConBanner 
-            name={upcomingEvent.name}
-            start={upcomingEvent.start}
-            end={upcomingEvent.end}
-            bannerUrl={upcomingEvent.bannerUrl}
-            detailsUrl={upcomingEvent.detailsUrl}
-            registrationUrl={upcomingEvent.registrationUrl}
+            name={activeBanner.name}
+            link={activeBanner.link}
+            lightImage={activeBanner.lightImage}
+            darkImage={activeBanner.darkImage}
           />
         )}
         
