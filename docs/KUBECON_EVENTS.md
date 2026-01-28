@@ -67,10 +67,18 @@ export const events: UpcomingEvent[] = [
     start: "2027-06-15",
     end: "2027-06-18",
     bannerUrl: "https://cncf.github.io/banners/events/Kubecon-China-2027-2400x300.png",
-    detailsUrl: "https://events.linuxfoundation.org/kubecon-cloudnativecon-china/"
+    detailsUrl: "https://events.linuxfoundation.org/kubecon-cloudnativecon-china/?utm_source=firehose&utm_campaign=KubeCon-China-2027",
+    registrationUrl: "https://events.linuxfoundation.org/kubecon-cloudnativecon-china/register/?utm_source=firehose&utm_campaign=KubeCon-China-2027"
   }
 ];
 ```
+
+**Registration URL Pattern:**
+```
+{detailsUrl}/register/
+```
+
+**Note:** The registration URL is typically the event URL + `/register/` path. Always verify the registration link is active before adding an event.
 
 **No manual cleanup needed** - past events are automatically filtered out.
 
@@ -120,12 +128,17 @@ Add events as they're announced (usually 6-12 months in advance):
 ```typescript
 export const events: UpcomingEvent[] = [
   // 2026 Events
-  { name: "KubeCon Europe 2026", start: "2026-03-23", end: "2026-03-27", ... },
-  { name: "KubeCon China 2026", start: "2026-06-20", end: "2026-06-23", ... },
-  { name: "KubeCon North America 2026", start: "2026-11-09", end: "2026-11-13", ... },
+  {
+    name: "KubeCon Europe 2026",
+    start: "2026-03-23",
+    end: "2026-03-27",
+    bannerUrl: "https://cncf.github.io/banners/events/Kubecon-EU-2026-2400x300.png",
+    detailsUrl: "https://events.linuxfoundation.org/kubecon-cloudnativecon-europe/?utm_source=firehose&utm_campaign=KubeCon-EU-2026",
+    registrationUrl: "https://events.linuxfoundation.org/kubecon-cloudnativecon-europe/register/?utm_source=firehose&utm_campaign=KubeCon-EU-2026"
+  },
   
   // 2027 Events (add as announced)
-  { name: "KubeCon Europe 2027", start: "2027-03-...", end: "2027-03-...", ... },
+  // { name: "KubeCon Europe 2027", start: "2027-03-...", end: "2027-03-...", ... },
 ];
 ```
 
@@ -144,6 +157,35 @@ Examples:
 ```
 
 **Dimensions:** 2400px × 300px (8:1 aspect ratio)
+
+## Register Now Button
+
+The banner includes a prominent "Register Now" call-to-action button that appears on hover (desktop) or is always visible (mobile).
+
+**Design:**
+- **Background:** CNCF pink (#D62293)
+- **Hover:** CNCF blue (#0086FF)
+- **Position:** Bottom-right of banner overlay
+- **Responsive:** Full-width on mobile (< 768px)
+
+**Behavior:**
+- Clicking the button goes directly to the registration page
+- Clicking the banner background goes to the event details page
+- Button prevents event propagation (separate click target)
+
+**URL Pattern:**
+```
+Registration: {baseUrl}/register/
+Details:      {baseUrl}
+```
+
+**Example:**
+```typescript
+{
+  detailsUrl: "https://events.linuxfoundation.org/kubecon-cloudnativecon-europe/",
+  registrationUrl: "https://events.linuxfoundation.org/kubecon-cloudnativecon-europe/register/"
+}
+```
 
 ## Testing
 
@@ -221,9 +263,11 @@ Each event link includes tracking parameters:
 - `upcomingEvent` - Exported for backward compatibility
 
 **File:** `src/components/KubeConBanner.astro`
-- Renders banner if event provided
+- Renders banner with hover overlay showing event details
+- "Register Now" button (CNCF pink → blue on hover)
 - Auto-hides if event is null
-- Responsive design
+- Responsive design (overlay always visible on mobile)
+- Button click goes to registration, banner click goes to event details
 
 **File:** `src/pages/index.astro`
 - Imports upcomingEvent
@@ -249,6 +293,7 @@ Each event link includes tracking parameters:
 2. **Countdown timer** - Days until event starts
 3. **Regional preferences** - Show events based on user location
 4. **Client-side rotation** - Update without rebuild (if needed)
+5. **Early bird pricing indicator** - Show deadline for discounted registration
 
 **Current approach is optimal for:**
 - Simple maintenance
