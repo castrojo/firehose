@@ -36,8 +36,6 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.6",
-    "@types/js-yaml": "^4.0.9",
     "pagefind": "^1.4.0"
   }
 }
