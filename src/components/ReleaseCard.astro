@@ -197,8 +197,8 @@ const formattedDate = data.isoDate
     line-height: 1.25;
   }
   
-  .markdown-body h1 { font-size: 1.75rem; border-bottom: 1px solid #d0d7de; padding-bottom: 0.3rem; }
-  .markdown-body h2 { font-size: 1.5rem; border-bottom: 1px solid #d0d7de; padding-bottom: 0.3rem; }
+  .markdown-body h1 { font-size: 1.75rem; border-bottom: 1px solid var(--color-markdown-border); padding-bottom: 0.3rem; }
+  .markdown-body h2 { font-size: 1.5rem; border-bottom: 1px solid var(--color-markdown-border); padding-bottom: 0.3rem; }
   .markdown-body h3 { font-size: 1.25rem; }
   .markdown-body h4 { font-size: 1rem; }
   
@@ -221,7 +221,7 @@ const formattedDate = data.isoDate
     padding: 0.2em 0.4em;
     margin: 0;
     font-size: 85%;
-    background-color: rgba(175, 184, 193, 0.2);
+    background-color: var(--color-markdown-code-bg);
     border-radius: 6px;
     font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
   }
@@ -231,7 +231,7 @@ const formattedDate = data.isoDate
     overflow: auto;
     font-size: 85%;
     line-height: 1.45;
-    background-color: #f6f8fa;
+    background-color: var(--color-markdown-bg-muted);
     border-radius: 6px;
     margin-bottom: 1rem;
   }
@@ -244,8 +244,8 @@ const formattedDate = data.isoDate
   
   .markdown-body blockquote {
     padding: 0 1rem;
-    border-left: 0.25rem solid #d0d7de;
-    color: #57606a;
+    border-left: 0.25rem solid var(--color-markdown-border);
+    color: var(--color-markdown-blockquote);
     margin: 0 0 1rem 0;
   }
   
@@ -258,12 +258,12 @@ const formattedDate = data.isoDate
   .markdown-body table th,
   .markdown-body table td {
     padding: 0.5rem 1rem;
-    border: 1px solid #d0d7de;
+    border: 1px solid var(--color-markdown-border);
   }
   
   .markdown-body table th {
     font-weight: 600;
-    background-color: #f6f8fa;
+    background-color: var(--color-markdown-bg-muted);
   }
   
   .markdown-body a {
@@ -284,7 +284,7 @@ const formattedDate = data.isoDate
     height: 0.25rem;
     padding: 0;
     margin: 1.5rem 0;
-    background-color: #d0d7de;
+    background-color: var(--color-markdown-border);
     border: 0;
   }
   
