@@ -687,7 +687,9 @@ See PROJECT.md Key Decisions table for full details and rationale.
 
 ### Pending Todos
 
-No pending todos! All critical issues resolved. ✨
+**1 pending** — Search robustness audit needed
+
+- Search robustness audit and testing (.planning/todos/pending/2026-01-28-comprehensive-search-robustness-audit.md)
 
 ### Next Steps
 
