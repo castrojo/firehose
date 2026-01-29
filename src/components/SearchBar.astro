@@ -204,6 +204,7 @@ const { projects } = Astro.props;
     searchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         clearSearch();
+        searchInput.blur();
       }
     });
     
