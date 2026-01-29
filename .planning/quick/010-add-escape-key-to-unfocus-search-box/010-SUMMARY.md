@@ -1,7 +1,7 @@
 # Quick Task 010 Summary: Add Escape Key to Unfocus Search Box
 
 **Completed:** 2026-01-29  
-**Duration:** ~1 minute  
+**Duration:** ~5 minutes  
 **Status:** ✅ Complete, ready for user verification
 
 ## Objective
@@ -16,27 +16,37 @@ When focused inside the search box:
 
 Users had to click outside the search box to use keyboard navigation again.
 
-## Solution Implemented
+## Solution Implemented (Improved UX)
 
-Modified the Escape key handler in `SearchBar.astro` to:
-1. Clear the search (existing behavior preserved)
-2. Blur the search input to remove focus (new behavior)
+**Initial implementation:** Single Escape cleared and unfocused immediately.
 
-**Change made (line 207):**
+**Improved implementation (user suggestion):** Two-step Escape pattern:
+1. **First Escape:** Clear the search field (stay focused for new search)
+2. **Second Escape:** Unfocus the search box (return to keyboard navigation)
+
+This is a more intuitive pattern commonly used in search interfaces.
+
+**Final implementation (lines 203-215):**
 ```typescript
 searchInput.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    clearSearch();
-    searchInput.blur();  // ← Added this line
+    if (searchInput.value.trim() !== '' || searchResults.style.display === 'block') {
+      // First Escape: clear search if there's content or results showing
+      clearSearch();
+    } else {
+      // Second Escape: unfocus if already cleared
+      searchInput.blur();
+    }
   }
 });
 ```
 
 ## Results
 
-- ✅ Pressing Escape in search box clears search
-- ✅ Pressing Escape in search box removes focus
-- ✅ User can immediately use j/k/o keyboard shortcuts after Escape
+- ✅ **First Escape:** Clears search field and results (stays focused)
+- ✅ **Second Escape:** Removes focus from search box
+- ✅ User can immediately use j/k/o keyboard shortcuts after second Escape
+- ✅ More intuitive two-step pattern (common in modern search UIs)
 - ✅ Build completes successfully (231/231 feeds, 2189 releases)
 - ✅ Preview server running at http://localhost:4321/firehose
 
@@ -49,19 +59,30 @@ searchInput.addEventListener('keydown', (e) => {
 4. Press `j` → doesn't work (still typing in search box)
 5. **Must click outside with mouse** to use keyboard nav
 
-**After:**
+**After (improved two-step pattern):**
 1. Press `/` to focus search
 2. Type query
-3. Press Escape → search clears AND input loses focus
-4. Press `j` → **immediately works!** Navigation active again
-5. **No mouse needed** ✨
+3. **First Escape** → search clears (stay focused, can type new search)
+4. **Second Escape** → input loses focus
+5. Press `j` → **immediately works!** Navigation active again
+6. **No mouse needed** ✨
+
+**Why two steps is better:**
+- First Escape clears without kicking you out (quick retry)
+- Second Escape exits search mode (deliberate action)
+- Matches user expectations from other applications
 
 ## Technical Details
 
 **File Modified:**
-- `src/components/SearchBar.astro` (line 207)
+- `src/components/SearchBar.astro` (lines 203-215)
 
-**Change Type:** Enhancement (adding blur behavior to existing Escape handler)
+**Change Type:** Enhancement (two-step Escape handler)
+
+**Logic:**
+- If search has content OR results are showing → clear search (stay focused)
+- If search is already cleared → unfocus search box
+- This creates natural two-step exit pattern
 
 **Keyboard Navigation Integration:**
 - Works seamlessly with existing keyboard shortcuts
@@ -71,17 +92,21 @@ searchInput.addEventListener('keydown', (e) => {
 ## Verification Steps
 
 1. ✅ Run: `npm run build` → Success
-2. ✅ Run: `.dev-tools/restart-preview.sh` → Server running
+2. ✅ Run: Preview server → Running
 3. ⏳ Manual test sequence (awaiting user):
    - Press `/` to focus search
    - Type a search query
-   - Press Escape
+   - Press Escape once → search clears, input still focused
+   - Type another query (verify you can search again)
+   - Press Escape once → search clears again
+   - Press Escape again (second time on empty field) → input unfocuses
    - Immediately press `j` or `k`
    - Expected: Navigation works (search is unfocused)
 
 ## Commits
 
-- **a1f49c9** - feat(quick-010): add Escape key to unfocus search box
+- **a1f49c9** - feat(quick-010): add Escape key to unfocus search box (initial)
+- **dc0cbc4** - feat(quick-010): improve Escape key UX - first Esc clears, second Esc unfocuses (improved)
 
 ## Context
 
@@ -89,7 +114,8 @@ This enhancement removes friction from the keyboard navigation workflow:
 - `/` or `s` keys focus search (Quick Task 007)
 - `j/k` navigate releases (disabled while typing)
 - `o/Enter` open focused item
-- `Escape` now unfocuses search (this task) ✨
+- **First Escape** clears search (this task) ✨
+- **Second Escape** unfocuses search (this task) ✨
 
 Completes the keyboard-first UX cycle without requiring mouse interaction.
 
@@ -97,9 +123,10 @@ Completes the keyboard-first UX cycle without requiring mouse interaction.
 
 **User verification needed:**
 1. Visit http://localhost:4321/firehose
-2. Test the Escape key behavior:
+2. Test the two-step Escape behavior:
    - Focus search with `/`
    - Type a query
-   - Press Escape
+   - Press Escape → should clear (stay focused)
+   - Press Escape again → should unfocus
    - Try j/k navigation immediately
-3. Confirm: "Keyboard navigation works after Escape" → ready to deploy
+3. Confirm behavior matches expectations → ready to deploy
