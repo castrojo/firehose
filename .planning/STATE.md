@@ -11,7 +11,7 @@ See: .planning/PROJECT.md (updated 2026-01-26)
 
 Phase: Maintenance & Automation
 Status: All features deployed and working perfectly
-Last activity: 2026-01-29 — Completed Quick Task 010: Add Escape key to unfocus search box
+Last activity: 2026-01-29 — Completed Quick Task 010: Improved Escape key search UX
 Next: Monitor production deployment
 
 Backlog: All high-priority enhancements complete! All known bugs resolved.
@@ -32,7 +32,7 @@ Progress: v1.0 Milestone [██████████] 100% complete
          Quick Task 007 [██████████] 100% complete (Keyboard shortcuts)
          Quick Task 008 [██████████] 100% complete (KubeCon banner system)
          Quick Task 009 [██████████] 100% complete (Markdown dark mode)
-         Quick Task 010 [██████████] 100% complete (Escape to unfocus search)
+         Quick Task 010 [██████████] 100% complete (Escape key search UX)
          v1.4 Enhancement Session [██████████] 100% complete (6 features)
          v1.4.1 Dark Mode Link Fix [██████████] 100% complete
          Quick Task 005 [██████████] 100% complete (Add sandbox projects)
@@ -68,6 +68,58 @@ Progress: v1.0 Milestone [██████████] 100% complete
 
 **Commits:**
 - a1f49c9 "feat(quick-010): add Escape key to unfocus search box"
+
+**Documentation:**
+- `.planning/quick/010-add-escape-key-to-unfocus-search-box/010-PLAN.md` - Task plan
+- `.planning/quick/010-add-escape-key-to-unfocus-search-box/010-SUMMARY.md` - Execution summary
+
+## Quick Task 010: Improve Escape Key Search UX
+
+**Completed:** 2026-01-29  
+**Duration:** ~5 minutes  
+**Status:** ✅ Complete, ready for user verification
+
+**Objective:** Implement two-step Escape pattern for better search box UX - first Escape clears search, second Escape unfocuses.
+
+**Problem:** Original implementation had single Escape both clearing and unfocusing, which wasn't intuitive for users who wanted to quickly clear and search again.
+
+**What was done:**
+1. **Improved Escape handler logic** in SearchBar.astro
+2. **First Escape:** Clears search field and results (stays focused)
+3. **Second Escape:** Unfocuses search box (returns to keyboard navigation)
+
+**Implementation:**
+```typescript
+if (e.key === 'Escape') {
+  if (searchInput.value.trim() !== '' || searchResults.style.display === 'block') {
+    clearSearch();  // First Escape: clear (stay focused)
+  } else {
+    searchInput.blur();  // Second Escape: unfocus
+  }
+}
+```
+
+**Results:**
+- ✅ More intuitive two-step exit pattern
+- ✅ First Escape clears without kicking user out
+- ✅ Second Escape exits search mode completely
+- ✅ Matches user expectations from modern search UIs
+- ✅ Build successful (231/231 feeds, 2189 releases)
+
+**User Experience:**
+- Press `/` → Focus search
+- Type query → Filter projects
+- First Escape → Clear (can type new search immediately)
+- Second Escape → Unfocus (back to j/k navigation)
+- Complete keyboard-first workflow ✨
+
+**Files modified:**
+- `src/components/SearchBar.astro` - Two-step Escape handler
+
+**Commits:**
+- a1f49c9 "feat(quick-010): add Escape key to unfocus search box" (initial)
+- dc0cbc4 "feat(quick-010): improve Escape key UX - first Esc clears, second Esc unfocuses"
+- 409b9ca "docs(quick-010): update summary with improved two-step Escape UX"
 
 **Documentation:**
 - `.planning/quick/010-add-escape-key-to-unfocus-search-box/010-PLAN.md` - Task plan
@@ -807,6 +859,9 @@ None! All critical issues resolved. ✨
 | 005 | Add all sandbox projects with enhanced statistics | 2026-01-27 | ebaa51f | [005-add-all-sandbox-projects-from-cncf-lands](.planning/quick/005-add-all-sandbox-projects-from-cncf-lands/) |
 | 006 | Fix critical search bug (search all 223 projects) | 2026-01-28 | 7e469c1 | [006-comprehensive-search-robustness-audit](.planning/quick/006-comprehensive-search-robustness-audit/) |
 | 007 | Add keyboard shortcuts (Space/Shift+Space/h/s) | 2026-01-28 | 1f590c0 | [007-add-keyboard-shortcuts-space-shift-space](.planning/quick/007-add-keyboard-shortcuts-space-shift-space/) |
+| 008 | Fix KubeCon banner system | 2026-01-28 | dcd794c | [008-fix-kubecon-banner-system](.planning/quick/008-fix-kubecon-banner-system/) |
+| 009 | Fix markdown dark mode accessibility | 2026-01-28 | 20e6e89 | [009-fix-markdown-dark-mode-accessibility](.planning/quick/009-fix-markdown-dark-mode-accessibility/) |
+| 010 | Improve Escape key search UX (two-step pattern) | 2026-01-29 | dc0cbc4 | [010-add-escape-key-to-unfocus-search-box](.planning/quick/010-add-escape-key-to-unfocus-search-box/) |
 | 008 | Fix KubeCon banner system with official CNCF banners | 2026-01-28 | dcd794c | [008-fix-kubecon-banner-system](.planning/quick/008-fix-kubecon-banner-system/) |
 | 009 | Fix markdown dark mode accessibility | 2026-01-28 | 20e6e89 | [009-fix-markdown-dark-mode-accessibility](.planning/quick/009-fix-markdown-dark-mode-accessibility/) |
 | 010 | Add Escape key to unfocus search box | 2026-01-29 | a1f49c9 | [010-add-escape-key-to-unfocus-search-box](.planning/quick/010-add-escape-key-to-unfocus-search-box/) |
