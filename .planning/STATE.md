@@ -11,7 +11,7 @@ See: .planning/PROJECT.md (updated 2026-01-26)
 
 Phase: Maintenance & Automation
 Status: All features deployed and working perfectly
-Last activity: 2026-01-28 — Completed Quick Task 009: Fixed markdown dark mode accessibility
+Last activity: 2026-01-29 — Completed Quick Task 010: Add Escape key to unfocus search box
 Next: Monitor production deployment
 
 Backlog: All high-priority enhancements complete! All known bugs resolved.
@@ -32,9 +32,46 @@ Progress: v1.0 Milestone [██████████] 100% complete
          Quick Task 007 [██████████] 100% complete (Keyboard shortcuts)
          Quick Task 008 [██████████] 100% complete (KubeCon banner system)
          Quick Task 009 [██████████] 100% complete (Markdown dark mode)
+         Quick Task 010 [██████████] 100% complete (Escape to unfocus search)
          v1.4 Enhancement Session [██████████] 100% complete (6 features)
          v1.4.1 Dark Mode Link Fix [██████████] 100% complete
          Quick Task 005 [██████████] 100% complete (Add sandbox projects)
+
+## Quick Task 010: Add Escape Key to Unfocus Search Box
+
+**Completed:** 2026-01-29  
+**Duration:** ~1 minute  
+**Status:** ✅ Complete, ready for user verification
+
+**Objective:** Enable users to unfocus the search box by pressing Escape, allowing them to return to keyboard navigation (j/k/o/etc.) without using the mouse.
+
+**Problem:** When focused inside the search box, Escape cleared the search but input remained focused, requiring mouse click to use keyboard navigation again.
+
+**What was done:**
+1. **Modified Escape key handler** in SearchBar.astro to add `searchInput.blur()`
+2. **One-line change** that completes the keyboard-first UX cycle
+
+**Implementation:**
+- Added `searchInput.blur()` call after `clearSearch()` in Escape handler
+- Preserves existing clear behavior, adds focus removal
+- Works seamlessly with existing keyboard shortcuts (/, s, j, k, o, ?)
+
+**Results:**
+- ✅ Build successful (231/231 feeds, 2189 releases)
+- ✅ Pressing Escape clears search AND removes focus
+- ✅ User can immediately use j/k/o after Escape
+- ✅ No mouse interaction needed for full keyboard workflow
+- ⏳ Awaiting user verification at http://localhost:4321/firehose
+
+**Files modified:**
+- `src/components/SearchBar.astro` (line 207)
+
+**Commits:**
+- a1f49c9 "feat(quick-010): add Escape key to unfocus search box"
+
+**Documentation:**
+- `.planning/quick/010-add-escape-key-to-unfocus-search-box/010-PLAN.md` - Task plan
+- `.planning/quick/010-add-escape-key-to-unfocus-search-box/010-SUMMARY.md` - Execution summary
 
 ## Quick Task 009: Fix Markdown Dark Mode Accessibility
 
@@ -770,6 +807,9 @@ None! All critical issues resolved. ✨
 | 005 | Add all sandbox projects with enhanced statistics | 2026-01-27 | ebaa51f | [005-add-all-sandbox-projects-from-cncf-lands](.planning/quick/005-add-all-sandbox-projects-from-cncf-lands/) |
 | 006 | Fix critical search bug (search all 223 projects) | 2026-01-28 | 7e469c1 | [006-comprehensive-search-robustness-audit](.planning/quick/006-comprehensive-search-robustness-audit/) |
 | 007 | Add keyboard shortcuts (Space/Shift+Space/h/s) | 2026-01-28 | 1f590c0 | [007-add-keyboard-shortcuts-space-shift-space](.planning/quick/007-add-keyboard-shortcuts-space-shift-space/) |
+| 008 | Fix KubeCon banner system with official CNCF banners | 2026-01-28 | dcd794c | [008-fix-kubecon-banner-system](.planning/quick/008-fix-kubecon-banner-system/) |
+| 009 | Fix markdown dark mode accessibility | 2026-01-28 | 20e6e89 | [009-fix-markdown-dark-mode-accessibility](.planning/quick/009-fix-markdown-dark-mode-accessibility/) |
+| 010 | Add Escape key to unfocus search box | 2026-01-29 | a1f49c9 | [010-add-escape-key-to-unfocus-search-box](.planning/quick/010-add-escape-key-to-unfocus-search-box/) |
 
 ## Optional Enhancements (Backlog)
 
@@ -910,8 +950,8 @@ See PROJECT.md Key Decisions table for full details and rationale.
 
 ## Session Continuity
 
-Last session: 2026-01-28 (Quick Task 007: Keyboard Shortcuts Enhancement)
+Last session: 2026-01-29 (Quick Task 010: Add Escape Key to Unfocus Search Box)
 Stopped at: All tasks complete, ready for user verification
 Status: Build succeeded, preview server running at http://localhost:4321/firehose/
-Resume: User needs to verify keyboard shortcuts work correctly
-Next step: Test Space/Shift+Space/h/s keys, then deploy if approved
+Resume: User needs to verify Escape key unfocus behavior works correctly
+Next step: Test Escape key after search, verify j/k navigation works immediately
