@@ -201,10 +201,17 @@ const { projects } = Astro.props;
     searchClear.addEventListener('click', clearSearch);
     
     // Keyboard shortcuts
+    // First Escape: clear search field (stay focused)
+    // Second Escape: unfocus search box (return to keyboard nav)
     searchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        clearSearch();
-        searchInput.blur();
+        if (searchInput.value.trim() !== '' || searchResults.style.display === 'block') {
+          // First Escape: clear search if there's content or results showing
+          clearSearch();
+        } else {
+          // Second Escape: unfocus if already cleared
+          searchInput.blur();
+        }
       }
     });
     
