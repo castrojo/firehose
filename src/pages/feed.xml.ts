@@ -1,11 +1,25 @@
 import type { APIRoute } from 'astro';
-import { getCollection } from 'astro:content';
 import { marked } from 'marked';
+import releasesData from '../data/releases.json';
 
 export const GET: APIRoute = async ({ site }) => {
-  const releases = await getCollection('releases');
+  // Transform JSON releases to match expected format
+  const releases = ((releasesData as any).releases as any[]).map((r: any) => ({
+    data: {
+      title: r.title,
+      link: r.link,
+      isoDate: r.pubDate,
+      content: r.content || '',
+      contentSnippet: r.content ? r.content.substring(0, 200) : '',
+      projectName: r.projectName || '',
+      projectStatus: r.projectStatus,
+      feedTitle: r.feedTitle || '',
+      feedStatus: r.feedStatus,
+    }
+  }));
   
   // Filter out errors and sort by date (newest first)
+  // Go pipeline already sorts, but keep this for safety
   const validReleases = releases
     .filter(r => r.data.feedStatus !== 'error')
     .sort((a, b) => {
