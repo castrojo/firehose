@@ -36,60 +36,76 @@ func FetchAndParse() (map[string]models.LandscapeProject, error) {
 
 // parseLandscapeYAML parses landscape.yml and builds org/repo → project map
 func parseLandscapeYAML(data []byte) (map[string]models.LandscapeProject, error) {
-	var landscape struct {
-		Landscape []struct {
-			Name       string `yaml:"name"`
-			Categories []struct {
-				Name          string `yaml:"name"`
-				Subcategories []struct {
-					Name  string `yaml:"name"`
-					Items []struct {
-						Name           string `yaml:"name"`
-						Homepage       string `yaml:"homepage_url"`
-						Repo           string `yaml:"repo_url"`
-						Project        string `yaml:"project"` // graduated, incubating, sandbox
-						SummaryUseCase string `yaml:"summary_use_case"`
-						Description    string `yaml:"description"`
-					} `yaml:"items"`
-				} `yaml:"subcategories"`
-			} `yaml:"categories"`
-		} `yaml:"landscape"`
+	var doc struct {
+		Landscape []map[string]interface{} `yaml:"landscape"`
 	}
 
-	if err := yaml.Unmarshal(data, &landscape); err != nil {
+	if err := yaml.Unmarshal(data, &doc); err != nil {
 		return nil, fmt.Errorf("parse YAML: %w", err)
 	}
 
 	// Build map keyed by org/repo
 	projectMap := make(map[string]models.LandscapeProject)
 
-	for _, section := range landscape.Landscape {
-		for _, category := range section.Categories {
-			for _, subcategory := range category.Subcategories {
-				for _, item := range subcategory.Items {
-					if item.Repo == "" {
-						continue
-					}
+	for _, categoryMap := range doc.Landscape {
+		// Parse subcategories array
+		subcategories, ok := categoryMap["subcategories"].([]interface{})
+		if !ok {
+			continue
+		}
 
-					// Extract org/repo from GitHub URL
-					// Example: https://github.com/kubernetes/kubernetes → kubernetes/kubernetes
-					slug := extractOrgRepo(item.Repo)
-					if slug == "" {
-						continue
-					}
+		for _, subInterface := range subcategories {
+			subMap, ok := subInterface.(map[string]interface{})
+			if !ok {
+				continue
+			}
 
-					description := item.Description
-					if description == "" {
-						description = item.SummaryUseCase
-					}
+			// Parse items array
+			items, ok := subMap["items"].([]interface{})
+			if !ok {
+				continue
+			}
 
-					projectMap[slug] = models.LandscapeProject{
-						Name:        item.Name,
-						Description: description,
-						RepoURL:     item.Repo,
-						HomepageURL: item.Homepage,
-						Status:      item.Project,
+			for _, itemInterface := range items {
+				itemMap, ok := itemInterface.(map[string]interface{})
+				if !ok {
+					continue
+				}
+
+				// Extract fields
+				name, _ := itemMap["name"].(string)
+				repoURL, _ := itemMap["repo_url"].(string)
+				homepageURL, _ := itemMap["homepage_url"].(string)
+				project, _ := itemMap["project"].(string)
+				description, _ := itemMap["description"].(string)
+
+				if repoURL == "" {
+					continue
+				}
+
+				// Extract org/repo from GitHub URL
+				slug := extractOrgRepo(repoURL)
+				if slug == "" {
+					continue
+				}
+
+				// Get description from extra.summary_use_case if not present
+				if description == "" {
+					if extra, ok := itemMap["extra"].(map[string]interface{}); ok {
+						if summaryUseCase, ok := extra["summary_use_case"].(string); ok {
+							description = summaryUseCase
+						} else if summaryBusinessUseCase, ok := extra["summary_business_use_case"].(string); ok {
+							description = summaryBusinessUseCase
+						}
 					}
+				}
+
+				projectMap[slug] = models.LandscapeProject{
+					Name:        name,
+					Description: description,
+					RepoURL:     repoURL,
+					HomepageURL: homepageURL,
+					Status:      project,
 				}
 			}
 		}
