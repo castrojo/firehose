@@ -162,7 +162,6 @@ firehose-go/
 **Foundation (Previous):**
 3. `40c36ad` - Set up Go project structure and convert feed config to YAML
 4. `d0b321b` - Update AGENTS.md and add .gitattributes
-5. `5c8cd3b` - Sync beads issue tracking
 
 **All commits pushed to origin/main ✅**
 
@@ -284,9 +283,9 @@ All 10 architecture documents are complete and up-to-date:
 ## Session Continuity
 
 **Last session:** 2026-02-02 21:00-21:30 UTC  
-**Stopped at:** Completed dependency cleanup and beads ingestion  
+**Stopped at:** Completed dependency cleanup  
 **Resume file:** N/A - all work committed and pushed  
-**Next step:** See beads ready work (4 tasks available)
+**Next step:** Monitor CI/CD, consider backlog items
 
 **Commands for verification:**
 ```bash
@@ -296,7 +295,6 @@ npm run build                           # Builds Astro site (4.42s)
 npm run preview                         # Preview at http://localhost:4321/firehose
 
 # Check status
-bd stats                                # Project health
 git status                              # Working tree status
 gh run list --limit 5                   # Recent CI/CD runs
 ```
@@ -304,9 +302,7 @@ gh run list --limit 5                   # Recent CI/CD runs
 **Session accomplishments:**
 - ✅ Closed firehose-1y6 (v2.0 Go port epic - 11 subtasks)
 - ✅ Closed firehose-6xt (dependency cleanup - resolved 7 security vulnerabilities)
-- ✅ Closed firehose-fma (STATE.md ingestion - created 3 new tracked issues)
 - ✅ Closed firehose-cqo (documentation updates)
 
-**Beads tracking:** bd ready → shows 4 ready tasks
 **Commits pushed:** 87fae47, 1b486c7, 0ef09b0, 26f3f91, fa5e960
 **Working tree:** Clean ✅
