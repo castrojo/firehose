@@ -14,8 +14,6 @@
  * - dark-theme: For dark mode display
  */
 
-import yaml from 'js-yaml';
-
 export interface BannerConfig {
   name: string;
   link: string;
@@ -30,6 +28,88 @@ interface RawBanner {
     'light-theme'?: string;
     'dark-theme'?: string;
   };
+}
+
+/**
+ * Minimal inline parser for banners.yml.
+ *
+ * Handles exactly this structure (no js-yaml dependency needed):
+ *
+ *   - name: "Foo"
+ *     link: "https://..."
+ *     images:
+ *       light-theme: "https://..."
+ *       dark-theme: "https://..."
+ *
+ * Rules:
+ * - Lines starting with "- " begin a new banner object
+ * - Key-value lines: `  key: value` (leading whitespace ignored)
+ * - Nested `images:` block: next lines with deeper indent are sub-keys
+ * - Values may be quoted with single or double quotes (stripped)
+ * - Blank lines and comment lines (#) are ignored
+ */
+function parseBannersYamlInline(yamlText: string): RawBanner[] {
+  const banners: RawBanner[] = [];
+  let current: RawBanner | null = null;
+  let inImages = false;
+
+  for (const rawLine of yamlText.split('\n')) {
+    const line = rawLine.trimEnd();
+    if (!line.trim() || line.trim().startsWith('#')) continue;
+
+    // Strip an optional leading quote character from values
+    const stripQuotes = (s: string): string => s.replace(/^['"]|['"]$/g, '').trim();
+
+    // New top-level list item
+    if (/^- /.test(line)) {
+      if (current) banners.push(current);
+      current = {};
+      inImages = false;
+      const rest = line.slice(2).trim();
+      const colonIdx = rest.indexOf(':');
+      if (colonIdx !== -1) {
+        const k = rest.slice(0, colonIdx).trim();
+        const v = rest.slice(colonIdx + 1).trim();
+        if (k && v) (current as Record<string, unknown>)[k] = stripQuotes(v);
+      }
+      continue;
+    }
+
+    if (!current) continue;
+
+    const trimmed = line.trim();
+    const colonIdx = trimmed.indexOf(':');
+    if (colonIdx === -1) continue;
+
+    const key = trimmed.slice(0, colonIdx).trim();
+    const val = trimmed.slice(colonIdx + 1).trim();
+
+    // Entering images block
+    if (key === 'images' && !val) {
+      inImages = true;
+      current.images = {};
+      continue;
+    }
+
+    if (inImages && current.images) {
+      // Detect end of images block: line indented less than image sub-keys
+      const indent = line.match(/^(\s*)/)?.[1].length ?? 0;
+      if (indent <= 2) {
+        inImages = false;
+        // Fall through to handle as top-level key
+      } else {
+        if (key === 'light-theme') current.images['light-theme'] = stripQuotes(val);
+        else if (key === 'dark-theme') current.images['dark-theme'] = stripQuotes(val);
+        continue;
+      }
+    }
+
+    if (key === 'name') current.name = stripQuotes(val);
+    else if (key === 'link') current.link = stripQuotes(val);
+  }
+
+  if (current) banners.push(current);
+  return banners;
 }
 
 /**
@@ -48,7 +128,7 @@ export async function fetchBannersConfig(): Promise<RawBanner[]> {
     }
     
     const yamlText = await response.text();
-    return parseBannersYaml(yamlText);
+    return parseBannersYamlInline(yamlText);
   } catch (error) {
     console.warn('Error fetching CNCF banners:', error);
     return [];
@@ -57,23 +137,11 @@ export async function fetchBannersConfig(): Promise<RawBanner[]> {
 
 /**
  * Parse banners YAML and extract banner objects
- * 
+ *
  * Returns empty array on parse errors
  */
 export function parseBannersYaml(yamlText: string): RawBanner[] {
-  try {
-    const data = yaml.load(yamlText);
-    
-    if (Array.isArray(data)) {
-      return data;
-    }
-    
-    console.warn('Banners YAML is not an array');
-    return [];
-  } catch (error) {
-    console.warn('Error parsing banners YAML:', error);
-    return [];
-  }
+  return parseBannersYamlInline(yamlText);
 }
 
 /**
