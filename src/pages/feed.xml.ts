@@ -40,7 +40,7 @@ export const GET: APIRoute = async ({ site }) => {
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>The Firehose - CNCF Project Releases</title>
+    <title>CNCF Project Releases</title>
     <description>Aggregated release feed from ${releases.length} CNCF projects. Stay updated with the latest releases from the cloud native ecosystem.</description>
     <link>${siteUrl}</link>
     <atom:link href="${feedUrl}" rel="self" type="application/rss+xml" />
