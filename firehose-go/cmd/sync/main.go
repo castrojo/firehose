@@ -23,6 +23,9 @@ func main() {
 		log.Fatalf("Sync failed: %v", err)
 	}
 
-	out, _ := json.MarshalIndent(result, "", "  ")
+	out, err := json.MarshalIndent(result, "", "  ")
+	if err != nil {
+		log.Fatalf("Failed to marshal sync result: %v", err)
+	}
 	fmt.Println(string(out))
 }
