@@ -121,19 +121,6 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
 </body>
 </html>
 
-<!-- Sticky section preference: redirect on root load if user prefers News -->
-<script define:vars={{ activeSection, baseUrl }}>
-  if (activeSection === 'releases') {
-    const preferred = localStorage.getItem('firehose-preferred-section');
-    if (preferred === 'news') {
-      window.location.replace(baseUrl + 'news/');
-    }
-  }
-  window.addEventListener('DOMContentLoaded', () => {
-    localStorage.setItem('firehose-preferred-section', activeSection);
-  });
-</script>
-
 <!-- Help button handler (must be in layout so ? works on both pages) -->
 <script>
   document.getElementById('help-button')?.addEventListener('click', () => {
