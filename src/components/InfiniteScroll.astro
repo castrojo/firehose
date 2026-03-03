@@ -81,6 +81,17 @@
         ? `<span class="project-status ${escapeHtml(projectStatus)}">${escapeHtml(projectStatus)}</span>` 
         : '';
       
+      // Variables referenced in template
+      const projectDescription = data.projectDescription || '';
+      const truncatedDescription = truncateToSentences(projectDescription, 2) || projectDescription;
+      const dateHtml = formattedDate
+        ? `<div class="release-date"><time datetime="${escapeHtml(data.isoDate || '')}">${escapeHtml(formattedDate)}</time></div>`
+        : '';
+      // Use contentSnippet as raw HTML (RSS feeds deliver HTML; iframes must be preserved)
+      const contentPreview = (data.contentSnippet || data.content)
+        ? `<div class="release-content markdown-body">${data.contentSnippet || data.content}</div>`
+        : '';
+
       // Build project description HTML
       const projectDescriptionHtml = projectDescription 
         ? `<p class="project-description" title="${escapeHtml(projectDescription)}">${escapeHtml(truncatedDescription)}</p>` 
@@ -116,6 +127,7 @@
           ${contentPreview}
         </article>
       `;
+      return html;
     }
     
     // HTML escape utility
