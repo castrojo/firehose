@@ -257,3 +257,59 @@ These files automatically use `BASE_URL` from Astro:
 - `src/components/InfiniteScroll.astro` - Client-side logo paths
 
 **You don't need to edit these files** - they read from `astro.config.mjs` automatically.
+
+## Migrating to releases.cncf.io
+
+When the CNCF transfers this site to `releases.cncf.io`, the following changes are required.
+
+### 1. Update astro.config.mjs
+
+Change:
+```js
+site: 'https://castrojo.github.io',
+base: '/firehose',
+```
+
+To:
+```js
+site: 'https://releases.cncf.io',
+base: '/',
+```
+
+### 2. Update GitHub repository links in index.astro
+
+There are two hardcoded links to `castrojo/firehose` in `src/pages/index.astro`. Search for `castrojo/firehose` and update both to `cncf/firehose` once the repo is transferred.
+
+### 3. Configure GitHub Pages custom domain
+
+In the repository Settings → Pages → Custom domain, enter `releases.cncf.io`.
+
+This creates a `CNAME` file in the repo root automatically. Alternatively, create it manually:
+```
+releases.cncf.io
+```
+
+### 4. DNS configuration
+
+Configure DNS for `releases.cncf.io` with one of:
+
+**Option A — CNAME (recommended for apex via CNAME flattening):**
+```
+releases.cncf.io  CNAME  cncf.github.io
+```
+
+**Option B — A records (GitHub Pages IPs):**
+```
+releases.cncf.io  A  185.199.108.153
+releases.cncf.io  A  185.199.109.153
+releases.cncf.io  A  185.199.110.153
+releases.cncf.io  A  185.199.111.153
+```
+
+### 5. Enable HTTPS
+
+After DNS propagates, enable "Enforce HTTPS" in the repository Settings → Pages.
+
+### 6. Update the deploy workflow
+
+The workflow at `.github/workflows/update-feed.yaml` requires no changes — GitHub Pages handles the custom domain transparently.
