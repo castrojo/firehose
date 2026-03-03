@@ -43,7 +43,25 @@ Go pipeline → src/data/releases.json (~29MB, gitignored) → Astro → GitHub 
 
 ## MCP Servers
 
-Two MCP servers are configured in `opencode.json`. Using them is **mandatory** for the tasks listed below — they are the authoritative sources for correctness, not web search or assumptions.
+Two MCP servers are configured in `opencode.json`. Using them is **mandatory** — they are
+the authoritative sources for correctness. Do not substitute web search or model memory.
+
+### Session workflow
+
+Read `opencode.json` at the start of every session. Before writing any code, consult the
+relevant MCP for the domain you are touching. This is a lookup, not a judgment call.
+
+| If you are touching... | Query this MCP first |
+|---|---|
+| `firehose-go/config/feeds.yaml` or any feed/project data | `cncf-landscape` |
+| Any file in `src/` (components, pages, lib) | `astro-docs` |
+| `astro.config.mjs` or Astro-related deps in `package.json` | `astro-docs` |
+| `src/lib/logoMapper.ts` or `public/logos/` | `cncf-landscape` (verify project exists) |
+| Any CNCF project name, status, repo URL, or description | `cncf-landscape` |
+| `src/assets/` SVG imports or Astro image handling | `astro-docs` |
+
+**Do not** use the CNCF website, GitHub browsing, or model memory as a substitute.
+The MCPs return live landscape data and version-exact Astro docs — web search does not.
 
 ### cncf-landscape
 
@@ -56,21 +74,26 @@ Provides live data from the CNCF Landscape (`https://landscape.cncf.io/data/full
 - **Auditing feeds.yaml** — cross-check existing entries against live landscape data to find stale, miscategorized, or missing projects
 - **Getting canonical metadata** — project name, description, homepage URL as CNCF defines them
 
-**Why:** The landscape is the single source of truth per the core principles. Adding a feed in the wrong category or for a project that no longer exists in the landscape silently corrupts the data.
+**Why:** The landscape is the single source of truth per the core principles. Adding a feed
+in the wrong category or for a project that no longer exists in the landscape silently
+corrupts the data. There is no build-time error — the data is just wrong.
 
-### Astro docs
+### astro-docs
 
-Provides version-accurate documentation for the Astro framework version in use.
+Provides version-accurate documentation for the exact Astro version in `package.json`.
 
 **Use it for:**
 
 - **Before modifying any file in `src/`** — verify correct API usage, import paths, and component patterns for the current Astro version
+- **Asset and image handling** — confirm whether to use `src/assets/` imports, `public/` paths, `<Image />`, or SVG components; the answer changes between Astro versions
 - **`BASE_URL` and asset path handling** — confirm the correct way to reference public assets and construct URLs
 - **Pagefind integration** — check current integration patterns before touching the search setup
 - **Static output vs SSR** — verify any page or endpoint follows the correct static-generation pattern
 - **Deprecated APIs** — check before using any Astro feature not already present in the codebase
 
-**Why:** Astro has breaking changes between minor versions. The MCP server returns docs for the exact version in `package.json`, preventing silent regressions from outdated patterns.
+**Why:** Astro has breaking changes between minor versions. Using the wrong image import
+pattern or a removed API produces no build error in development but fails in CI or renders
+incorrectly. The MCP returns docs for the exact installed version — web search does not.
 
 ## Attribution Requirements
 
@@ -124,16 +147,78 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
 - `.github/workflows/update-logos.yaml` — logo update automation
 - `package.json` — Node.js dependencies and scripts
 
+## CNCF Artwork
+
+All CNCF logos come from **https://github.com/cncf/artwork** — this is the canonical
+source for all CNCF project and brand logos. The landscape MCP does not serve artwork;
+use the artwork repo directly via `curl` or the GitHub API.
+
+**Directory structure:**
+
+```
+other/cncf/icon/color/cncf-icon-color.svg   ← CNCF site logo, light mode
+other/cncf/icon/white/cncf-icon-white.svg   ← CNCF site logo, dark mode
+projects/<name>/icon/color/                  ← project logo, light mode
+projects/<name>/icon/white/                  ← project logo, dark mode
+```
+
+**Where to store assets locally:**
+
+| Asset type | Location | Why |
+|---|---|---|
+| Site branding (CNCF logo, static UI SVGs) | `src/assets/` | Astro processes and inlines at build time |
+| Project logos (fetched by Go pipeline) | `public/logos/` | Served as-is; accessed via URL paths at runtime |
+
+**Never** put site branding in `public/logos/` or project logos in `src/assets/` — the
+distinction matters because `src/assets/` images are bundled by Astro and `public/` files
+are copied as-is with no processing.
+
+**Astro SVG import pattern (Astro ≥ 5.7, current):**
+
+Import SVGs from `src/assets/` as Astro components. Do NOT use `<img src="...">` with
+`public/` paths for build-time assets — that bypasses Astro's pipeline and requires
+manual `BASE_URL` construction.
+
+```astro
+---
+import CNCFLogoColor from '../assets/cncf-icon-color.svg';
+import CNCFLogoWhite from '../assets/cncf-icon-white.svg';
+---
+<CNCFLogoColor width={40} height={40} />
+```
+
+Always confirm the correct SVG import pattern with the `astro-docs` MCP before use —
+it has changed across Astro versions.
+
+**Theme-switching pattern:**
+
+The site uses JS-driven `[data-theme="dark"]` on `<html>`, set by `ThemeToggle.astro`.
+This is **not** `prefers-color-scheme`. Do NOT use `<picture media="(prefers-color-scheme: dark)">` —
+it will not respond to the manual toggle button.
+
+Use the dual-SVG CSS hide/show pattern, consistent with how `ThemeToggle.astro` handles
+its sun/moon icons:
+
+```css
+/* light mode: show color, hide white */
+.logo-dark  { display: none; }
+
+/* dark mode: hide color, show white */
+[data-theme="dark"] .logo-light { display: none; }
+[data-theme="dark"] .logo-dark  { display: block; }
+```
+
 ## Common Tasks
 
 ### Adding a Feed
 
-1. Edit `firehose-go/config/feeds.yaml`
-2. Add the feed URL under the appropriate CNCF status (`graduated`, `incubating`, `sandbox`)
-3. Run the Go pipeline and then `npm run build` to test
-4. Verify the feed loads in the build output
+1. **Use the `cncf-landscape` MCP** to verify the project exists, confirm its current status (`graduated`, `incubating`, `sandbox`), and get the canonical name — do not use the website or model memory
+2. Edit `firehose-go/config/feeds.yaml`
+3. Add the feed URL under the appropriate CNCF status section
+4. Run the Go pipeline and then `npm run build` to test
+5. Verify the feed loads in the build output
 
-Only add CNCF projects. Verify at https://landscape.cncf.io.
+Only add CNCF projects.
 
 ### Local Development
 
@@ -153,6 +238,7 @@ cd firehose-go && go vet ./...
 
 ### Modifying the Layout
 
+- **Before starting:** Query the `astro-docs` MCP to verify correct component patterns and asset handling for the current Astro version
 - Edit `src/pages/index.astro` for main page structure
 - Two-column grid: sidebar (320px, sticky) + main content
 - Responsive: single column below 1024px, fully vertical below 480px
@@ -160,6 +246,7 @@ cd firehose-go && go vet ./...
 
 ### Modifying Release Card Display
 
+- **Before starting:** Query the `astro-docs` MCP to verify correct component patterns for the current Astro version
 - Edit `src/components/ReleaseCard.astro`
 - Content rendered as GitHub-compatible markdown via `marked.js`
 - Project metadata comes from Go pipeline enrichment

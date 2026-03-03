@@ -1,6 +1,8 @@
 ---
 import ReleaseCard from '../components/ReleaseCard.astro';
 import CollapsibleReleaseGroup from '../components/CollapsibleReleaseGroup.astro';
+import CNCFLogoColor from '../assets/cncf-icon-color.svg';
+import CNCFLogoWhite from '../assets/cncf-icon-white.svg';
 import InfiniteScroll from '../components/InfiniteScroll.astro';
 import ErrorBanner from '../components/ErrorBanner.astro';
 import KeyboardHelp from '../components/KeyboardHelp.astro';
@@ -157,11 +159,17 @@ const remainingReleasesData = remainingReleases.map(r => ({
     <div class="container">
       <div style="display: flex; justify-content: space-between; align-items: center; gap: 2rem;">
         <div style="display: flex; align-items: center; gap: 2rem; flex: 1;">
-          <div>
-            <h1 class="site-title">
-              <a href={baseUrl} id="home-link" class="home-link">CNCF Releases</a>
-            </h1>
-            <p class="site-subtitle">CNCF Project Releases</p>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span class="cncf-logo-wrapper" aria-hidden="true">
+              <CNCFLogoColor class="logo-light" width={40} height={40} />
+              <CNCFLogoWhite class="logo-dark" width={40} height={40} />
+            </span>
+            <div>
+              <h1 class="site-title">
+                <a href={baseUrl} id="home-link" class="home-link">CNCF Releases</a>
+              </h1>
+              <p class="site-subtitle">CNCF Project Releases</p>
+            </div>
           </div>
           <div style="flex: 1; max-width: 600px;">
             <SearchBar projects={uniqueProjects} />
@@ -689,7 +697,17 @@ const remainingReleasesData = remainingReleases.map(r => ({
     color: var(--color-text-secondary);
     font-size: 1rem;
   }
-  
+
+  /* CNCF logo: dual-SVG theme-aware pattern (same as ThemeToggle sun/moon) */
+  .cncf-logo-wrapper {
+    display: flex;
+    flex-shrink: 0;
+  }
+  .cncf-logo-wrapper .logo-dark { display: none; }
+  [data-theme="dark"] .cncf-logo-wrapper .logo-light { display: none; }
+  [data-theme="dark"] .cncf-logo-wrapper .logo-dark  { display: block; }
+  .cncf-logo-wrapper svg { width: 40px; height: 40px; }
+
   .stats {
     background: var(--color-bg-default);
     border: 1px solid var(--color-border-default);
@@ -799,6 +817,8 @@ const remainingReleasesData = remainingReleases.map(r => ({
     .site-subtitle {
       font-size: 0.875rem;
     }
+
+    .cncf-logo-wrapper svg { width: 32px; height: 32px; }
   }
   
   /* Mobile landscape (640px and below) */
@@ -814,6 +834,8 @@ const remainingReleasesData = remainingReleases.map(r => ({
     .site-title {
       font-size: 1.25rem;
     }
+
+    .cncf-logo-wrapper svg { width: 28px; height: 28px; }
   }
   
   /* Mobile portrait (480px and below) */
@@ -840,6 +862,8 @@ const remainingReleasesData = remainingReleases.map(r => ({
     .site-subtitle {
       font-size: 0.8125rem;
     }
+
+    .cncf-logo-wrapper svg { width: 24px; height: 24px; }
     
   .stat-value {
     font-size: 1.25rem;
