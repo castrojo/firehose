@@ -31,10 +31,8 @@ firehose-go/
 │   │   └── feeds.go             # Parallel feed fetching
 │   ├── landscape/
 │   │   └── landscape.go         # CNCF Landscape integration
-│   ├── models/
-│   │   └── models.go            # Data structures
-│   └── output/
-│       └── output.go            # Output utilities
+│   └── models/
+│       └── models.go            # Data structures
 ├── config/
 │   └── feeds.yaml               # 231 feed URLs (generated from feeds.ts)
 ├── go.mod                       # Go module definition
@@ -132,8 +130,6 @@ cd .. && npm run build
 ## References
 
 - JSON Schema: `../.planning/go-port/JSON-SCHEMA.md`
-- Architecture: `../.planning/codebase/ARCHITECTURE.md`
-- Data Flow: `../.planning/codebase/DATAFLOW.md`
 - Current Node.js implementation: `../src/lib/feed-loader.ts`, `../src/lib/landscape.ts`
 
 ## License
