@@ -243,18 +243,76 @@ const formattedDate = data.isoDate
   }
 
   /* Upstream blog posts (Kubernetes, Flux, PipeCD, etc.) ship Hugo/Chroma
-     inline styles with hardcoded light-mode colors, e.g.:
-       style="background-color:#f8f8f8;color:#333333"
-     CSS custom properties cannot override inline styles, so we invert
-     luminance on the pre block in dark mode. hue-rotate(180deg) approximately
-     preserves syntax color hues. The child rule prevents double-inversion
-     on the inner <span> elements. */
-  [data-theme="dark"] .markdown-body pre[style] {
-    filter: invert(1) hue-rotate(180deg);
+     inline styles. These are stripped in markdown.ts before rendering, so
+     plain <pre><code> blocks land here with no inline styles and pick up
+     the GitHub Primer syntax theme below. */
+
+  /* ── GitHub Primer syntax theme — light mode ───────────────────────────
+     Token colors match github.com's own light syntax theme.
+     Applied to all code blocks (both plain markdown fences and stripped Chroma). */
+  .markdown-body pre {
+    background-color: var(--color-markdown-bg-muted);
+    color: #24292f;
   }
-  [data-theme="dark"] .markdown-body pre[style] * {
-    filter: invert(0) !important;
+
+  /* keywords, storage types */
+  .markdown-body pre .pl-k,
+  .markdown-body pre .kd,
+  .markdown-body pre .kr,
+  .markdown-body pre .kn { color: #cf222e; }
+
+  /* strings */
+  .markdown-body pre .pl-s,
+  .markdown-body pre .s,
+  .markdown-body pre .s1,
+  .markdown-body pre .s2 { color: #0a3069; }
+
+  /* comments */
+  .markdown-body pre .pl-c,
+  .markdown-body pre .c,
+  .markdown-body pre .c1,
+  .markdown-body pre .cm { color: #6e7781; font-style: italic; }
+
+  /* numbers, constants, literals */
+  .markdown-body pre .pl-c1,
+  .markdown-body pre .m,
+  .markdown-body pre .mi,
+  .markdown-body pre .mf { color: #0550ae; }
+
+  /* function names, variables */
+  .markdown-body pre .pl-en,
+  .markdown-body pre .nf,
+  .markdown-body pre .n  { color: #8250df; }
+
+  /* ── GitHub Primer syntax theme — dark mode ─────────────────────────── */
+  [data-theme="dark"] .markdown-body pre {
+    background-color: var(--color-markdown-bg-muted);
+    color: #e6edf3;
   }
+
+  [data-theme="dark"] .markdown-body pre .pl-k,
+  [data-theme="dark"] .markdown-body pre .kd,
+  [data-theme="dark"] .markdown-body pre .kr,
+  [data-theme="dark"] .markdown-body pre .kn { color: #ff7b72; }
+
+  [data-theme="dark"] .markdown-body pre .pl-s,
+  [data-theme="dark"] .markdown-body pre .s,
+  [data-theme="dark"] .markdown-body pre .s1,
+  [data-theme="dark"] .markdown-body pre .s2 { color: #a5d6ff; }
+
+  [data-theme="dark"] .markdown-body pre .pl-c,
+  [data-theme="dark"] .markdown-body pre .c,
+  [data-theme="dark"] .markdown-body pre .c1,
+  [data-theme="dark"] .markdown-body pre .cm { color: #8b949e; font-style: italic; }
+
+  [data-theme="dark"] .markdown-body pre .pl-c1,
+  [data-theme="dark"] .markdown-body pre .m,
+  [data-theme="dark"] .markdown-body pre .mi,
+  [data-theme="dark"] .markdown-body pre .mf { color: #79c0ff; }
+
+  [data-theme="dark"] .markdown-body pre .pl-en,
+  [data-theme="dark"] .markdown-body pre .nf,
+  [data-theme="dark"] .markdown-body pre .n  { color: #d2a8ff; }
   
   .markdown-body blockquote {
     padding: 0 1rem;
