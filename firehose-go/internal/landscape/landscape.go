@@ -78,6 +78,7 @@ func parseLandscapeYAML(data []byte) (map[string]models.LandscapeProject, error)
 				homepageURL, _ := itemMap["homepage_url"].(string)
 				project, _ := itemMap["project"].(string)
 				description, _ := itemMap["description"].(string)
+				blogURL, _ := itemMap["blog_url"].(string)
 
 				if repoURL == "" {
 					continue
@@ -113,6 +114,7 @@ func parseLandscapeYAML(data []byte) (map[string]models.LandscapeProject, error)
 					RepoURL:     repoURL,
 					HomepageURL: homepageURL,
 					Status:      project,
+					BlogURL:     blogURL,
 				}
 			}
 		}

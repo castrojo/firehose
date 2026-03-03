@@ -81,6 +81,7 @@ type LandscapeProject struct {
 	RepoURL     string `json:"repo_url,omitempty"`
 	HomepageURL string `json:"homepage_url,omitempty"`
 	Status      string `json:"project,omitempty"` // graduated, incubating, sandbox
+	BlogURL     string `json:"blog_url,omitempty"`
 }
 
 // FeedConfig represents the feeds.yaml configuration
