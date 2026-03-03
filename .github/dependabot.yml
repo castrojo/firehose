@@ -25,6 +25,19 @@ updates:
           - "minor"
           - "patch"
 
+  # Go module updates
+  - package-ecosystem: "gomod"
+    directory: "/firehose-go"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      go-dependencies:
+        patterns:
+          - "*"
+
   # GitHub Actions updates - group all together
   - package-ecosystem: "github-actions"
     directory: "/"
