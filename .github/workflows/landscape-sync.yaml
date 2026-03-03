@@ -1,0 +1,59 @@
+name: Sync Feeds with CNCF Landscape
+
+on:
+  schedule:
+    # Weekly on Mondays at 4 AM UTC
+    # Runs after logo update (Sunday 3 AM), before daily build (6 AM)
+    - cron: "0 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4
+
+      - name: Setup Go
+        uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5
+        with:
+          go-version: '1.24'
+          cache-dependency-path: firehose-go/go.sum
+
+      - name: Build sync tool
+        run: |
+          cd firehose-go
+          go build -o sync-tool cmd/sync/main.go
+
+      - name: Run landscape sync
+        id: sync
+        run: |
+          cd firehose-go
+          ./sync-tool 2>/dev/null | tee sync-output.json
+          changed=$(jq -r '.changed' sync-output.json)
+          added=$(jq -r '.added | length' sync-output.json)
+          removed=$(jq -r '.removed | length' sync-output.json)
+          echo "changed=${changed}" >> $GITHUB_OUTPUT
+          echo "added=${added}" >> $GITHUB_OUTPUT
+          echo "removed=${removed}" >> $GITHUB_OUTPUT
+
+      - name: Commit updated feeds.yaml
+        if: steps.sync.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add firehose-go/config/feeds.yaml
+          git commit -m "chore(feeds): sync with CNCF landscape (+${{ steps.sync.outputs.added }} added, -${{ steps.sync.outputs.removed }} removed)
+
+          Automated sync from CNCF landscape. The landscape is the source of truth.
+          New CNCF projects added; archived/removed projects removed from feed list.
+
+          Assisted-by: Automated workflow"
+          git push
+
+      - name: No changes needed
+        if: steps.sync.outputs.changed == 'false'
+        run: echo "feeds.yaml is already in sync with the CNCF landscape. No changes needed."

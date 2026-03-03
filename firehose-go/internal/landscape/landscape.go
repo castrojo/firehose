@@ -100,6 +100,13 @@ func parseLandscapeYAML(data []byte) (map[string]models.LandscapeProject, error)
 					}
 				}
 
+				// Keep the canonical CNCF project entry (graduated/incubating/sandbox).
+				// Duplicate entries for the same repo_url (e.g. Wasm subcategory
+				// entries) share the slug but have no project status — don't let
+				// them overwrite a real status we already recorded.
+				if existing, ok := projectMap[slug]; ok && existing.Status != "" {
+					continue
+				}
 				projectMap[slug] = models.LandscapeProject{
 					Name:        name,
 					Description: description,
