@@ -241,6 +241,20 @@ const formattedDate = data.isoDate
     background-color: transparent;
     border-radius: 0;
   }
+
+  /* Upstream blog posts (Kubernetes, Flux, PipeCD, etc.) ship Hugo/Chroma
+     inline styles with hardcoded light-mode colors, e.g.:
+       style="background-color:#f8f8f8;color:#333333"
+     CSS custom properties cannot override inline styles, so we invert
+     luminance on the pre block in dark mode. hue-rotate(180deg) approximately
+     preserves syntax color hues. The child rule prevents double-inversion
+     on the inner <span> elements. */
+  [data-theme="dark"] .markdown-body pre[style] {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  [data-theme="dark"] .markdown-body pre[style] * {
+    filter: invert(0) !important;
+  }
   
   .markdown-body blockquote {
     padding: 0 1rem;

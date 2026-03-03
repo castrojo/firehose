@@ -122,7 +122,7 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
 </html>
 
 <!-- Sticky section preference: redirect on root load if user prefers News -->
-<script define:vars={{ activeSection, baseUrl: import.meta.env.BASE_URL }}>
+<script define:vars={{ activeSection, baseUrl }}>
   if (activeSection === 'releases') {
     const preferred = localStorage.getItem('firehose-preferred-section');
     if (preferred === 'news') {
