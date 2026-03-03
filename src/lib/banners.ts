@@ -155,43 +155,48 @@ export function parseBannersYaml(yamlText: string): RawBanner[] {
  * Returns null if no active KubeCon banners
  */
 export async function getActiveBanner(): Promise<BannerConfig | null> {
+  const banners = await getActiveBanners();
+  return banners.length > 0 ? banners[0] : null;
+}
+
+/**
+ * Get all active KubeCon banners from CNCF configuration
+ *
+ * Returns all valid KubeCon/CloudNativeCon banners for client-side rotation.
+ * Returns empty array if none available.
+ */
+export async function getActiveBanners(): Promise<BannerConfig[]> {
   const banners = await fetchBannersConfig();
-  
+
   if (banners.length === 0) {
     console.log('No banners available');
-    return null;
+    return [];
   }
-  
+
   // Filter to KubeCon events only
-  const kubeconBanners = banners.filter(banner => 
+  const kubeconBanners = banners.filter(banner =>
     banner.name?.includes('KubeCon') || banner.name?.includes('CloudNative')
   );
-  
+
   if (kubeconBanners.length === 0) {
     console.log('No KubeCon banners found');
-    return null;
+    return [];
   }
-  
-  // Take first KubeCon banner (CNCF controls order)
-  const banner = kubeconBanners[0];
-  
-  // Validate required fields
-  if (!banner.name || !banner.link || !banner.images?.['light-theme'] || !banner.images?.['dark-theme']) {
-    console.warn('Banner missing required fields:', banner);
-    return null;
+
+  const configs: BannerConfig[] = [];
+  for (const banner of kubeconBanners) {
+    if (!banner.name || !banner.link || !banner.images?.['light-theme'] || !banner.images?.['dark-theme']) {
+      console.warn('Banner missing required fields, skipping:', banner);
+      continue;
+    }
+    configs.push({
+      name: banner.name,
+      link: banner.link,
+      lightImage: banner.images['light-theme'],
+      darkImage: banner.images['dark-theme'],
+    });
   }
-  
-  const config: BannerConfig = {
-    name: banner.name,
-    link: banner.link,
-    lightImage: banner.images['light-theme'],
-    darkImage: banner.images['dark-theme'],
-  };
-  
-  console.log(`Fetched active KubeCon banner: ${config.name}`);
-  console.log(`  Link: ${config.link}`);
-  console.log(`  Light image: ${config.lightImage}`);
-  console.log(`  Dark image: ${config.darkImage}`);
-  
-  return config;
+
+  console.log(`Fetched ${configs.length} active KubeCon banner(s)`);
+  return configs;
 }
