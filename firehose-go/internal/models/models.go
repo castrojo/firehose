@@ -11,6 +11,7 @@ import (
 type OutputData struct {
 	Metadata Metadata     `json:"metadata"`
 	Releases []Release    `json:"releases"`
+	News     []Release    `json:"news"`
 	Feeds    []FeedStatus `json:"feeds"`
 }
 
@@ -31,6 +32,8 @@ type Stats struct {
 	FeedsFailed              int `json:"feedsFailed"`
 	FeedsSkipped             int `json:"feedsSkipped"`
 	ReleasesTotal            int `json:"releasesTotal"`
+	NewsTotal                int `json:"newsTotal"`
+	BlogFeedsTotal           int `json:"blogFeedsTotal"`
 	LandscapeProjectsTotal   int `json:"landscapeProjectsTotal"`
 	LandscapeProjectsMatched int `json:"landscapeProjectsMatched"`
 }
@@ -87,6 +90,7 @@ type LandscapeProject struct {
 // FeedConfig represents the feeds.yaml configuration
 type FeedConfig struct {
 	Feeds []FeedSource `yaml:"feeds"`
+	Blogs []BlogSource `yaml:"blogs,omitempty"`
 }
 
 // FeedSource represents a single feed source
@@ -94,6 +98,14 @@ type FeedSource struct {
 	URL      string  `yaml:"url" validate:"required,url"`
 	Category string  `yaml:"category" validate:"required,oneof=graduated incubating sandbox"`
 	Project  *string `yaml:"project,omitempty"` // Optional project name override
+}
+
+// BlogSource represents a single blog feed source
+type BlogSource struct {
+	URL      string `yaml:"url"`
+	Category string `yaml:"category"`
+	Project  string `yaml:"project,omitempty"`
+	BlogURL  string `yaml:"blog_url,omitempty"`
 }
 
 // WriteJSON writes OutputData to a JSON file (pretty-printed)
