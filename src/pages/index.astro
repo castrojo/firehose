@@ -14,7 +14,7 @@ import { getActiveBanner } from '../lib/banners';
 import releasesData from '../data/releases.json';
 
 // Base URL from Astro config (e.g., /firehose for GitHub Pages)
-const baseUrl = import.meta.env.BASE_URL;
+const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
 
 // Get active KubeCon banner from CNCF
 const activeBanner = await getActiveBanner();

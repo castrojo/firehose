@@ -9,7 +9,7 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import releasesData from '../../data/releases.json';
 
 // Base URL from Astro config (e.g., /firehose for GitHub Pages)
-const baseUrl = import.meta.env.BASE_URL;
+const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
 
 // Transform JSON news items to match ReleaseCard's expected format
 const newsItems = ((releasesData as any).news as any[]).map((r: any) => ({

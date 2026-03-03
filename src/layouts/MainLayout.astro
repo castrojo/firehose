@@ -19,7 +19,7 @@ const {
   projects,
 } = Astro.props;
 
-const baseUrl = import.meta.env.BASE_URL;
+const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
 ---
 
 <!DOCTYPE html>
