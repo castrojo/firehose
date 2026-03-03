@@ -159,7 +159,7 @@ const remainingReleasesData = remainingReleases.map(r => ({
     <div class="container">
       <div style="display: flex; justify-content: space-between; align-items: center; gap: 2rem;">
         <div style="display: flex; align-items: center; gap: 2rem; flex: 1;">
-          <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
             <span class="cncf-logo-wrapper" aria-hidden="true">
               <CNCFLogoColor class="logo-light" width={40} height={40} />
               <CNCFLogoWhite class="logo-dark" width={40} height={40} />
@@ -702,6 +702,7 @@ const remainingReleasesData = remainingReleases.map(r => ({
   .cncf-logo-wrapper {
     display: flex;
     flex-shrink: 0;
+    align-self: flex-start;
   }
   .cncf-logo-wrapper .logo-dark { display: none; }
   [data-theme="dark"] .cncf-logo-wrapper .logo-light { display: none; }
