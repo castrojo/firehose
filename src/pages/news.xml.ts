@@ -31,7 +31,7 @@ export const GET: APIRoute = async ({ site }) => {
   // Build site URL from Astro config (site + base)
   const baseUrl = import.meta.env.BASE_URL || '/';
   const siteOrigin = site?.toString().replace(/\/$/, '') || 'http://localhost:4321';
-  const siteUrl = `${siteOrigin}${baseUrl}`.replace(/\/+$/, '/');
+  const siteUrl = `${siteOrigin}${baseUrl}`.replace(/\/*$/, '/');
   const feedUrl = `${siteUrl}news.xml`;
   const buildDate = new Date().toUTCString();
 
