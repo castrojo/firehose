@@ -24,6 +24,30 @@ marked.use(markedHighlight({
 }));
 
 /**
+ * Strip inline style attributes from pre and span elements inside code blocks.
+ *
+ * Upstream blog posts (Kubernetes, Flux, PipeCD, etc.) ship Hugo/Chroma HTML
+ * with hardcoded light-mode inline styles, e.g.:
+ *   <pre style="background-color:#f8f8f8;..."><span style="color:#00f;font-weight:bold">
+ *
+ * Inline styles take precedence over CSS custom properties, making dark-mode
+ * theming impossible without this stripping step. After stripping, the site's
+ * own CSS (GitHub Primer token classes) handles both light and dark rendering.
+ *
+ * Only targets pre[style] and their descendant span[style] — does not touch
+ * other inline styles that may legitimately appear in blog content.
+ */
+export function stripChromaInlineStyles(html: string): string {
+  // Strip style attr from <pre ...style="..."> blocks
+  let result = html.replace(/<pre([^>]*?) style="[^"]*"([^>]*)>/gi, '<pre$1$2>');
+  // Strip style attr from <span style="..."> (token coloring inside code blocks)
+  // Only strip spans that carry only color/font-weight/font-style (Chroma token spans)
+  result = result.replace(/<span style="(?:color:[^";]*|font-weight:[^";]*|font-style:[^";]*|;|\s)*"([^>]*)>/gi,
+    '<span$1>');
+  return result;
+}
+
+/**
  * Render markdown content to HTML using GitHub-compatible rules
  * @param markdown - Raw markdown string from feed content
  * @returns Sanitized HTML string safe for insertion via set:html
@@ -37,7 +61,10 @@ export function renderMarkdown(markdown: string | undefined): string {
     
     // marked.parse returns string or Promise<string>
     // In synchronous mode it returns string
-    return typeof html === 'string' ? html : '';
+    const htmlStr = typeof html === 'string' ? html : '';
+
+    // Strip Chroma/Hugo inline styles so our CSS theme takes over
+    return stripChromaInlineStyles(htmlStr);
   } catch (error) {
     console.error('Markdown rendering error:', error);
     // Fallback to escaped plain text on error

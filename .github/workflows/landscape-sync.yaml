@@ -20,7 +20,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5
         with:
-          go-version: '1.24'
+          go-version: '1.25'
           cache-dependency-path: firehose-go/go.sum
 
       - name: Build sync tool
@@ -36,9 +36,15 @@ jobs:
           changed=$(jq -r '.changed' sync-output.json)
           added=$(jq -r '.added | length' sync-output.json)
           removed=$(jq -r '.removed | length' sync-output.json)
+          blogs_added=$(jq -r '.blogsAdded | length' sync-output.json)
+          blogs_removed=$(jq -r '.blogsRemoved | length' sync-output.json)
+          blogs_failed=$(jq -r '.blogsDiscoveryFailed | length' sync-output.json)
           echo "changed=${changed}" >> $GITHUB_OUTPUT
           echo "added=${added}" >> $GITHUB_OUTPUT
           echo "removed=${removed}" >> $GITHUB_OUTPUT
+          echo "blogs_added=${blogs_added}" >> $GITHUB_OUTPUT
+          echo "blogs_removed=${blogs_removed}" >> $GITHUB_OUTPUT
+          echo "blogs_failed=${blogs_failed}" >> $GITHUB_OUTPUT
 
       - name: Commit updated feeds.yaml
         if: steps.sync.outputs.changed == 'true'
@@ -46,10 +52,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add firehose-go/config/feeds.yaml
-          git commit -m "chore(feeds): sync with CNCF landscape (+${{ steps.sync.outputs.added }} added, -${{ steps.sync.outputs.removed }} removed)
+          git commit -m "chore(feeds): sync with CNCF landscape
 
-          Automated sync from CNCF landscape. The landscape is the source of truth.
-          New CNCF projects added; archived/removed projects removed from feed list.
+          Release feeds: +${{ steps.sync.outputs.added }} added, -${{ steps.sync.outputs.removed }} removed
+          Blog feeds: +${{ steps.sync.outputs.blogs_added }} added, -${{ steps.sync.outputs.blogs_removed }} removed (${{ steps.sync.outputs.blogs_failed }} discovery failures)
+
+          Automated sync from CNCF landscape.
 
           Assisted-by: Automated workflow"
           git push

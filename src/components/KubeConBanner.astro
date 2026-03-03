@@ -1,97 +1,112 @@
 ---
 // KubeCon Event Banner component
 // Displays upcoming CNCF events with theme-aware banner images
-// 
+//
 // Uses official CNCF banner system with:
-// - 500x500px square format (not 2400x300 rectangle)
-// - Light and dark theme variants
-// - Automatic rotation managed by CNCF
+// - 500x500px square format
+// - Light and dark theme variants via CSS class-swap (NOT prefers-color-scheme —
+//   the site uses JS-driven [data-theme="dark"] on <html>, not the OS media query)
+// - Auto-rotation across all banners when multiple are present
+
+import type { BannerConfig } from '../lib/banners';
 
 interface Props {
-  name: string;
-  link: string;
-  lightImage: string;  // 500x500px light theme banner
-  darkImage: string;   // 500x500px dark theme banner
+  banners: BannerConfig[];
 }
 
-const { name, link, lightImage, darkImage } = Astro.props;
+const { banners } = Astro.props;
+
+if (banners.length === 0) return;
 ---
 
-<div class="kubecon-banner">
-  <a 
-    href={link} 
-    target="_blank" 
-    rel="noopener noreferrer"
-    class="banner-link"
-    aria-label={`${name}`}
-  >
-    <picture>
-      <source 
-        srcset={darkImage} 
-        media="(prefers-color-scheme: dark)"
-      />
-      <img 
-        src={lightImage}
-        alt={`${name} banner`}
-        class="banner-image"
+<div class="kubecon-banner" id="kubecon-banner">
+  {banners.map((banner, i) => (
+    <a
+      href={banner.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      class:list={['banner-slide', { active: i === 0 }]}
+      aria-label={banner.name}
+      data-index={i}
+    >
+      <!-- light mode -->
+      <img
+        src={banner.lightImage}
+        alt={`${banner.name} banner`}
+        class="banner-image logo-light"
         loading="lazy"
       />
-    </picture>
-  </a>
+      <!-- dark mode -->
+      <img
+        src={banner.darkImage}
+        alt={`${banner.name} banner`}
+        class="banner-image logo-dark"
+        loading="lazy"
+      />
+    </a>
+  ))}
 </div>
 
-<script>
-  // Listen for theme changes and reload banner if needed
-  // The picture element handles theme switching automatically via media queries
-  const observer = new MutationObserver(() => {
-    const theme = document.documentElement.getAttribute('data-theme');
-    // Browser automatically selects correct source based on prefers-color-scheme
-    // This observer is here for future enhancements if needed
-  });
-  
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['data-theme']
-  });
-</script>
+{banners.length > 1 && (
+  <script define:vars={{ totalBanners: banners.length }}>
+    (function () {
+      let current = 0;
+      const INTERVAL_MS = 8000;
+
+      function rotate() {
+        const slides = document.querySelectorAll('#kubecon-banner .banner-slide');
+        if (!slides.length) return;
+        slides[current].classList.remove('active');
+        current = (current + 1) % totalBanners;
+        slides[current].classList.add('active');
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        setInterval(rotate, INTERVAL_MS);
+      });
+    })();
+  </script>
+)}
 
 <style>
   .kubecon-banner {
-    margin-bottom: 1.5rem;
+    position: relative;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: box-shadow 0.2s ease;
+    margin-bottom: 1.5rem;
   }
-  
+
   .kubecon-banner:hover {
-    transform: translateY(-2px);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   }
-  
-  .banner-link {
-    display: block;
-    position: relative;
+
+  .banner-slide {
+    display: none;
     text-decoration: none;
-    overflow: hidden;
   }
-  
+
+  .banner-slide.active {
+    display: block;
+  }
+
   .banner-image {
     width: 100%;
     height: auto;
     display: block;
     object-fit: cover;
-    aspect-ratio: 1 / 1; /* 500x500 square format */
+    aspect-ratio: 1 / 1;
   }
-  
-  /* Mobile responsiveness */
+
+  /* Dark mode: CSS class-swap pattern (matches [data-theme="dark"] on <html>) */
+  .logo-dark  { display: none; }
+  [data-theme="dark"] .logo-light { display: none; }
+  [data-theme="dark"] .logo-dark  { display: block; }
+
   @media (max-width: 768px) {
     .kubecon-banner {
       margin-bottom: 1rem;
-    }
-    
-    .banner-image {
-      aspect-ratio: 1 / 1; /* Maintain square on all screen sizes */
     }
   }
 </style>

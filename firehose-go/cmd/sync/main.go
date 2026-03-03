@@ -23,6 +23,12 @@ func main() {
 		log.Fatalf("Sync failed: %v", err)
 	}
 
+	log.Printf("Release feeds: +%d -%d (total %d)",
+		len(result.Added), len(result.Removed), result.Total)
+	log.Printf("Blog feeds: +%d -%d (discovery failed: %d, total: %d)",
+		len(result.BlogsAdded), len(result.BlogsRemoved),
+		len(result.BlogsDiscoveryFailed), result.BlogsTotal)
+
 	out, err := json.MarshalIndent(result, "", "  ")
 	if err != nil {
 		log.Fatalf("Failed to marshal sync result: %v", err)

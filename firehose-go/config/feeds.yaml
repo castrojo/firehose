@@ -1,7 +1,7 @@
 # Feed Configuration for The Firehose (Go)
 # Managed by landscape-sync workflow — do not edit feed URLs manually
 # Source of truth: https://landscape.cncf.io
-# Total: 217 feeds
+# Total: 217 release feeds, 36 blog feeds
 
 feeds:
     - url: https://github.com/argoproj/argo-cd/releases.atom
@@ -438,3 +438,148 @@ feeds:
       category: sandbox
     - url: https://github.com/truefoundry/KubeElasti/releases.atom
       category: sandbox
+blogs:
+    - url: https://www.aeraki.net/blog/index.xml
+      category: sandbox
+      project: Aeraki Mesh
+      blog_url: https://www.aeraki.net/blog/
+    - url: https://medium.com/feed/akri
+      category: sandbox
+      project: Akri
+      blog_url: https://medium.com/akri
+    - url: https://backstage.io/blog/rss.xml
+      category: incubating
+      project: Backstage
+      blog_url: https://backstage.io/blog
+    - url: https://medium.com/feed/cri-o
+      category: graduated
+      project: CRI-O
+      blog_url: https://medium.com/cri-o
+    - url: https://carvel.dev/blog/index.xml
+      category: sandbox
+      project: Carvel
+      blog_url: https://carvel.dev/blog/
+    - url: https://chaos-mesh.org/blog/rss.xml
+      category: incubating
+      project: Chaos Mesh
+      blog_url: https://chaos-mesh.org/blog/
+    - url: https://confidentialcontainers.org/blog/index.xml
+      category: sandbox
+      project: Confidential Containers
+      blog_url: https://confidentialcontainers.org/blog/
+    - url: https://buf.build/blog/rss.xml
+      category: sandbox
+      project: Connect RPC
+      blog_url: https://buf.build/blog
+    - url: https://coredns.io/blog/index.xml
+      category: graduated
+      project: CoreDNS
+      blog_url: https://coredns.io/blog/
+    - url: https://blog.dapr.io/posts/index.xml
+      category: graduated
+      project: Dapr
+      blog_url: https://blog.dapr.io/posts
+    - url: https://fluxcd.io/blog/index.xml
+      category: graduated
+      project: Flux
+      blog_url: https://fluxcd.io/blog/
+    - url: https://headlamp.dev/blog/rss.xml
+      category: sandbox
+      project: Headlamp
+      blog_url: https://headlamp.dev/blog
+    - url: https://hwameistor.io/blog/rss.xml
+      category: sandbox
+      project: HwameiStor
+      blog_url: https://hwameistor.io/blog
+    - url: https://istio.io/blog/feed.xml
+      category: graduated
+      project: Istio
+      blog_url: https://istio.io/blog/
+    - url: https://medium.com/feed/jaegertracing
+      category: graduated
+      project: Jaeger
+      blog_url: https://medium.com/jaegertracing/
+    - url: https://kserve.github.io/website/blog/rss.xml
+      category: incubating
+      project: KServe
+      blog_url: https://kserve.github.io/website/blog
+    - url: https://kairos.io/blog/rss.xml
+      category: sandbox
+      project: Kairos
+      blog_url: https://kairos.io/blog/
+    - url: https://kubearmor.io/blog/rss.xml
+      category: sandbox
+      project: KubeArmor
+      blog_url: https://kubearmor.io/blog
+    - url: https://kubevela.io/blog/rss.xml
+      category: incubating
+      project: KubeVela
+      blog_url: https://kubevela.io/blog
+    - url: https://blog.kubeflow.org/feed
+      category: incubating
+      project: Kubeflow
+      blog_url: https://blog.kubeflow.org
+    - url: https://kubernetes.io/feed.xml
+      category: graduated
+      project: Kubernetes
+      blog_url: http://blog.kubernetes.io/
+    - url: https://kubewarden.io/blog/index.xml
+      category: sandbox
+      project: Kubewarden
+      blog_url: https://kubewarden.io/blog
+    - url: https://meshery.io/feed.xml
+      category: sandbox
+      project: Meshery
+      blog_url: https://meshery.io/blog/
+    - url: https://oras.land/blog/rss.xml
+      category: sandbox
+      project: ORAS
+      blog_url: https://oras.land/blog/
+    - url: https://docs.openfeature.dev/blog/rss.xml
+      category: incubating
+      project: OpenFeature
+      blog_url: https://docs.openfeature.dev/blog
+    - url: https://www.paralus.io/blog/rss.xml
+      category: sandbox
+      project: Paralus
+      blog_url: https://www.paralus.io/blog
+    - url: https://pipecd.dev/blog/index.xml
+      category: sandbox
+      project: PipeCD
+      blog_url: https://pipecd.dev/blog/
+    - url: https://blog.px.dev/rss.xml
+      category: sandbox
+      project: Pixie
+      blog_url: https://blog.px.dev/
+    - url: https://prometheus.io/blog/feed.xml
+      category: graduated
+      project: Prometheus
+      blog_url: https://prometheus.io/blog/
+    - url: https://blog.rook.io/feed
+      category: graduated
+      project: Rook
+      blog_url: https://blog.rook.io/
+    - url: https://score.dev/blog/index.xml
+      category: sandbox
+      project: Score
+      blog_url: https://score.dev/blog
+    - url: https://tikv.org/blog/index.xml
+      category: graduated
+      project: TiKV
+      blog_url: https://tikv.org/blog/
+    - url: https://vitess.io/blog/rss
+      category: graduated
+      project: Vitess
+      blog_url: https://vitess.io/blog/
+    - url: https://medium.com/feed/k0sproject
+      category: sandbox
+      project: k0s
+      blog_url: https://medium.com/k0sproject
+    - url: https://metal3.io/feed.xml
+      category: incubating
+      project: metal3-io
+      blog_url: https://metal3.io/blog/index.html
+    - url: https://blog.werf.io/feed
+      category: sandbox
+      project: werf
+      blog_url: https://blog.werf.io

@@ -4,29 +4,41 @@ This document provides guidelines for AI agents and AI-assisted development tool
 
 ## Overview
 
-CNCF Releases is an Astro-based aggregator for CNCF project release announcements. It fetches 230+ RSS/Atom feeds from CNCF projects, enriches them with CNCF Landscape metadata, and renders a searchable static site deployed to GitHub Pages.
+CNCF Releases is an Astro-based aggregator for CNCF project release announcements **and** CNCF project blog posts. It fetches 217 release feeds and 36 blog feeds from CNCF projects, enriches them with CNCF Landscape metadata, and renders a searchable static site deployed to GitHub Pages.
 
-**Live Site:** https://castrojo.github.io/firehose/
+**Live Site:** https://castrojo.github.io/ (domain migration to `releases.cncf.io` pending — see `astro.config.mjs` comments)
 
-## Architecture (v2.0)
+## Architecture (v3.0)
 
 ```
-Go pipeline → src/data/releases.json (~29MB, gitignored) → Astro → GitHub Pages
+Go pipeline → src/data/releases.json { releases: [], news: [] } → Astro → GitHub Pages
 ```
+
+Two pages, two RSS feeds:
+
+| Route | Content | Items |
+|---|---|---|
+| `/` | CNCF project release notes | ~2093 |
+| `/news/` | CNCF project blog posts | ~1195 |
+| `/feed.xml` | Releases RSS 2.0 | latest 100 |
+| `/news.xml` | News RSS 2.0 | latest 100 |
 
 ### Go Backend (`firehose-go/`)
 
 - Fetches CNCF Landscape metadata (`landscape.yml`) from GitHub
-- Fetches 230+ RSS/Atom feeds in parallel with goroutines
-- Enriches releases with project name, description, and CNCF status
-- Validates and normalizes data
-- Writes `src/data/releases.json` for Astro to consume
+- Fetches 217 release feeds in parallel with goroutines → `releases` array
+- Fetches 36 blog feeds in parallel → `news` array (name-based landscape fallback since blog feeds lack GitHub URLs)
+- Blog URL discovery via `internal/blog/discovery.go`: Medium special-case → suffix probing (`/feed`, `/feed.xml`, etc.) → HTML `<link rel=alternate>` fallback. 5s timeout, 10-goroutine cap.
+- Enriches both arrays with project name, description, and CNCF status
+- Writes `src/data/releases.json` with shape `{ releases: Release[], news: Release[], ... }`
 
 ### Astro Frontend (`src/`)
 
 - Imports `src/data/releases.json` at build time
-- Renders static HTML with Pagefind search index
-- Client-side filtering (project, date), keyboard nav, infinite scroll
+- Shared layout: `src/layouts/MainLayout.astro` (HTML shell, CSS vars, dark mode, header with CNCF logos, Releases/News nav tabs, SearchBar, KeyboardHelp modal, footer)
+- Two pages import `MainLayout` and render their own content + FilterBar + InfiniteScroll
+- Client-side filtering (project, date), keyboard nav, infinite scroll on both pages
+- Pagefind search index built over both pages
 - Deploys to GitHub Pages via GitHub Actions
 
 ### CI Pipeline
@@ -117,18 +129,22 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
 
 ### Go Pipeline
 
-- `firehose-go/cmd/firehose/main.go` — pipeline entry point
-- `firehose-go/config/feeds.yaml` — 230+ feed URLs
-- `firehose-go/internal/feeds/feeds.go` — parallel feed fetching
-- `firehose-go/internal/landscape/landscape.go` — CNCF Landscape integration
-- `firehose-go/internal/models/models.go` — data structures with JSON tags
-- `firehose-go/go.mod` — Go module (currently Go 1.24)
+- `firehose-go/cmd/firehose/main.go` — pipeline entry point; fetches both release and blog feeds
+- `firehose-go/config/feeds.yaml` — 217 release feeds + 36 blog feeds
+- `firehose-go/internal/feeds/feeds.go` — parallel feed fetching; `FetchBlogFeeds()` with name-based landscape fallback
+- `firehose-go/internal/blog/discovery.go` — RSS/Atom blog feed auto-discovery
+- `firehose-go/internal/landscape/landscape.go` — CNCF Landscape integration; parses `blog_url` from `extra:` block
+- `firehose-go/internal/models/models.go` — data structures; `BlogSource`, `News []Release`, `BlogFeedsTotal`
+- `firehose-go/go.mod` — Go module (currently Go 1.25)
 
 ### Astro Frontend
 
-- `src/pages/index.astro` — main page (sidebar layout, release feed, keyboard nav)
-- `src/pages/feed.xml.ts` — RSS feed output
-- `src/components/ReleaseCard.astro` — individual release display
+- `src/layouts/MainLayout.astro` — **shared layout** for all pages: HTML shell, dark mode, header, CNCF logos, Releases/News nav, SearchBar, KeyboardHelp modal, footer
+- `src/pages/index.astro` — Releases page (uses `MainLayout`; sidebar, release feed, keyboard nav)
+- `src/pages/news/index.astro` — News page (mirrors Releases UX; uses `MainLayout`)
+- `src/pages/feed.xml.ts` — Releases RSS 2.0 output
+- `src/pages/news.xml.ts` — News RSS 2.0 output
+- `src/components/ReleaseCard.astro` — individual release/post display
 - `src/components/SearchBar.astro` — Pagefind search integration
 - `src/components/FilterBar.astro` — client-side filtering
 - `src/components/InfiniteScroll.astro` — performance optimization
@@ -139,12 +155,13 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
 - `src/lib/releaseGrouping.ts` — groups releases by project/version
 - `src/lib/semver.ts` — semver parsing helpers
 - `src/lib/truncate.ts` — text truncation utilities
-- `astro.config.mjs` — Astro configuration (site/base for GitHub Pages)
+- `astro.config.mjs` — Astro configuration; `base: '/'`; domain migration notes inline
 
 ### Build and Deployment
 
 - `.github/workflows/update-feed.yaml` — daily build and deploy (6 AM UTC)
 - `.github/workflows/update-logos.yaml` — logo update automation
+- `.github/workflows/landscape-sync.yaml` — weekly Monday 4 AM UTC auto-sync of feeds.yaml
 - `package.json` — Node.js dependencies and scripts
 
 ## CNCF Artwork
@@ -210,13 +227,20 @@ its sun/moon icons:
 
 ## Common Tasks
 
-### Adding a Feed
+### Adding a Release Feed
 
 1. **Use the `cncf-landscape` MCP** to verify the project exists, confirm its current status (`graduated`, `incubating`, `sandbox`), and get the canonical name — do not use the website or model memory
-2. Edit `firehose-go/config/feeds.yaml`
+2. Edit `firehose-go/config/feeds.yaml` under the `feeds:` section
 3. Add the feed URL under the appropriate CNCF status section
 4. Run the Go pipeline and then `npm run build` to test
 5. Verify the feed loads in the build output
+
+### Adding a Blog Feed
+
+1. **Use the `cncf-landscape` MCP** to verify the project exists and has a `blog_url` in `extra:`
+2. If `blog_url` is present in the landscape, run the landscape sync: `cd firehose-go && go run cmd/sync/main.go`
+3. Otherwise, manually add under the `blogs:` section in `firehose-go/config/feeds.yaml`
+4. Run the Go pipeline and then `npm run build` to test
 
 Only add CNCF projects.
 
@@ -247,7 +271,7 @@ not pick up changes until you rebuild and restart the server.
    ```bash
    npm run build
    ```
-2. Restart the preview server (`just serve` or `npm run preview`) to serve the new `dist/`.
+2. Restart the preview server (`npm run preview`) to serve the new `dist/`.
 
 After each commit that changes `src/`, run `npm run build` and restart the server to see
 the update in the browser. The Go pipeline only needs to re-run if `firehose-go/` or
@@ -256,7 +280,9 @@ the update in the browser. The Go pipeline only needs to re-run if `firehose-go/
 ### Modifying the Layout
 
 - **Before starting:** Query the `astro-docs` MCP to verify correct component patterns and asset handling for the current Astro version
-- Edit `src/pages/index.astro` for main page structure
+- Edit `src/layouts/MainLayout.astro` for shared chrome (header, nav, footer, dark mode)
+- Edit `src/pages/index.astro` for Releases-specific content
+- Edit `src/pages/news/index.astro` for News-specific content
 - Two-column grid: sidebar (320px, sticky) + main content
 - Responsive: single column below 1024px, fully vertical below 480px
 - CSS variables defined in `:root` — use `--color-*` tokens from GitHub Primer
@@ -268,26 +294,51 @@ the update in the browser. The Go pipeline only needs to re-run if `firehose-go/
 - Content rendered as GitHub-compatible markdown via `marked.js`
 - Project metadata comes from Go pipeline enrichment
 
+### BASE_URL / Asset URL Pattern
+
+`astro.config.mjs` has `base: '/'`. All files that construct URLs use:
+
+```ts
+const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
+```
+
+Never use `import.meta.env.BASE_URL` raw — trailing-slash inconsistencies will cause 404s.
+`MainLayout.astro` passes the normalised `baseUrl` constant via `define:vars` to client scripts.
+
 ## Testing Changes
 
 ```bash
 npm run build   # Full pipeline verification (after running Go binary)
-npm run preview # Preview at http://localhost:4321/firehose
+npm run preview # Preview at http://localhost:4321/
 ```
 
 **What to verify:**
 - Build completes without errors
-- Search works (type in search box)
-- Filters work (project, date range)
+- Releases page (`/`) loads with release cards
+- News page (`/news/`) loads with blog post cards
+- Search works (type in search box — Pagefind covers both pages)
+- Filters work (project, date range) on both pages
 - Keyboard navigation works (j/k/o/?)
 - Responsive design (resize browser to 320px, 768px, 1024px)
 - Infinite scroll (scroll to bottom)
+- Dark mode toggle works; code blocks in dark mode are readable (upstream inline styles are inverted via CSS filter)
+- RSS feeds: `/feed.xml` and `/news.xml` both return valid XML
+
+## Known Gotchas
+
+- **Dark mode + upstream code blocks:** Blogs from Kubernetes, Flux, PipeCD etc. ship Hugo/Chroma inline styles with hardcoded light-mode colors. Fixed in `ReleaseCard.astro` with `filter: invert(1) hue-rotate(180deg)` on `[data-theme="dark"] .markdown-body pre[style]`. Only applies to `pre[style]` (inline-styled blocks).
+- **`package sync` shadows stdlib:** `firehose-go/internal/sync/sync.go` uses `gosync "sync"` alias throughout.
+- **Blog landscape fallback:** Blog feeds don't have GitHub URLs, so `fetchSingleFeed` falls back to matching `source.Project` against `proj.Name` in the landscape map (not org/repo key).
+- **Canonical landscape entry wins:** `landscape.go` ensures the canonical CNCF entry (graduated/incubating/sandbox) wins over duplicate `repo_url` entries (e.g. Wasm subcategory entries).
+- **Pre-existing LSP errors:** `src/pages/index.astro` (`Property 'data' does not exist on type 'never'`) and `src/components/ReleaseCard.astro` (`Cannot find module '../lib/schemas'`) — both are pre-existing and do not affect `npm run build`.
+- **`astro check` is banned in builds** — breaks content collection in CI/CD. Never add it.
 
 ## Current Dependencies
 
 **Node.js:**
 - `astro@5.x` — static site generator
 - `marked@17.x` — markdown rendering
+- `marked-highlight` — stub (returns raw code; syntax colors come from upstream RSS content)
 - `pagefind@1.x` — static search (dev dependency)
 
 **Go:**
@@ -306,8 +357,8 @@ Landscape integration happens in Go, not TypeScript.
 ### Go Pipeline (`firehose-go/internal/landscape/landscape.go`)
 
 1. Fetches `landscape.yml` from the `cncf/landscape` GitHub repository
-2. Parses project entries: name, repo URL, project status, description
-3. Creates a lookup map by `org/repo` key
+2. Parses project entries: name, repo URL, project status, description, `blog_url` (from `extra:` block)
+3. Creates a lookup map by `org/repo` key; canonical CNCF entry wins over duplicates
 4. `firehose-go/internal/feeds/feeds.go` uses this map to enrich each feed entry
 
 ### Troubleshooting
@@ -320,6 +371,10 @@ Landscape integration happens in Go, not TypeScript.
 - Check org/repo extraction from feed URL in `landscape.go`
 - Verify project exists in `landscape.yml`
 
+**Blog posts have no project name:**
+- Blog feeds use name-based fallback (not org/repo key)
+- Verify `source.Project` matches `proj.Name` in landscape map
+
 **Build fails fetching landscape:**
 - Check network connectivity to `raw.githubusercontent.com`
 - Verify landscape.yml URL in `landscape.go` is still correct
@@ -329,9 +384,9 @@ Landscape integration happens in Go, not TypeScript.
 ### Build Failures
 
 1. Run the Go pipeline first: `cd firehose-go && ./firehose`
-2. Check `src/data/releases.json` exists and is non-empty
+2. Check `src/data/releases.json` exists and is non-empty; verify it has both `releases` and `news` arrays
 3. Run `npm run build` and check for TypeScript errors
-4. Check network connectivity (Go pipeline fetches 230+ feeds + landscape data)
+4. Check network connectivity (Go pipeline fetches 250+ feeds + landscape data)
 
 ### Search Not Working
 
@@ -348,7 +403,13 @@ Landscape integration happens in Go, not TypeScript.
 
 1. Focus on an input field disables keyboard nav
 2. `.kbd-focused` class should be applied to the focused card
-3. Keyboard nav is inlined in `src/pages/index.astro`
+3. Keyboard nav is inlined in each page (`index.astro` and `news/index.astro`)
+
+### News Page Empty
+
+1. Verify `src/data/releases.json` has a non-empty `news` array
+2. Re-run the Go pipeline: `cd firehose-go && ./firehose`
+3. Check `firehose-go/config/feeds.yaml` has entries under `blogs:`
 
 ## Code Quality Standards
 
@@ -374,10 +435,11 @@ Landscape integration happens in Go, not TypeScript.
 
 - Don't add unnecessary dependencies
 - Don't break existing features without testing
-- Don't change `astro.config.mjs` `site`/`base` values without reading DEPLOYMENT.md first
+- Don't change `astro.config.mjs` `site`/`base` values without reading the inline comments first
 - Don't break responsive design
 - **CRITICAL:** Don't run `astro check` in build (breaks content collection in CI/CD)
 - Don't commit `src/data/releases.json` (gitignored, ~29MB)
+- Don't use `import.meta.env.BASE_URL` raw — always normalise with `.replace(/\/*$/, '/')`
 
 ## Landing the Plane (Session Completion)
 
