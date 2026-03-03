@@ -236,6 +236,23 @@ cd firehose-go && go vet ./...
 
 > `src/data/releases.json` is gitignored. Run the Go pipeline before `npm run build`.
 
+### Seeing live changes in the browser
+
+`npm run preview` serves the static `dist/` output and **does not hot-reload** — it will
+not pick up changes until you rebuild and restart the server.
+
+**Workflow for iterating on frontend changes (no feed data changes):**
+
+1. Run the Astro build (skip Go pipeline — `releases.json` already exists):
+   ```bash
+   npm run build
+   ```
+2. Restart the preview server (`just serve` or `npm run preview`) to serve the new `dist/`.
+
+After each commit that changes `src/`, run `npm run build` and restart the server to see
+the update in the browser. The Go pipeline only needs to re-run if `firehose-go/` or
+`firehose-go/config/feeds.yaml` changed.
+
 ### Modifying the Layout
 
 - **Before starting:** Query the `astro-docs` MCP to verify correct component patterns and asset handling for the current Astro version
