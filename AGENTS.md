@@ -1,37 +1,84 @@
-# AI Agent Guidelines for The Firehose
+# AI Agent Guidelines for CNCF Releases
 
-This document provides guidelines for AI agents and AI-assisted development tools contributing to The Firehose repository.
+This document provides guidelines for AI agents and AI-assisted development tools contributing to this repository.
 
 ## Overview
 
-The Firehose is an Astro-based RSS feed aggregator for CNCF and cloud native project releases. It aggregates 610+ releases from 62 CNCF projects with full-text search, filtering, keyboard navigation, and automated daily updates.
+CNCF Releases is an Astro-based aggregator for CNCF project release announcements. It fetches 230+ RSS/Atom feeds from CNCF projects, enriches them with CNCF Landscape metadata, and renders a searchable static site deployed to GitHub Pages.
 
 **Live Site:** https://castrojo.github.io/firehose/
 
+## Architecture (v2.0)
+
+```
+Go pipeline → src/data/releases.json (~29MB, gitignored) → Astro → GitHub Pages
+```
+
+### Go Backend (`firehose-go/`)
+
+- Fetches CNCF Landscape metadata (`landscape.yml`) from GitHub
+- Fetches 230+ RSS/Atom feeds in parallel with goroutines
+- Enriches releases with project name, description, and CNCF status
+- Validates and normalizes data
+- Writes `src/data/releases.json` for Astro to consume
+
+### Astro Frontend (`src/`)
+
+- Imports `src/data/releases.json` at build time
+- Renders static HTML with Pagefind search index
+- Client-side filtering (project, date), keyboard nav, infinite scroll
+- Deploys to GitHub Pages via GitHub Actions
+
+### CI Pipeline
+
+1. Go build + `./firehose` (generates `releases.json`)
+2. `npm ci && npm run build` (Astro + Pagefind)
+3. Deploy to GitHub Pages
+
 ## Core Principles
 
-- **@cncf/landscape is the single source of truth** - It MUST always take priority for project metadata
-- **Use the github MCP server** for interfacing with @cncf/landscape, do not use web search
-- **Keep it simple** - Be surgical and not verbose. Minimize dependencies.
-- **Maintain responsive design** - Support 320px to 1920px viewports
+- **@cncf/landscape is the single source of truth** — always takes priority for project metadata
+- **Keep it simple** — surgical changes, minimize dependencies
+- **Maintain responsive design** — 320px to 1920px viewports
+
+## MCP Servers
+
+Two MCP servers are configured in `opencode.json`. Using them is **mandatory** for the tasks listed below — they are the authoritative sources for correctness, not web search or assumptions.
+
+### cncf-landscape
+
+Provides live data from the CNCF Landscape (`https://landscape.cncf.io/data/full.json`).
+
+**Use it for:**
+
+- **Before adding any feed** — verify the project exists in the landscape, confirm its status (`graduated`, `incubating`, or `sandbox`), and get the canonical project name and repo URL
+- **Before modifying `feeds.yaml`** — confirm the category is still correct (projects graduate and are archived)
+- **Auditing feeds.yaml** — cross-check existing entries against live landscape data to find stale, miscategorized, or missing projects
+- **Getting canonical metadata** — project name, description, homepage URL as CNCF defines them
+
+**Why:** The landscape is the single source of truth per the core principles. Adding a feed in the wrong category or for a project that no longer exists in the landscape silently corrupts the data.
+
+### Astro docs
+
+Provides version-accurate documentation for the Astro framework version in use.
+
+**Use it for:**
+
+- **Before modifying any file in `src/`** — verify correct API usage, import paths, and component patterns for the current Astro version
+- **`BASE_URL` and asset path handling** — confirm the correct way to reference public assets and construct URLs
+- **Pagefind integration** — check current integration patterns before touching the search setup
+- **Static output vs SSR** — verify any page or endpoint follows the correct static-generation pattern
+- **Deprecated APIs** — check before using any Astro feature not already present in the codebase
+
+**Why:** Astro has breaking changes between minor versions. The MCP server returns docs for the exact version in `package.json`, preventing silent regressions from outdated patterns.
 
 ## Attribution Requirements
-
-AI agents must disclose what tool and model they are using in the "Assisted-by" commit footer:
 
 ```text
 Assisted-by: [Model Name] via [Tool Name]
 ```
 
-Example:
-
-```text
-Assisted-by: Claude 3.5 Sonnet via Cline
-```
-
 ## Commit Message Format
-
-When making commits, use the following format:
 
 ```text
 <type>: <short description>
@@ -41,629 +88,202 @@ When making commits, use the following format:
 Assisted-by: [Model Name] via [Tool Name]
 ```
 
-Example:
+Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
 
-```text
-feat: add support for new RSS feed format
+## Key Files
 
-This change adds support for RSS 2.0 feeds in addition
-to the existing Atom feed support.
+### Go Pipeline
 
-Assisted-by: Claude 3.5 Sonnet via Cline
-```
+- `firehose-go/cmd/firehose/main.go` — pipeline entry point
+- `firehose-go/config/feeds.yaml` — 230+ feed URLs
+- `firehose-go/internal/feeds/feeds.go` — parallel feed fetching
+- `firehose-go/internal/landscape/landscape.go` — CNCF Landscape integration
+- `firehose-go/internal/models/models.go` — data structures with JSON tags
+- `firehose-go/go.mod` — Go module (currently Go 1.24)
 
-Commit types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
+### Astro Frontend
 
-## Project-Specific Guidance
+- `src/pages/index.astro` — main page (sidebar layout, release feed, keyboard nav)
+- `src/pages/feed.xml.ts` — RSS feed output
+- `src/components/ReleaseCard.astro` — individual release display
+- `src/components/SearchBar.astro` — Pagefind search integration
+- `src/components/FilterBar.astro` — client-side filtering
+- `src/components/InfiniteScroll.astro` — performance optimization
+- `src/components/KeyboardHelp.astro` — keyboard shortcuts modal
+- `src/lib/banners.ts` — CNCF banner system (build-time fetch, inline YAML parser)
+- `src/lib/markdown.ts` — GitHub-compatible markdown rendering (marked.js)
+- `src/lib/logoMapper.ts` — maps project names to logo files
+- `src/lib/releaseGrouping.ts` — groups releases by project/version
+- `src/lib/semver.ts` — semver parsing helpers
+- `src/lib/truncate.ts` — text truncation utilities
+- `astro.config.mjs` — Astro configuration (site/base for GitHub Pages)
 
-### Architecture Understanding
+### Build and Deployment
 
-#### v1.x: Astro-Only Architecture (Current Production)
+- `.github/workflows/update-feed.yaml` — daily build and deploy (6 AM UTC)
+- `.github/workflows/update-logos.yaml` — logo update automation
+- `package.json` — Node.js dependencies and scripts
 
-The Firehose is built with **Astro v5** using a modern, build-time aggregation architecture:
+## Common Tasks
 
-1. **Build-time aggregation**: Astro Content Layer API fetches and processes feeds during build
-2. **Custom RSS loader**: `src/content/loader.ts` handles parallel feed fetching with error handling
-3. **Static site generation**: All content is pre-rendered as static HTML
-4. **Client-side enhancement**: Search (Pagefind), filters, and keyboard nav work after page load
-5. **Daily automation**: GitHub Actions runs scheduled builds at 6 AM UTC
+### Adding a Feed
 
-**Key architectural decisions:**
-- Astro v5 Content Layer API (not osmosfeed - that was the prototype)
-- Build-time processing for performance
-- Static deployment to GitHub Pages
-- Client-side features for interactivity
-- CNCF Landscape integration for project metadata
+1. Edit `firehose-go/config/feeds.yaml`
+2. Add the feed URL under the appropriate CNCF status (`graduated`, `incubating`, `sandbox`)
+3. Run the Go pipeline and then `npm run build` to test
+4. Verify the feed loads in the build output
 
-#### v2.0: Hybrid Go + Astro Architecture (In Development)
+Only add CNCF projects. Verify at https://landscape.cncf.io.
 
-**Status:** Foundation complete (4/10 subtasks), implementation in progress
+### Local Development
 
-The v2.0 architecture splits responsibilities between Go (backend) and Astro (frontend):
-
-**Go Backend (Data Pipeline):**
-- Fetches CNCF Landscape metadata (landscape.yml)
-- Fetches 231 RSS/Atom feeds in parallel with goroutines
-- Enriches releases with CNCF project metadata
-- Validates and normalizes data
-- Outputs JSON file for Astro to consume
-
-**Astro Frontend (UI Rendering):**
-- Imports JSON data (generated by Go)
-- Renders static HTML with existing components (unchanged)
-- Provides search (Pagefind), filters, keyboard nav (unchanged)
-- Deploys to GitHub Pages (unchanged)
-
-**Interface:**
-- Go writes: `src/data/releases.json` (~7MB)
-- Astro reads: Import JSON instead of Content Layer API
-- Schema: `.planning/go-port/JSON-SCHEMA.md`
-
-**Performance Target:**
-- Current (Node.js): 10-15s build time
-- Target (Go): 4-6s build time (60% reduction via goroutines)
-
-**Go Project Structure:**
-```
-firehose-go/
-├── cmd/firehose/main.go              # CLI entry point
-├── config/feeds.yaml                 # 231 feed URLs
-├── internal/
-│   ├── feeds/feeds.go                # Parallel feed fetching
-│   ├── landscape/landscape.go        # CNCF Landscape integration
-│   ├── models/models.go              # Data structures
-│   └── output/output.go              # JSON output
-└── go.mod                            # Dependencies: gofeed, yaml.v3
-```
-
-**Key Go Files:**
-- `firehose-go/cmd/firehose/main.go` - Pipeline orchestration
-- `firehose-go/internal/landscape/landscape.go` - Port of src/lib/landscape.ts
-- `firehose-go/internal/feeds/feeds.go` - Port of src/lib/feed-loader.ts
-- `firehose-go/internal/models/models.go` - Data structures with JSON tags
-- `firehose-go/config/feeds.yaml` - Converted from src/config/feeds.ts
-
-**Documentation:**
-- `.planning/go-port/JSON-SCHEMA.md` - Go ↔ Astro data contract
-- `.planning/codebase/` - 10 architecture docs (reference for Go port)
-- `firehose-go/README.md` - Go pipeline documentation
-
-### Key Files and Directories
-
-**Core Application:**
-- `src/pages/index.astro` - Main page with sidebar layout and release feed
-- `src/content/loader.ts` - Custom RSS loader with parallel fetching and error handling
-- `src/content/config.ts` - Content collection schema definition
-- `src/config/feeds.ts` - Feed source configuration (62 CNCF projects)
-
-**Components:**
-- `src/components/ReleaseCard.astro` - Individual release display with markdown rendering
-- `src/components/SearchBar.astro` - Pagefind search integration
-- `src/components/FilterBar.astro` - Client-side filtering (project/status/date)
-- `src/components/KeyboardHelp.astro` - Vim-style keyboard shortcuts modal
-- `src/components/InfiniteScroll.astro` - Performance optimization for large feeds
-
-**Libraries:**
-- `src/lib/schemas.ts` - Zod schemas for validation
-- `src/lib/markdown.ts` - GitHub-compatible markdown rendering (marked.js)
-- `src/lib/landscape.ts` - CNCF Landscape data fetcher and parser
-
-**Build and Deployment:**
-- `astro.config.mjs` - Astro configuration with GitHub Pages settings
-- `.github/workflows/deploy.yml` - GitHub Actions workflow (build + deploy)
-- `package.json` - Dependencies and scripts
-
-**Planning Documents:**
-- `.planning/STATE.md` - Current project status and session continuity
-- `.planning/ROADMAP.md` - Phase breakdown and success criteria
-- `.planning/backlog.md` - Future enhancements and known issues
-- `.planning/PROJECT.md` - Requirements and design decisions
-
-### Architecture Deep Dive
-
-#### Feed Loading Pipeline
-
-1. **Build starts** → Astro invokes Content Layer API
-2. **Custom loader** (`src/content/loader.ts`) executes:
-   - Fetches CNCF landscape data from GitHub
-   - Parses landscape.yml for project metadata
-   - Fetches 62 feeds in parallel (Promise.allSettled)
-   - Retries transient errors (5xx, timeouts) with exponential backoff
-   - Skips permanent errors (404, 403)
-   - Enriches entries with project name, description, status
-   - Validates with Zod schemas
-3. **Content collection** populated with release entries
-4. **Static pages generated** by Astro
-5. **Pagefind indexes** content for search
-6. **Deploy** to GitHub Pages
-
-**Error handling:** Graceful degradation - build succeeds if 50%+ feeds succeed. Failed feeds tracked with `feedStatus: 'error'`.
-
-#### Client-Side Features
-
-**Search (Pagefind):**
-- Static search index generated at build time
-- No backend required, works offline after first load
-- Term highlighting in results
-- Located in `src/components/SearchBar.astro`
-
-**Filtering:**
-- Client-side JavaScript reads `data-*` attributes on release cards
-- Instant filtering (<10ms) by project, status, date range
-- No page reload required
-- Located in `src/components/FilterBar.astro`
-
-**Keyboard Navigation:**
-- Vim-style shortcuts: `j` (down), `k` (up), `o`/`Enter` (open), `/` (search), `?` (help)
-- Focus indicator with subtle shadow
-- Screen reader support
-- Located in `src/pages/index.astro` (inline script)
-
-### Current State (v1.1)
-
-**Status:** Production-ready, all core features working ✅
-
-**Completed Milestones:**
-- ✅ v1.0 - All 5 phases complete (Core Infrastructure → Deployment)
-- ✅ v1.0 UI Enhancements - Sidebar layout, larger project names, improved navigation
-- ✅ v1.1 Bug Fixes - Search functionality fixed after layout changes
-
-**Performance Metrics:**
-- 610 releases from 62 CNCF projects
-- 100% feed success rate
-- Build time: ~3-5 seconds
-- Daily automated updates at 6 AM UTC
-
-**Known Issues:** None! 🎉
-
-**Optional Enhancements (Backlog):**
-1. Truncate long project descriptions (Medium priority)
-2. Collapse minor releases (High priority)
-3. CNCF branding (Future milestone)
-
-### Common Tasks
-
-#### Adding a New Feed
-
-1. Edit `src/config/feeds.ts`
-2. Add feed URL to the appropriate array (graduated or incubating)
-3. Format: `'https://github.com/org/repo/releases.atom'`
-4. Run `npm run build` to test
-5. Verify feed loads successfully in build logs
-
-**Note:** Only add CNCF projects. Check https://landscape.cncf.io first.
-
-#### Modifying the Layout
-
-1. Edit `src/pages/index.astro` for main page structure
-2. Current layout: Two-column grid with sidebar (320px) + main content
-3. Sidebar contains: Stats and Filters
-4. Main content contains: Search and release cards
-5. Responsive breakpoints:
-   - Desktop (1024px+): Two-column with sticky sidebar
-   - Tablet (below 1024px): Single column, sidebar stacks
-   - Mobile (480px and below): Fully vertical
-6. Test with `npm run build` and `npm run preview`
-
-#### Updating Component Styling
-
-1. Edit the relevant component in `src/components/`
-2. Styles are scoped to each Astro component
-3. Use CSS variables from `:root` in `src/pages/index.astro`:
-   - `--color-bg-default`, `--color-bg-secondary`
-   - `--color-border-default`
-   - `--color-text-primary`, `--color-text-secondary`, `--color-text-tertiary`
-   - `--color-text-link`, `--color-accent-emphasis`
-4. Follow GitHub Primer design conventions
-5. Ensure responsive design (test at 320px, 768px, 1024px, 1920px)
-
-#### Modifying Release Card Display
-
-1. Edit `src/components/ReleaseCard.astro`
-2. Structure: Project header → Description → Title → Date → Content
-3. Content is rendered as GitHub-compatible markdown (via `marked.js`)
-4. Project metadata comes from CNCF Landscape enrichment
-5. Maintain accessibility (semantic HTML, ARIA labels)
-
-### Testing Changes
-
-**Local Development:**
 ```bash
+# Full build from scratch
+cd firehose-go && go build -o firehose cmd/firehose/main.go && ./firehose && cd ..
+npm ci && npm run build && npm run preview
+
+# Dev server (requires existing releases.json)
 npm run dev
-# Visit http://localhost:4321/firehose
+
+# Go validation
+cd firehose-go && go vet ./...
 ```
 
-**Full Build Test:**
+> `src/data/releases.json` is gitignored. Run the Go pipeline before `npm run build`.
+
+### Modifying the Layout
+
+- Edit `src/pages/index.astro` for main page structure
+- Two-column grid: sidebar (320px, sticky) + main content
+- Responsive: single column below 1024px, fully vertical below 480px
+- CSS variables defined in `:root` — use `--color-*` tokens from GitHub Primer
+
+### Modifying Release Card Display
+
+- Edit `src/components/ReleaseCard.astro`
+- Content rendered as GitHub-compatible markdown via `marked.js`
+- Project metadata comes from Go pipeline enrichment
+
+## Testing Changes
+
 ```bash
-npm run build
-npm run preview
-# Visit http://localhost:4321/firehose
+npm run build   # Full pipeline verification (after running Go binary)
+npm run preview # Preview at http://localhost:4321/firehose
 ```
-
-**IMPORTANT: Restarting Preview Server Reliably**
-
-When asking the user to test changes, **ALWAYS** restart the preview server properly to avoid "server down" errors:
-
-```bash
-# Use the reliable restart script
-.dev-tools/restart-preview.sh
-```
-
-**Manual restart process (if script unavailable):**
-```bash
-# 1. Kill all existing Astro processes
-pkill -9 -f "astro preview" 2>/dev/null
-pkill -9 -f "node.*preview" 2>/dev/null
-pkill -9 -f "node.*astro" 2>/dev/null
-sleep 2
-
-# 2. Free up ports if needed
-for port in 4321 4322 4323 4324; do
-    lsof -ti:$port | xargs kill -9 2>/dev/null
-done
-sleep 1
-
-# 3. Start server in background
-cd /var/home/jorge/src/firehose
-nohup npm run preview > /tmp/astro-preview.log 2>&1 &
-sleep 4
-
-# 4. Verify server is responding
-curl -s -o /dev/null -w "%{http_code}" http://localhost:4321/firehose/
-# Should return 200
-```
-
-**Why this matters:**
-- Astro preview servers can linger after timeouts
-- Ports may remain occupied even after process termination
-- Users get "connection refused" errors if server isn't fully restarted
-- Always verify server is responding (HTTP 200) before telling user to test
 
 **What to verify:**
-- [ ] Build completes without errors
-- [ ] All 62 feeds load successfully (check build logs)
-- [ ] Search works (type in search box)
-- [ ] Filters work (project, status, date range)
-- [ ] Keyboard navigation works (j/k/o/?)
-- [ ] Responsive design works (resize browser)
-- [ ] Infinite scroll works (scroll to bottom)
-- [ ] Links open in new tabs
+- Build completes without errors
+- Search works (type in search box)
+- Filters work (project, date range)
+- Keyboard navigation works (j/k/o/?)
+- Responsive design (resize browser to 320px, 768px, 1024px)
+- Infinite scroll (scroll to bottom)
 
-### Code Quality Standards
+## Current Dependencies
 
-1. **TypeScript**: Use proper types, follow existing patterns
-2. **Astro components**: Scoped styles, semantic HTML
-3. **CSS**: Use CSS variables, mobile-first responsive design
-4. **JavaScript**: Vanilla JS for client-side features (no frameworks)
-5. **Accessibility**: ARIA labels, keyboard navigation, screen reader support
-6. **Dependencies**: Minimize additions (current stack is intentionally lean)
+**Node.js:**
+- `astro@5.x` — static site generator
+- `marked@17.x` — markdown rendering
+- `pagefind@1.x` — static search (dev dependency)
 
-### Current Dependencies
-
-**Core:**
-- `astro@5.x` - Static site generator
-- `rss-parser@3.x` - RSS/Atom feed parsing
-- `marked@17.x` - Markdown rendering
-- `zod@3.x` - Schema validation
-
-**Search:**
-- `pagefind@1.x` - Static search (dev dependency)
-
-**Build:**
-- Node.js 20 (LTS)
-- GitHub Actions for CI/CD
+**Go:**
+- `github.com/mmcdole/gofeed` — RSS/Atom feed parsing
+- `gopkg.in/yaml.v3` — YAML parsing (landscape.yml)
 
 **Do NOT add** without discussion:
 - UI frameworks (React, Vue, Svelte)
 - CSS frameworks (Tailwind, Bootstrap)
 - State management libraries
-- Additional build tools
 
-## Best Practices for AI Agents
+## CNCF Landscape Integration
 
-### Do's
+Landscape integration happens in Go, not TypeScript.
 
-✅ Read `.planning/STATE.md` first to understand current status  
-✅ Check `.planning/backlog.md` for known issues and future work  
-✅ Follow existing code patterns and conventions  
-✅ Test changes with `npm run build`  
-✅ Include proper attribution in commits  
-✅ Maintain responsive design (320px-1920px)  
-✅ Preserve accessibility features  
-✅ Update planning documents when completing work  
-✅ Use semantic commit messages  
-✅ Keep the site simple and maintainable  
+### Go Pipeline (`firehose-go/internal/landscape/landscape.go`)
 
-### Don'ts
+1. Fetches `landscape.yml` from the `cncf/landscape` GitHub repository
+2. Parses project entries: name, repo URL, project status, description
+3. Creates a lookup map by `org/repo` key
+4. `firehose-go/internal/feeds/feeds.go` uses this map to enrich each feed entry
 
-❌ Don't add unnecessary dependencies  
-❌ Don't break existing features without testing  
-❌ Don't remove attribution from existing commits  
-❌ Don't make breaking changes without discussion  
-❌ Don't skip the build process  
-❌ Don't modify GitHub Actions workflow without testing  
-❌ Don't change Astro configuration without understanding impacts  
-❌ Don't break responsive design  
-❌ **CRITICAL:** Don't run `astro check` in build (breaks content collection in CI/CD)  
+### Troubleshooting
+
+**No project names in output:**
+- Check Go build logs for "Fetching CNCF landscape data"
+- Verify `landscape.go` parsing matches current `landscape.yml` indentation
+
+**Wrong project metadata:**
+- Check org/repo extraction from feed URL in `landscape.go`
+- Verify project exists in `landscape.yml`
+
+**Build fails fetching landscape:**
+- Check network connectivity to `raw.githubusercontent.com`
+- Verify landscape.yml URL in `landscape.go` is still correct
 
 ## Debugging Common Issues
 
 ### Build Failures
 
-**Symptom:** `npm run build` fails
-
-**Check:**
-1. Network connectivity (loader fetches 62 feeds + landscape data)
-2. Feed URL changes (projects may rename repos)
-3. TypeScript errors (run `npm run dev` to see errors)
-4. Content collection errors (check `src/content/loader.ts`)
-5. Zod validation failures (check schemas in `src/lib/schemas.ts`)
-
-**Common causes:**
-- GitHub API rate limiting (rare, we use releases.atom)
-- Feed URL 404 (project moved/renamed)
-- Landscape.yml structure changed
-- TypeScript type errors
+1. Run the Go pipeline first: `cd firehose-go && ./firehose`
+2. Check `src/data/releases.json` exists and is non-empty
+3. Run `npm run build` and check for TypeScript errors
+4. Check network connectivity (Go pipeline fetches 230+ feeds + landscape data)
 
 ### Search Not Working
 
-**Symptom:** Search input doesn't show results
-
-**Check:**
-1. Browser console for JavaScript errors
-2. Pagefind index files in `dist/pagefind/` after build
-3. SearchBar component loaded correctly
-4. Search input width/positioning (should fill available space)
-5. Network tab: `/pagefind/pagefind.js` loads successfully
-
-**Recent fix (v1.1):** SearchBar width constraints removed for sidebar layout
+1. Check browser console for JavaScript errors
+2. Verify Pagefind index in `dist/pagefind/` after build
+3. Check `/pagefind/pagefind.js` loads in the Network tab
 
 ### Filters Not Working
 
-**Symptom:** Filter dropdowns don't filter releases
-
-**Check:**
-1. Browser console for JavaScript errors
-2. `data-project`, `data-status`, `data-date` attributes on `.release-card` elements
-3. FilterBar script loaded
-4. Event listeners attached correctly
-
-### Styling Issues
-
-**Symptom:** Layout broken or styles not applied
-
-**Check:**
-1. Browser cache (hard refresh: Ctrl+Shift+R / Cmd+Shift+R)
-2. CSS scoping (Astro components have scoped styles by default)
-3. CSS variable usage (must be defined in `:root`)
-4. Responsive breakpoints (test at multiple widths)
-5. Grid/flexbox issues (check browser DevTools)
-
-**Recent changes (v1.0):**
-- Two-column grid layout with sidebar
-- Container width increased to 1400px
-- Stats and filters moved to sidebar
+1. Check `data-project`, `data-status`, `data-date` attributes on `.release-card` elements
+2. Check browser console for FilterBar script errors
 
 ### Keyboard Navigation Issues
 
-**Symptom:** j/k navigation doesn't work
+1. Focus on an input field disables keyboard nav
+2. `.kbd-focused` class should be applied to the focused card
+3. Keyboard nav is inlined in `src/pages/index.astro`
 
-**Check:**
-1. Focus on input fields (keyboard nav disabled when typing)
-2. `.kbd-focused` class applied correctly
-3. `scrollIntoView({ behavior: 'smooth', block: 'start' })` working
-4. Keyboard event listeners attached
+## Code Quality Standards
 
-## CNCF Landscape Integration
+1. **TypeScript** — proper types, follow existing patterns
+2. **Astro components** — scoped styles, semantic HTML
+3. **CSS** — CSS variables, mobile-first responsive design
+4. **JavaScript** — vanilla JS for client-side (no frameworks)
+5. **Go** — standard library preferred, minimal external deps
+6. **Accessibility** — ARIA labels, keyboard navigation, screen reader support
 
-### Overview
+## Best Practices for AI Agents
 
-The Firehose enriches feed entries with CNCF Landscape metadata (project name, description, status). This happens at build time through the custom content loader.
+### Do's
 
-### Landscape Data Pipeline
+- Follow existing code patterns and conventions
+- Test with `npm run build` (after running Go pipeline)
+- Include proper attribution in commits
+- Maintain responsive design (320px–1920px)
+- Preserve accessibility features
+- Use semantic commit messages
 
-1. **Fetch** (`src/lib/landscape.ts:fetchLandscapeData`)
-   - Downloads `landscape.yml` from cncf/landscape repository
-   - Returns raw YAML text
+### Don'ts
 
-2. **Parse** (`src/lib/landscape.ts:parseLandscapeYaml`)
-   - Custom line-by-line parser (not js-yaml)
-   - Handles specific indentation structure
-   - Extracts: name, repo_url, project status, summary_use_case
-
-3. **Map** (`src/lib/landscape.ts:createProjectMap`)
-   - Creates lookup by `org/repo` key
-   - Structure: `{ "dapr/dapr": { name, description, status, ... } }`
-
-4. **Enrich** (`src/content/loader.ts:enrichEntry`)
-   - Matches feed URL to landscape project
-   - Adds projectName, projectDescription, projectStatus to entry
-   - Falls back to feed title if no match
-
-### Landscape YAML Structure
-
-**IMPORTANT:** Always use GitHub MCP to fetch landscape.yml:
-```
-github-mcp-server-get_file_contents owner:cncf repo:landscape path:landscape.yml
-```
-
-**Indentation is critical:**
-- Item marker (`- item:`): 10 spaces
-- Item fields (`name:`, `repo_url:`, `extra:`): 12 spaces
-- Extra fields (`summary_use_case:`): 14 spaces
-- Field content: 16 spaces
-
-**Parsing rules:**
-- Match exact indentation with regex
-- Multi-line content at 16 spaces belongs to field at 14 spaces
-- New field at 14 spaces terminates previous field
-- Section ends when indentation decreases to ≤13 spaces
-
-**See:** Detailed parsing logic in `src/lib/landscape.ts`
-
-### Troubleshooting Landscape Integration
-
-**No project names showing:**
-- Check build logs for "Fetching CNCF landscape data" and "Parsed X projects"
-- Verify `parseLandscapeYaml()` regex patterns match current indentation
-- Check browser console for errors
-
-**Wrong project names:**
-- Verify org/repo extraction from feed URL
-- Check landscape data map keys match feed URLs
-- Ensure project exists in landscape.yml
-
-**Build fails fetching landscape:**
-- Check network connectivity to raw.githubusercontent.com
-- Verify landscape.yml URL still correct
-- Check for parsing errors in build logs
-
-## Planning Document Workflow
-
-### When to Update Planning Docs
-
-**Always update when:**
-- Starting new work (update STATE.md with current focus)
-- Completing milestones (update STATE.md and ROADMAP.md)
-- Finding bugs (add to backlog.md)
-- Finishing session (update STATE.md with resume point)
-
-**Files to update:**
-
-1. **`.planning/STATE.md`** - Current status, last activity, next steps
-2. **`.planning/ROADMAP.md`** - Phase completion, milestones
-3. **`.planning/backlog.md`** - Known issues, future enhancements
-4. **`.planning/PROJECT.md`** - Requirements, decisions (rarely changes)
-
-### STATE.md Format
-
-```markdown
-# Project State
-
-## Project Reference
-See: .planning/PROJECT.md
-**Core value:** [one-line value prop]
-**Current focus:** [what you're working on]
-
-## Current Position
-Phase: [current milestone]
-Status: [brief status]
-Last activity: [date] — [what was done]
-Next: [next step]
-
-## [Milestone] Summary
-**Completed:** [date]
-**Duration:** [time]
-**Achievements:** [bullet list]
-
-## Known Issues
-[List of issues or "None!"]
-
-## Accumulated Context
-### Decisions
-[Key technology/architecture decisions]
-
-### Next Steps
-[Prioritized list]
-
-## Session Continuity
-Last session: [timestamp]
-Stopped at: [where to resume]
-Resume file: [relevant file]
-Next step: [concrete action]
-```
-
-### Backlog Format
-
-```markdown
-# Backlog
-
-## Current Milestone: [Name]
-
-### [Issue Title]
-**Priority:** Critical/High/Medium/Low
-**Effort:** Small/Medium/Large
-**Context:** [Why this matters]
-
-[Description and implementation notes]
-
-**Location:** [files to modify]
-
----
-
-## Future Milestone: [Name]
-
-[Same format as above]
-```
-
-## Resources
-
-### Documentation
-- [Project STATE.md](.planning/STATE.md) - Current status and session continuity
-- [Project ROADMAP.md](.planning/ROADMAP.md) - Phase breakdown and milestones
-- [Project Backlog](.planning/backlog.md) - Known issues and future work
-- [Project README](README.md) - Comprehensive technical documentation
-
-### External Documentation
-- [Astro Documentation](https://docs.astro.build/) - Astro v5 official docs
-- [Astro Content Layer API](https://docs.astro.build/en/reference/content-layer-api/) - Custom loader reference
-- [Pagefind](https://pagefind.app/) - Static search documentation
-- [CNCF Landscape](https://landscape.cncf.io) - Interactive landscape viewer
-- [CNCF Landscape GitHub](https://github.com/cncf/landscape) - Source repository
-- [GitHub Primer CSS](https://primer.style/css/) - Design system reference
-- [marked.js](https://marked.js.org/) - Markdown rendering
-
-### Useful Commands
-
-```bash
-# Development
-npm run dev              # Start dev server (localhost:4321)
-npm run build            # Full production build
-npm run preview          # Preview production build
-
-# Testing
-npm run build && npm run preview  # Full build + preview
-
-# Deployment
-git push origin main     # Triggers GitHub Actions deploy
-gh run list --limit 5    # Check recent deployments
-```
-
-## Questions?
-
-For questions about these guidelines or AI-assisted contributions:
-
-1. Review the planning documents in `.planning/`
-2. Check existing commits for examples
-3. File an issue on the [GitHub repository](https://github.com/castrojo/firehose/issues)
-
-## License
-
-This project is licensed under the MIT License. All contributions, including those made by AI agents, are subject to this license.
+- Don't add unnecessary dependencies
+- Don't break existing features without testing
+- Don't change `astro.config.mjs` `site`/`base` values without reading DEPLOYMENT.md first
+- Don't break responsive design
+- **CRITICAL:** Don't run `astro check` in build (breaks content collection in CI/CD)
+- Don't commit `src/data/releases.json` (gitignored, ~29MB)
 
 ## Landing the Plane (Session Completion)
 
-**When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
+Work is NOT complete until `git push` succeeds.
 
-**MANDATORY WORKFLOW:**
+1. Run `npm run build` to verify no regressions
+2. Commit all changes with conventional commit messages
+3. `git pull --rebase && git push`
+4. Verify `git status` shows "up to date with origin"
 
-1. **File issues for remaining work** - Create issues for anything that needs follow-up
-2. **Run quality gates** (if code changed) - Tests, linters, builds
-3. **Update issue status** - Close finished work, update in-progress items
-4. **PUSH TO REMOTE** - This is MANDATORY:
-   ```bash
-   git pull --rebase
-   bd sync
-   git push
-   git status  # MUST show "up to date with origin"
-   ```
-5. **Clean up** - Clear stashes, prune remote branches
-6. **Verify** - All changes committed AND pushed
-7. **Hand off** - Provide context for next session
+## License
 
-**CRITICAL RULES:**
-- Work is NOT complete until `git push` succeeds
-- NEVER stop before pushing - that leaves work stranded locally
-- NEVER say "ready to push when you are" - YOU must push
-- If push fails, resolve and retry until it succeeds
-Use 'bd' for task tracking
+MIT License. All contributions, including AI-assisted ones, are subject to this license.
