@@ -78,7 +78,19 @@ func parseLandscapeYAML(data []byte) (map[string]models.LandscapeProject, error)
 				homepageURL, _ := itemMap["homepage_url"].(string)
 				project, _ := itemMap["project"].(string)
 				description, _ := itemMap["description"].(string)
-				blogURL, _ := itemMap["blog_url"].(string)
+
+				// blog_url and summary fields live inside extra:
+				var blogURL string
+				if extra, ok := itemMap["extra"].(map[string]interface{}); ok {
+					blogURL, _ = extra["blog_url"].(string)
+					if description == "" {
+						if summaryUseCase, ok := extra["summary_use_case"].(string); ok {
+							description = summaryUseCase
+						} else if summaryBusinessUseCase, ok := extra["summary_business_use_case"].(string); ok {
+							description = summaryBusinessUseCase
+						}
+					}
+				}
 
 				if repoURL == "" {
 					continue
@@ -88,17 +100,6 @@ func parseLandscapeYAML(data []byte) (map[string]models.LandscapeProject, error)
 				slug := extractOrgRepo(repoURL)
 				if slug == "" {
 					continue
-				}
-
-				// Get description from extra.summary_use_case if not present
-				if description == "" {
-					if extra, ok := itemMap["extra"].(map[string]interface{}); ok {
-						if summaryUseCase, ok := extra["summary_use_case"].(string); ok {
-							description = summaryUseCase
-						} else if summaryBusinessUseCase, ok := extra["summary_business_use_case"].(string); ok {
-							description = summaryBusinessUseCase
-						}
-					}
 				}
 
 				// Keep the canonical CNCF project entry (graduated/incubating/sandbox).
