@@ -1,6 +1,6 @@
 module github.com/castrojo/firehose-go
 
-go 1.25.6
+go 1.24
 
 require (
 	github.com/mmcdole/gofeed v1.3.0
