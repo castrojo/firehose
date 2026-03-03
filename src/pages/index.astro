@@ -703,7 +703,10 @@ const remainingReleasesData = remainingReleases.map(r => ({
     display: flex;
     flex-shrink: 0;
     align-self: flex-start;
-    margin-top: 5px;
+    /* Center logo on the h1 line: (h1 line-height - logo height) / 2
+       h1: 2rem × 1.6 line-height = 3.2rem tall; logo = 40px = 2.5rem
+       margin = (3.2rem - 2.5rem) / 2 = 0.35rem ≈ 5.6px */
+    margin-top: calc((2rem * 1.6 - 40px) / 2);
   }
   .cncf-logo-wrapper .logo-dark { display: none; }
   [data-theme="dark"] .cncf-logo-wrapper .logo-light { display: none; }
