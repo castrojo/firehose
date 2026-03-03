@@ -69,6 +69,22 @@ func FetchAllFeeds(sources []models.FeedSource, landscapeData map[string]models.
 	}
 }
 
+// FetchBlogFeeds fetches all blog feeds in parallel, reusing FetchAllFeeds.
+// BlogSource is converted to FeedSource; the Project name is used as an override
+// so fetchSingleFeed can find landscape metadata by name instead of GitHub URL.
+func FetchBlogFeeds(blogs []models.BlogSource, landscapeData map[string]models.LandscapeProject) *models.FetchResults {
+	sources := make([]models.FeedSource, 0, len(blogs))
+	for _, b := range blogs {
+		proj := b.Project
+		sources = append(sources, models.FeedSource{
+			URL:      b.URL,
+			Category: b.Category,
+			Project:  &proj,
+		})
+	}
+	return FetchAllFeeds(sources, landscapeData)
+}
+
 // fetchSingleFeed fetches a single feed and enriches entries
 func fetchSingleFeed(source models.FeedSource, landscapeData map[string]models.LandscapeProject) ([]models.Release, models.FeedStatus) {
 	fetchedAt := time.Now().UTC()
@@ -90,6 +106,16 @@ func fetchSingleFeed(source models.FeedSource, landscapeData map[string]models.L
 	// Extract org/repo from feed URL for landscape lookup
 	orgRepo := extractOrgRepoFromFeedURL(source.URL)
 	landscapeProject, hasLandscape := landscapeData[orgRepo]
+	// Blog feeds don't have GitHub URLs — fall back to name-based lookup.
+	if !hasLandscape && source.Project != nil && *source.Project != "" {
+		for _, proj := range landscapeData {
+			if proj.Name == *source.Project {
+				landscapeProject = proj
+				hasLandscape = true
+				break
+			}
+		}
+	}
 
 	// Convert feed items to releases
 	var releases []models.Release

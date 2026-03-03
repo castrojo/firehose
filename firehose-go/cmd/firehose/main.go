@@ -36,6 +36,7 @@ func main() {
 		log.Fatalf("Failed to load feed config: %v", err)
 	}
 	log.Printf("Loaded %d feeds", len(feedConfig.Feeds))
+	log.Printf("Loaded %d blog feeds", len(feedConfig.Blogs))
 
 	// Step 3: Fetch all feeds in parallel
 	log.Println("Fetching feeds in parallel...")
@@ -43,6 +44,13 @@ func main() {
 	results := feeds.FetchAllFeeds(feedConfig.Feeds, landscapeData)
 	feedsDuration := time.Since(feedsStart)
 	log.Printf("Fetched %d feeds in %s", len(results.Feeds), feedsDuration)
+
+	// Step 3b: Fetch blog feeds in parallel
+	log.Println("Fetching blog feeds...")
+	blogStart := time.Now()
+	blogResults := feeds.FetchBlogFeeds(feedConfig.Blogs, landscapeData)
+	log.Printf("Fetched %d blog feeds in %s — %d news items",
+		len(blogResults.Feeds), time.Since(blogStart), len(blogResults.Releases))
 
 	// Step 4: Collect statistics
 	successCount := 0
@@ -78,6 +86,8 @@ func main() {
 				FeedsFailed:              failCount,
 				FeedsSkipped:             0,
 				ReleasesTotal:            len(results.Releases),
+				NewsTotal:                len(blogResults.Releases),
+				BlogFeedsTotal:           len(feedConfig.Blogs),
 				LandscapeProjectsTotal:   len(landscapeData),
 				LandscapeProjectsMatched: countMatchedProjects(results.Releases),
 			},
@@ -90,7 +100,8 @@ func main() {
 			},
 		},
 		Releases: results.Releases,
-		Feeds:    results.Feeds,
+		News:     blogResults.Releases,
+		Feeds:    append(results.Feeds, blogResults.Feeds...),
 	}
 
 	// Step 6: Write output JSON
@@ -115,6 +126,8 @@ func main() {
 		"feeds_ok":     successCount,
 		"feeds_failed": failCount,
 		"releases":     len(results.Releases),
+		"news":         len(blogResults.Releases),
+		"blog_feeds":   len(feedConfig.Blogs),
 	}
 	summaryJSON, _ := json.MarshalIndent(summary, "", "  ")
 	fmt.Println(string(summaryJSON))
