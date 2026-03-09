@@ -148,7 +148,7 @@ func fetchSingleFeed(source models.FeedSource, landscapeData map[string]models.L
 			Link:           item.Link,
 			PubDate:        pubDate,
 			Content:        item.Content,
-			ContentSnippet: item.Description,
+			ContentSnippet: truncateString(item.Description, 500),
 			GUID:           item.GUID,
 			FeedURL:        source.URL,
 			FeedTitle:      feed.Title,
@@ -193,6 +193,16 @@ func classifyError(err error) string {
 	}
 
 	return "network" // Default to network error
+}
+
+// truncateString truncates s to maxLen runes. Used to cap RSS description
+// fields that may contain full blog post bodies (avg 3.7KB, max 75KB).
+func truncateString(s string, maxLen int) string {
+	runes := []rune(s)
+	if len(runes) <= maxLen {
+		return s
+	}
+	return string(runes[:maxLen])
 }
 
 // contains checks if string contains substring (case-insensitive)
