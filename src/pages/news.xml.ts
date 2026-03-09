@@ -29,9 +29,9 @@ export const GET: APIRoute = async ({ site }) => {
     .slice(0, 100); // Limit to 100 most recent posts
 
   // Build site URL from Astro config (site + base)
-  const baseUrl = import.meta.env.BASE_URL || '/';
+  const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
   const siteOrigin = site?.toString().replace(/\/$/, '') || 'http://localhost:4321';
-  const siteUrl = `${siteOrigin}${baseUrl}`.replace(/\/*$/, '/');
+  const siteUrl = `${siteOrigin}${baseUrl}`;
   const feedUrl = `${siteUrl}news.xml`;
   const buildDate = new Date().toUTCString();
 

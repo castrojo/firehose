@@ -5,8 +5,8 @@
 export function getProjectLogo(projectName: string | undefined): string {
   // Astro's BASE_URL (e.g., /firehose) is used for GitHub Pages deployment
   // Public assets need the base path prepended
-  const baseUrl = import.meta.env.BASE_URL || '/';
-  const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
+  const normalizedBaseUrl = baseUrl.slice(0, -1); // strip trailing slash for path prefix
   
   if (!projectName) {
     return `${normalizedBaseUrl}/logos/cncf-placeholder.svg`;

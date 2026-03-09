@@ -24,26 +24,26 @@ Go pipeline → src/data/releases.json → Astro → GitHub Pages
 ### Full build from scratch
 
 ```bash
-# 1. Build the Go binary and generate releases.json
-cd firehose-go
-go build -o firehose cmd/firehose/main.go
-./firehose
-cd ..
-
-# 2. Build the Astro site
-npm ci
-npm run build
-npm run preview  # visit http://localhost:4321/firehose
+just build
 ```
 
-### Dev server (uses existing releases.json)
+This runs the full pipeline: Go binary → feeds JSON → Astro build → Pagefind index.
+
+### Preview the built site
 
 ```bash
-npm run dev
+just serve  # opens http://localhost:4321/firehose in your browser
 ```
 
-> Note: `src/data/releases.json` is gitignored. You must run the Go pipeline at
-> least once before `npm run build` or `npm run dev` will work.
+### Dev server (hot reload, no search)
+
+```bash
+just dev
+```
+
+> Note: `src/data/releases.json` is gitignored. `just build` handles the full pipeline
+> including the Go binary. Use `npm run build` alone only when `releases.json` already
+> exists and you want to skip re-fetching all feeds.
 
 ## Adding a Feed
 

@@ -10,6 +10,7 @@ export interface FeedEntry {
   title: string;
   link: string;
   pubDate: string;
+  isoDate?: string;
   content: string;
   guid: string;
 

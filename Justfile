@@ -6,7 +6,7 @@ default:
 
 # Rebuild the full pipeline: Go binary → feeds JSON → Astro → Pagefind
 build:
-    npm install --prefer-offline
+    npm ci
     cd firehose-go && go build -o firehose cmd/firehose/main.go && ./firehose
     npm run build
 
