@@ -10,6 +10,10 @@ build:
     cd firehose-go && go build -o firehose cmd/firehose/main.go && ./firehose
     npm run build
 
+# Run the Astro build with wall-clock timing — shows aggregate build time without reconstructing from log timestamps
+time-build:
+    time npm run build
+
 # Serve the built output and open a browser (foreground server, browser in background)
 # main branch: port 4321, base '/firehose'; worktree branches use port 4322, base '/'
 serve:
