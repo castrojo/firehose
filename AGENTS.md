@@ -247,7 +247,7 @@ Only add CNCF projects.
 ### Local Development
 
 ```bash
-# Full build from scratch (self-contained — runs npm install, Go pipeline, Astro, Pagefind)
+# Full build from scratch (self-contained — runs npm ci, Go pipeline, Astro, Pagefind)
 just build
 
 # Preview the built site (opens browser at http://localhost:4321/firehose)
