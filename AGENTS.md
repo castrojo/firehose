@@ -38,7 +38,7 @@ Two pages, two RSS feeds:
 - Shared layout: `src/layouts/MainLayout.astro` (HTML shell, CSS vars, dark mode, header with CNCF logos, Releases/News nav tabs, SearchBar, KeyboardHelp modal, footer)
 - Two pages import `MainLayout` and render their own content + FilterBar + InfiniteScroll
 - Client-side filtering (project, date), keyboard nav, infinite scroll on both pages
-- Pagefind search index built over both pages
+- Pagefind index built over both pages (build-time only; no Pagefind UI is rendered — see Known Gotchas)
 - Deploys to GitHub Pages via GitHub Actions
 
 ### CI Pipeline
@@ -145,7 +145,7 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
 - `src/pages/feed.xml.ts` — Releases RSS 2.0 output
 - `src/pages/news.xml.ts` — News RSS 2.0 output
 - `src/components/ReleaseCard.astro` — individual release/post display
-- `src/components/SearchBar.astro` — Pagefind search integration
+- `src/components/SearchBar.astro` — project-name autocomplete dropdown (client-side filter; NOT a Pagefind UI)
 - `src/components/FilterBar.astro` — client-side filtering
 - `src/components/InfiniteScroll.astro` — performance optimization
 - `src/components/KeyboardHelp.astro` — keyboard shortcuts modal
@@ -320,7 +320,7 @@ npm run preview # Preview at http://localhost:4321/
 - Build completes without errors
 - Releases page (`/`) loads with release cards
 - News page (`/news/`) loads with blog post cards
-- Search works (type in search box — Pagefind covers both pages)
+- Project filter works (SearchBar.astro is a project-name autocomplete dropdown — not a Pagefind UI; Pagefind index is built but no full-text search UI is rendered)
 - Filters work (project, date range) on both pages
 - Keyboard navigation works (j/k/o/?)
 - Responsive design (resize browser to 320px, 768px, 1024px)
@@ -394,9 +394,11 @@ Landscape integration happens in Go, not TypeScript.
 
 ### Search Not Working
 
-1. Check browser console for JavaScript errors
-2. Verify Pagefind index in `dist/pagefind/` after build
-3. Check `/pagefind/pagefind.js` loads in the Network tab
+The search box is **SearchBar.astro** — a project-name autocomplete dropdown (client-side JS filter). It is NOT a Pagefind UI. Pagefind index is built but not surfaced as a UI.
+
+1. Check browser console for JavaScript errors in SearchBar's client script
+2. Verify Pagefind index in `dist/pagefind/` after build (index exists even though no UI is rendered)
+3. Check `data-project` attributes on `.release-card` elements — FilterBar uses these for filtering
 
 ### Filters Not Working
 
