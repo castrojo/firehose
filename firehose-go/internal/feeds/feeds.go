@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/castrojo/firehose-go/internal/models"
+	"github.com/castrojo/firehose-go/internal/urlutil"
 	gofeed "github.com/mmcdole/gofeed"
 	"gopkg.in/yaml.v3"
 )
@@ -112,7 +113,7 @@ func fetchSingleFeed(source models.FeedSource, landscapeData map[string]models.L
 	}
 
 	// Extract org/repo from feed URL for landscape lookup
-	orgRepo := extractOrgRepoFromFeedURL(source.URL)
+	orgRepo := urlutil.ExtractOrgRepo(source.URL)
 	landscapeProject, hasLandscape := landscapeData[orgRepo]
 	// Blog feeds don't have GitHub URLs — fall back to name-based lookup.
 	if !hasLandscape && source.Project != nil && *source.Project != "" {
@@ -174,60 +175,6 @@ func fetchSingleFeed(source models.FeedSource, landscapeData map[string]models.L
 		EntriesCount: len(releases),
 		FetchedAt:    fetchedAt.Format(time.RFC3339),
 	}
-}
-
-// extractOrgRepoFromFeedURL extracts org/repo from GitHub releases feed URL
-// Example: https://github.com/kubernetes/kubernetes/releases.atom → kubernetes/kubernetes
-func extractOrgRepoFromFeedURL(feedURL string) string {
-	const githubPrefix = "github.com/"
-	idx := -1
-
-	// Find github.com in URL
-	for i := range feedURL {
-		if i+len(githubPrefix) <= len(feedURL) && feedURL[i:i+len(githubPrefix)] == githubPrefix {
-			idx = i + len(githubPrefix)
-			break
-		}
-	}
-
-	if idx == -1 {
-		return ""
-	}
-
-	// Extract org/repo (before "/releases")
-	remainder := feedURL[idx:]
-
-	// Find "/releases" marker
-	const releasesMarker = "/releases"
-	releaseIdx := -1
-	for i := range remainder {
-		if i+len(releasesMarker) <= len(remainder) && remainder[i:i+len(releasesMarker)] == releasesMarker {
-			releaseIdx = i
-			break
-		}
-	}
-
-	if releaseIdx == -1 {
-		// No /releases marker, try to extract first two path segments
-		firstSlash := -1
-		secondSlash := -1
-		for i, c := range remainder {
-			if c == '/' {
-				if firstSlash == -1 {
-					firstSlash = i
-				} else if secondSlash == -1 {
-					secondSlash = i
-					break
-				}
-			}
-		}
-		if secondSlash != -1 {
-			return remainder[:secondSlash]
-		}
-		return remainder
-	}
-
-	return remainder[:releaseIdx]
 }
 
 // classifyError classifies fetch errors

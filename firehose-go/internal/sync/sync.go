@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"os"
 	"sort"
-	"strings"
 	gosync "sync"
 
 	"github.com/castrojo/firehose-go/internal/blog"
 	"github.com/castrojo/firehose-go/internal/feeds"
 	"github.com/castrojo/firehose-go/internal/models"
+	"github.com/castrojo/firehose-go/internal/urlutil"
 	"gopkg.in/yaml.v3"
 )
 
@@ -53,7 +53,7 @@ func Run(configPath string, landscapeData map[string]models.LandscapeProject) (*
 	// Build set of org/repo slugs currently tracked in feeds.yaml
 	existing := make(map[string]bool)
 	for _, f := range config.Feeds {
-		slug := extractOrgRepo(f.URL)
+		slug := urlutil.ExtractOrgRepo(f.URL)
 		if slug != "" {
 			existing[slug] = true
 		}
@@ -84,7 +84,7 @@ func Run(configPath string, landscapeData map[string]models.LandscapeProject) (*
 	// Compute removals: in feeds.yaml but not in landscape as a CNCF project
 	var removed []SyncEntry
 	for _, f := range config.Feeds {
-		slug := extractOrgRepo(f.URL)
+		slug := urlutil.ExtractOrgRepo(f.URL)
 		if slug == "" {
 			continue
 		}
@@ -119,7 +119,7 @@ func Run(configPath string, landscapeData map[string]models.LandscapeProject) (*
 	// Rebuild feed list: keep existing (minus removed), append added
 	var newFeeds []models.FeedSource
 	for _, f := range config.Feeds {
-		slug := extractOrgRepo(f.URL)
+		slug := urlutil.ExtractOrgRepo(f.URL)
 		if !removeSet[slug] {
 			newFeeds = append(newFeeds, f)
 		}
@@ -275,33 +275,4 @@ func writeConfig(path string, feedSources []models.FeedSource, blogSources []mod
 		return fmt.Errorf("marshal YAML: %w", err)
 	}
 	return os.WriteFile(path, append([]byte(header), data...), 0644)
-}
-
-// extractOrgRepo extracts org/repo from a GitHub feed URL or repo URL.
-// Examples:
-//
-//	https://github.com/kubernetes/kubernetes/releases.atom → kubernetes/kubernetes
-//	https://github.com/kubernetes/kubernetes              → kubernetes/kubernetes
-//
-// Note: this duplicates logic from feeds.go and landscape.go to avoid circular imports.
-// TODO: extract to a shared internal/util package.
-func extractOrgRepo(url string) string {
-	const prefix = "github.com/"
-	idx := strings.Index(url, prefix)
-	if idx == -1 {
-		return ""
-	}
-	remainder := url[idx+len(prefix):]
-
-	// Strip anything after /releases
-	if i := strings.Index(remainder, "/releases"); i != -1 {
-		remainder = remainder[:i]
-	}
-
-	// Take only the first two path segments (org/repo)
-	parts := strings.SplitN(remainder, "/", 3)
-	if len(parts) < 2 {
-		return remainder
-	}
-	return parts[0] + "/" + parts[1]
 }

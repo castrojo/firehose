@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/castrojo/firehose-go/internal/models"
+	"github.com/castrojo/firehose-go/internal/urlutil"
 	"gopkg.in/yaml.v3"
 )
 
@@ -99,7 +100,7 @@ func parseLandscapeYAML(data []byte) (map[string]models.LandscapeProject, error)
 				}
 
 				// Extract org/repo from GitHub URL
-				slug := extractOrgRepo(repoURL)
+				slug := urlutil.ExtractOrgRepo(repoURL)
 				if slug == "" {
 					continue
 				}
@@ -124,53 +125,4 @@ func parseLandscapeYAML(data []byte) (map[string]models.LandscapeProject, error)
 	}
 
 	return projectMap, nil
-}
-
-// extractOrgRepo extracts org/repo from GitHub URL
-// Example: https://github.com/kubernetes/kubernetes → kubernetes/kubernetes
-func extractOrgRepo(repoURL string) string {
-	// Simple extraction: find "github.com/" and take next two path segments
-	const githubPrefix = "github.com/"
-	idx := -1
-
-	// Find github.com in URL (handles both http and https)
-	for i := range repoURL {
-		if i+len(githubPrefix) <= len(repoURL) && repoURL[i:i+len(githubPrefix)] == githubPrefix {
-			idx = i + len(githubPrefix)
-			break
-		}
-	}
-
-	if idx == -1 {
-		return ""
-	}
-
-	// Extract org/repo (everything after github.com/)
-	remainder := repoURL[idx:]
-
-	// Find first and second slash
-	firstSlash := -1
-	secondSlash := -1
-	for i, c := range remainder {
-		if c == '/' {
-			if firstSlash == -1 {
-				firstSlash = i
-			} else if secondSlash == -1 {
-				secondSlash = i
-				break
-			}
-		}
-	}
-
-	if firstSlash == -1 {
-		return ""
-	}
-
-	// If no second slash, return everything (e.g., "kubernetes/kubernetes")
-	if secondSlash == -1 {
-		return remainder
-	}
-
-	// Return org/repo (e.g., "kubernetes/kubernetes" from "kubernetes/kubernetes/releases")
-	return remainder[:secondSlash]
 }
