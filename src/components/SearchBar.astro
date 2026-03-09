@@ -61,7 +61,6 @@ const { projects } = Astro.props;
     if (allProjectsData) {
       try {
         allProjectNames = JSON.parse(allProjectsData);
-        console.log(`[SearchBar] Project search initialized with ${allProjectNames.length} projects`);
       } catch (e) {
         console.error('[SearchBar] Failed to parse projects data:', e);
         return;
@@ -88,8 +87,6 @@ const { projects } = Astro.props;
       const matchingProjects = allProjectNames
         .filter(projectName => projectName.toLowerCase().includes(queryLower))
         .sort((a, b) => a.localeCompare(b));
-      
-      console.log(`[SearchBar] Found ${matchingProjects.length} projects matching "${query}"`);
       
       if (matchingProjects.length === 0) {
         showNoResults(query);
@@ -138,7 +135,6 @@ const { projects } = Astro.props;
             searchResults.style.display = 'none';
             searchClear.style.display = 'block';
             
-            console.log(`[SearchBar] Applied filter for project: ${projectName}`);
           }
         });
       });

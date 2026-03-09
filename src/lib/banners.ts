@@ -119,7 +119,6 @@ function parseBannersYamlInline(yamlText: string): RawBanner[] {
  */
 export async function fetchBannersConfig(): Promise<RawBanner[]> {
   try {
-    console.log('Fetching CNCF banners configuration...');
     const response = await fetch('https://cncf.github.io/banners/banners.yml');
     
     if (!response.ok) {
@@ -169,7 +168,6 @@ export async function getActiveBanners(): Promise<BannerConfig[]> {
   const banners = await fetchBannersConfig();
 
   if (banners.length === 0) {
-    console.log('No banners available');
     return [];
   }
 
@@ -179,7 +177,6 @@ export async function getActiveBanners(): Promise<BannerConfig[]> {
   );
 
   if (kubeconBanners.length === 0) {
-    console.log('No KubeCon banners found');
     return [];
   }
 
@@ -197,6 +194,5 @@ export async function getActiveBanners(): Promise<BannerConfig[]> {
     });
   }
 
-  console.log(`Fetched ${configs.length} active KubeCon banner(s)`);
   return configs;
 }

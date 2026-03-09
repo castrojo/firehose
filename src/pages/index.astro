@@ -282,7 +282,6 @@ const remainingReleasesData = remainingReleases.map(r => ({
       this.items = Array.from(document.querySelectorAll(itemSelector));
       this.searchInput = document.querySelector(searchInputSelector);
       this.attachListeners();
-      console.log(`[KeyboardNav] Initialized with ${this.items.length} items`);
     }
     
     attachListeners() {
@@ -436,7 +435,6 @@ const remainingReleasesData = remainingReleases.map(r => ({
     
     refresh() {
       this.items = Array.from(document.querySelectorAll(this.itemSelector));
-      console.log(`[KeyboardNav] Refreshed, now tracking ${this.items.length} items`);
     }
   }
 
