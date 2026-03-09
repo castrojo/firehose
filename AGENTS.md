@@ -155,7 +155,7 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
 - `src/lib/releaseGrouping.ts` — groups releases by project/version
 - `src/lib/semver.ts` — semver parsing helpers
 - `src/lib/truncate.ts` — text truncation utilities
-- `astro.config.mjs` — Astro configuration; `base: '/'`; domain migration notes inline
+- `astro.config.mjs` — Astro configuration; `base: '/firehose'`; domain migration notes inline
 
 ### Build and Deployment
 
@@ -325,16 +325,16 @@ npm run preview # Preview at http://localhost:4321/
 - Keyboard navigation works (j/k/o/?)
 - Responsive design (resize browser to 320px, 768px, 1024px)
 - Infinite scroll (scroll to bottom)
-- Dark mode toggle works; code blocks in dark mode are readable (upstream inline styles are inverted via CSS filter)
+- Dark mode toggle works; code blocks in dark mode are readable (`stripChromaInlineStyles()` in `src/lib/markdown.ts` strips Hugo/Chroma inline styles before rendering)
 - RSS feeds: `/feed.xml` and `/news.xml` both return valid XML
 
 ## Known Gotchas
 
-- **Dark mode + upstream code blocks:** Blogs from Kubernetes, Flux, PipeCD etc. ship Hugo/Chroma inline styles with hardcoded light-mode colors. Fixed in `ReleaseCard.astro` with `filter: invert(1) hue-rotate(180deg)` on `[data-theme="dark"] .markdown-body pre[style]`. Only applies to `pre[style]` (inline-styled blocks).
+- **Dark mode + upstream code blocks:** Blogs from Kubernetes, Flux, PipeCD etc. ship Hugo/Chroma inline styles with hardcoded light-mode colors. Fixed in `src/lib/markdown.ts` via `stripChromaInlineStyles()`, which strips inline `style` attributes from `<pre>` and `<span>` elements before rendering. This produces unstyled code blocks in dark mode rather than inverting light-mode colors.
 - **`package sync` shadows stdlib:** `firehose-go/internal/sync/sync.go` uses `gosync "sync"` alias throughout.
 - **Blog landscape fallback:** Blog feeds don't have GitHub URLs, so `fetchSingleFeed` falls back to matching `source.Project` against `proj.Name` in the landscape map (not org/repo key).
 - **Canonical landscape entry wins:** `landscape.go` ensures the canonical CNCF entry (graduated/incubating/sandbox) wins over duplicate `repo_url` entries (e.g. Wasm subcategory entries).
-- **Pre-existing LSP errors:** `src/pages/index.astro` (`Property 'data' does not exist on type 'never'`) and `src/components/ReleaseCard.astro` (`Cannot find module '../lib/schemas'`) — both are pre-existing and do not affect `npm run build`.
+- **Pre-existing LSP errors:** `src/pages/index.astro` (`Property 'data' does not exist on type 'never'`) — pre-existing and does not affect `npm run build`.
 - **`astro check` is banned in builds** — breaks content collection in CI/CD. Never add it.
 
 ## Current Dependencies
