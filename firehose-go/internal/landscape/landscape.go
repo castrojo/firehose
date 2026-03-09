@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 
 	"github.com/castrojo/firehose-go/internal/models"
 	"gopkg.in/yaml.v3"
@@ -13,8 +14,9 @@ const landscapeURL = "https://raw.githubusercontent.com/cncf/landscape/master/la
 
 // FetchAndParse fetches and parses the CNCF Landscape
 func FetchAndParse() (map[string]models.LandscapeProject, error) {
-	// Fetch landscape.yml
-	resp, err := http.Get(landscapeURL)
+	// Fetch landscape.yml with a 30s timeout to avoid hanging indefinitely.
+	client := &http.Client{Timeout: 30 * time.Second}
+	resp, err := client.Get(landscapeURL)
 	if err != nil {
 		return nil, fmt.Errorf("fetch landscape: %w", err)
 	}

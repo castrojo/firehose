@@ -3,6 +3,7 @@ package feeds
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"sort"
 	"sync"
@@ -37,11 +38,17 @@ func FetchAllFeeds(sources []models.FeedSource, landscapeData map[string]models.
 		allFeedStatus []models.FeedStatus
 	)
 
+	// Semaphore: cap concurrent goroutines at 20 to avoid overwhelming the network
+	// and remote servers (was unbounded at up to 217 simultaneous connections).
+	sem := make(chan struct{}, 20)
+
 	// Fetch feeds in parallel
 	for _, source := range sources {
 		wg.Add(1)
 		go func(src models.FeedSource) {
 			defer wg.Done()
+			sem <- struct{}{}
+			defer func() { <-sem }()
 
 			feedStart := time.Now()
 			releases, status := fetchSingleFeed(src, landscapeData)
@@ -89,8 +96,9 @@ func FetchBlogFeeds(blogs []models.BlogSource, landscapeData map[string]models.L
 func fetchSingleFeed(source models.FeedSource, landscapeData map[string]models.LandscapeProject) ([]models.Release, models.FeedStatus) {
 	fetchedAt := time.Now().UTC()
 
-	// Parse feed
+	// Parse feed — use a 30s timeout client to prevent hung goroutines.
 	fp := gofeed.NewParser()
+	fp.Client = &http.Client{Timeout: 30 * time.Second}
 	feed, err := fp.ParseURL(source.URL)
 	if err != nil {
 		log.Printf("❌ Failed to fetch %s: %v", source.URL, err)
