@@ -1,0 +1,1 @@
+{ "name": "firehose", "image": "ghcr.io/bootc-dev/devenv-debian:latest" }

@@ -11,10 +11,10 @@ build:
     npm run build
 
 # Serve the built output and open a browser (foreground server, browser in background)
-# NOTE: worktree uses port 4322 and base '/'; main branch uses port 4321 and base '/firehose'
+# main branch: port 4321, base '/firehose'; worktree branches use port 4322, base '/'
 serve:
-    xdg-open http://localhost:4322/ & sleep 1 && npm run preview -- --port 4322
+    xdg-open http://localhost:4321/firehose & sleep 1 && npm run preview -- --port 4321
 
 # Dev server with hot reload (skips Pagefind — search won't work)
 dev:
-    npm run dev -- --port 4322
+    npm run dev -- --port 4321

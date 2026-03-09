@@ -247,18 +247,22 @@ Only add CNCF projects.
 ### Local Development
 
 ```bash
-# Full build from scratch
-cd firehose-go && go build -o firehose cmd/firehose/main.go && ./firehose && cd ..
-npm ci && npm run build && npm run preview
+# Full build from scratch (self-contained — runs npm install, Go pipeline, Astro, Pagefind)
+just build
 
-# Dev server (requires existing releases.json)
-npm run dev
+# Preview the built site (opens browser at http://localhost:4321/firehose)
+just serve
 
-# Go validation
+# Dev server with hot reload (Pagefind/search not available)
+just dev
+
+# Go linting only
 cd firehose-go && go vet ./...
 ```
 
-> `src/data/releases.json` is gitignored. Run the Go pipeline before `npm run build`.
+> `src/data/releases.json` is gitignored. `just build` handles the full pipeline including
+> the Go binary. Use `npm run build` alone only when `releases.json` already exists and
+> you want to skip re-fetching all feeds.
 
 ### Seeing live changes in the browser
 
@@ -271,7 +275,7 @@ not pick up changes until you rebuild and restart the server.
    ```bash
    npm run build
    ```
-2. Restart the preview server (`npm run preview`) to serve the new `dist/`.
+2. Restart the preview server (`just serve`) to serve the new `dist/`.
 
 After each commit that changes `src/`, run `npm run build` and restart the server to see
 the update in the browser. The Go pipeline only needs to re-run if `firehose-go/` or
@@ -445,7 +449,7 @@ Landscape integration happens in Go, not TypeScript.
 
 Work is NOT complete until `git push` succeeds.
 
-1. Run `npm run build` to verify no regressions
+1. Run `just build` to verify no regressions
 2. Commit all changes with conventional commit messages
 3. `git pull --rebase && git push`
 4. Verify `git status` shows "up to date with origin"
