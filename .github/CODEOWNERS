@@ -1,0 +1,6 @@
+# All files: castrojo is the default owner
+* @castrojo
+
+# Automated PRs (logos, landscape sync) still notify castrojo
+.github/workflows/ @castrojo
+firehose-go/config/feeds.yaml @castrojo
