@@ -95,17 +95,42 @@ download_logo() {
   # Keep empty directory as marker
 }
 
-# Read project names from feeds.ts
-echo "Reading project list from src/config/feeds.ts..."
-FEEDS_FILE="$PROJECT_ROOT/src/config/feeds.ts"
+# Read project names from feeds.yaml
+echo "Reading project list from firehose-go/config/feeds.yaml..."
+FEEDS_FILE="$PROJECT_ROOT/firehose-go/config/feeds.yaml"
 
 if [[ ! -f "$FEEDS_FILE" ]]; then
-  echo "Error: feeds.ts not found"
+  echo "Error: feeds.yaml not found"
   exit 1
 fi
 
-# Extract project names from GitHub URLs
-PROJECT_NAMES=$(grep -oP "https://github\.com/[^/]+/\K[^/]+" "$FEEDS_FILE" | sed 's|/releases\.atom||g')
+# Extract project names using Python (available on all CI runners):
+# - Release feeds: extract repo name from GitHub URL
+# - Blog feeds: use the explicit 'project:' field
+PROJECT_NAMES=$(python3 -c "
+import yaml, re, sys
+
+with open('$FEEDS_FILE') as f:
+    data = yaml.safe_load(f)
+
+names = set()
+
+# Release feeds: extract repo name from github.com URLs
+for feed in data.get('feeds', []):
+    url = feed.get('url', '')
+    m = re.search(r'github\.com/[^/]+/([^/]+)/', url)
+    if m:
+        names.add(m.group(1))
+
+# Blog feeds: use the explicit project name
+for blog in data.get('blogs', []):
+    name = blog.get('project', '')
+    if name:
+        names.add(name)
+
+for name in sorted(names):
+    print(name)
+")
 
 echo "Found $(echo "$PROJECT_NAMES" | wc -l) projects to process"
 echo ""
