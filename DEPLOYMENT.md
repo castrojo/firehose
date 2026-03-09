@@ -141,11 +141,11 @@ export default defineConfig({
 After updating the configuration, test locally:
 
 ```bash
-# Build with production paths
-npm run build
+# Full build (Go pipeline → Astro → Pagefind)
+just build
 
-# Preview production build
-npm run preview
+# Preview production build (opens browser automatically)
+just serve
 
 # Visit http://localhost:4321/YOUR-BASE-PATH
 ```
@@ -219,8 +219,8 @@ Before deploying to production:
 - [ ] Updated `site` in `astro.config.mjs`
 - [ ] Updated `base` in `astro.config.mjs` (if needed)
 - [ ] Updated GitHub repository links (if forked)
-- [ ] Ran `npm run build` successfully
-- [ ] Tested `npm run preview` and verified all assets load
+- [ ] Ran `just build` successfully
+- [ ] Tested `just serve` and verified all assets load
 - [ ] Checked RSS feed XML at `YOUR-BASE-PATH/feed.xml`
 - [ ] Verified RSS feed URLs point to correct domain
 - [ ] Tested subscribe button links to correct feed
@@ -233,7 +233,7 @@ If you encounter issues deploying The Firehose:
 
 1. Check the [Astro deployment docs](https://docs.astro.build/en/guides/deploy/)
 2. Verify your `site` and `base` configuration
-3. Test locally with `npm run build && npm run preview`
+3. Test locally with `just build && just serve`
 4. Open an issue with deployment details
 
 ## Architecture Notes
