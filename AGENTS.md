@@ -336,6 +336,7 @@ npm run preview # Preview at http://localhost:4321/
 - **Canonical landscape entry wins:** `landscape.go` ensures the canonical CNCF entry (graduated/incubating/sandbox) wins over duplicate `repo_url` entries (e.g. Wasm subcategory entries).
 - **Pre-existing LSP errors:** `src/pages/index.astro` (`Property 'data' does not exist on type 'never'`) — pre-existing and does not affect `npm run build`.
 - **`astro check` is banned in builds** — breaks content collection in CI/CD. Never add it.
+- **`contentSnippet` is uncapped in the Go pipeline:** `firehose-go/internal/feeds/feeds.go` sets `ContentSnippet = item.Description` directly from the RSS `<description>` element. Blog feeds (Kubernetes, Flux, etc.) put the full post HTML body in `<description>` — avg 3.7KB, max 75KB. This is inlined into a `data-releases` HTML attribute via `JSON.stringify()` in `news/index.astro`, causing `news/index.html` to reach 5.2MB. Fix: truncate at Go layer to ~500 chars — safe because `InfiniteScroll.astro` falls back to `content` field for full rendering.
 
 ## Current Dependencies
 
