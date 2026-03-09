@@ -129,7 +129,11 @@ func main() {
 		"news":         len(blogResults.Releases),
 		"blog_feeds":   len(feedConfig.Blogs),
 	}
-	summaryJSON, _ := json.MarshalIndent(summary, "", "  ")
+	summaryJSON, err := json.MarshalIndent(summary, "", "  ")
+	if err != nil {
+		log.Printf("Warning: failed to marshal summary: %v", err)
+		summaryJSON = []byte("{}")
+	}
 	fmt.Println(string(summaryJSON))
 }
 
