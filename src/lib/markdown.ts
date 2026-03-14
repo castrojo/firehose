@@ -1,6 +1,7 @@
 import { marked } from 'marked';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
 import { markedHighlight } from 'marked-highlight';
+import sanitizeHtml from 'sanitize-html';
 
 // Configure marked for GitHub-style rendering
 marked.use(gfmHeadingId());
@@ -64,7 +65,37 @@ export function renderMarkdown(markdown: string | undefined): string {
     const htmlStr = typeof html === 'string' ? html : '';
 
     // Strip Chroma/Hugo inline styles so our CSS theme takes over
-    return stripChromaInlineStyles(htmlStr);
+    const strippedHtml = stripChromaInlineStyles(htmlStr);
+
+    // Sanitize HTML to prevent XSS attacks
+    // Preserves all standard markdown-rendered tags: headings, lists, links, images, code, tables, etc.
+    const sanitized = sanitizeHtml(strippedHtml, {
+      allowedTags: [
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+        'p', 'br', 'hr',
+        'ul', 'ol', 'li',
+        'a', 'img',
+        'code', 'pre', 'kbd',
+        'strong', 'em', 'b', 'i', 's',
+        'table', 'thead', 'tbody', 'tr', 'th', 'td',
+        'blockquote',
+        'div', 'span',
+        'details', 'summary',
+        'dl', 'dt', 'dd',
+      ],
+      allowedAttributes: {
+        a: ['href', 'target', 'rel', 'title'],
+        img: ['src', 'alt', 'title', 'width', 'height'],
+        code: ['class'],
+        pre: ['class'],
+        span: ['class'],
+      },
+      // No style attribute allowed (Chroma styles already stripped)
+      allowedStyles: {},
+      disallowedTagsMode: 'discard',
+    });
+
+    return sanitized;
   } catch (error) {
     console.error('Markdown rendering error:', error);
     // Fallback to escaped plain text on error
