@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -110,6 +111,9 @@ type BlogSource struct {
 
 // WriteJSON writes OutputData to a JSON file (pretty-printed)
 func (o *OutputData) WriteJSON(path string) error {
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		return fmt.Errorf("create output directory: %w", err)
+	}
 	file, err := os.Create(path)
 	if err != nil {
 		return fmt.Errorf("create file: %w", err)
