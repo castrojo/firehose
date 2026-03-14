@@ -3,6 +3,7 @@ package feeds
 import (
 	"fmt"
 	"log"
+	"math/rand/v2"
 	"net/http"
 	"os"
 	"sort"
@@ -93,14 +94,58 @@ func FetchBlogFeeds(blogs []models.BlogSource, landscapeData map[string]models.L
 	return FetchAllFeeds(sources, landscapeData)
 }
 
+// retryWithBackoff retries a function with exponential backoff and jitter.
+// Only retries on transient errors (timeout, network). Parse errors fail immediately.
+func retryWithBackoff(fn func() error, maxAttempts int, baseDelay time.Duration, url string) error {
+	var lastErr error
+	for attempt := 1; attempt <= maxAttempts; attempt++ {
+		lastErr = fn()
+		if lastErr == nil {
+			return nil
+		}
+
+		errorType := classifyError(lastErr)
+		// Don't retry parse errors (malformed XML/RSS) or 404/403 errors — permanent failures
+		if errorType == "parse" {
+			return lastErr
+		}
+		if contains(lastErr.Error(), "404") || contains(lastErr.Error(), "403") {
+			return lastErr
+		}
+
+		// Only retry on timeout or network errors
+		if errorType != "timeout" && errorType != "network" {
+			return lastErr
+		}
+
+		if attempt < maxAttempts {
+			// Exponential backoff with ±20% jitter: sleep = baseDelay * (2^(attempt-1)) * (0.8 + rand*0.4)
+			backoff := baseDelay * time.Duration(1<<uint(attempt-1))
+			jitter := 0.8 + rand.Float64()*0.4
+			sleep := time.Duration(float64(backoff) * jitter)
+			log.Printf("⚠️  Retry %d/%d for %s: %v", attempt, maxAttempts, url, lastErr)
+			time.Sleep(sleep)
+		}
+	}
+	return lastErr
+}
+
 // fetchSingleFeed fetches a single feed and enriches entries
 func fetchSingleFeed(source models.FeedSource, landscapeData map[string]models.LandscapeProject) ([]models.Release, models.FeedStatus) {
 	fetchedAt := time.Now().UTC()
 
-	// Parse feed — use a 30s timeout client to prevent hung goroutines.
-	fp := gofeed.NewParser()
-	fp.Client = &http.Client{Timeout: 30 * time.Second}
-	feed, err := fp.ParseURL(source.URL)
+	var feed *gofeed.Feed
+	err := retryWithBackoff(func() error {
+		// Create a new parser each attempt (parsers are not reusable after error)
+		fp := gofeed.NewParser()
+		fp.Client = &http.Client{Timeout: 30 * time.Second}
+		parsedFeed, parseErr := fp.ParseURL(source.URL)
+		if parseErr == nil {
+			feed = parsedFeed
+		}
+		return parseErr
+	}, 3, 1*time.Second, source.URL)
+
 	if err != nil {
 		log.Printf("❌ Failed to fetch %s: %v", source.URL, err)
 		return nil, models.FeedStatus{

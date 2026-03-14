@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand/v2"
 	"net/http"
 	"net/url"
 	"strings"
@@ -27,6 +28,40 @@ var httpClient = &http.Client{
 var suffixCandidates = []string{
 	"/feed", "/feed.xml", "/rss.xml", "/atom.xml", "/rss",
 	"/blog/feed", "/blog/rss.xml", "/blog/atom.xml", "/feed/",
+}
+
+func retryHTTP(fn func() error, maxAttempts int, baseDelay time.Duration, url string) error {
+	var lastErr error
+	for attempt := 1; attempt <= maxAttempts; attempt++ {
+		lastErr = fn()
+		if lastErr == nil {
+			return nil
+		}
+
+		errStr := lastErr.Error()
+		if strings.Contains(errStr, "404") || strings.Contains(errStr, "403") {
+			return lastErr
+		}
+
+		isTransient := strings.Contains(errStr, "timeout") ||
+			strings.Contains(errStr, "deadline exceeded") ||
+			strings.Contains(errStr, "500") ||
+			strings.Contains(errStr, "502") ||
+			strings.Contains(errStr, "503")
+
+		if !isTransient {
+			return lastErr
+		}
+
+		if attempt < maxAttempts {
+			backoff := baseDelay * time.Duration(1<<uint(attempt-1))
+			jitter := 0.8 + rand.Float64()*0.4
+			sleep := time.Duration(float64(backoff) * jitter)
+			log.Printf("⚠️  Retry %d/%d for %s: %v", attempt, maxAttempts, url, lastErr)
+			time.Sleep(sleep)
+		}
+	}
+	return lastErr
 }
 
 // DiscoverFeedURL finds an RSS/Atom feed URL for a blog page. Returns "" on failure.
@@ -68,14 +103,25 @@ func tryMedium(blogURL string) string {
 }
 
 func discoverFromHTML(blogURL string) string {
-	resp, err := httpClient.Get(blogURL)
-	if err != nil || resp.StatusCode != http.StatusOK {
-		if resp != nil {
-			resp.Body.Close()
+	var resp *http.Response
+	err := retryHTTP(func() error {
+		r, httpErr := httpClient.Get(blogURL)
+		if httpErr != nil {
+			return httpErr
 		}
+		if r.StatusCode != http.StatusOK {
+			r.Body.Close()
+			return fmt.Errorf("HTTP %d", r.StatusCode)
+		}
+		resp = r
+		return nil
+	}, 2, 1*time.Second, blogURL)
+
+	if err != nil {
 		return ""
 	}
 	defer resp.Body.Close()
+
 	body, err := io.ReadAll(io.LimitReader(resp.Body, 512*1024))
 	if err != nil {
 		return ""
@@ -129,8 +175,16 @@ func extractFeedLink(baseURL, htmlContent string) string {
 }
 
 func isValidFeed(feedURL string) bool {
-	fp := gofeed.NewParser()
-	fp.Client = httpClient
-	feed, err := fp.ParseURL(feedURL)
+	var feed *gofeed.Feed
+	err := retryHTTP(func() error {
+		fp := gofeed.NewParser()
+		fp.Client = httpClient
+		parsedFeed, parseErr := fp.ParseURL(feedURL)
+		if parseErr == nil {
+			feed = parsedFeed
+		}
+		return parseErr
+	}, 2, 1*time.Second, feedURL)
+
 	return err == nil && feed != nil && len(feed.Items) > 0
 }
