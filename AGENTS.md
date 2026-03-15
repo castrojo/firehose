@@ -487,7 +487,7 @@ just container-run     # runs on :8080 and opens browser
 `.devcontainer/` provides a Chainguard wolfi-based development environment.
 
 - **Base image:** `cgr.dev/chainguard/wolfi-base` (SHA-pinned, Renovate-managed)
-- **Installed:** `bash go-1.26 nodejs-25 npm just git curl podman`
+- **Installed:** `bash go-1.26 nodejs-25 npm just git curl`
 - **VS Code extensions:** `astro-build.astro-vscode`, `golang.go`, `dbaeumer.vscode-eslint`
 - **Port forwarding:** 4321 (Astro dev server), 8080 (container/nginx, silent)
 - **Post-create:** `npm ci && cd firehose-go && go mod download`
