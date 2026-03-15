@@ -1,7 +1,7 @@
 # Feed Configuration for The Firehose (Go)
 # Managed by landscape-sync workflow — do not edit feed URLs manually
 # Source of truth: https://landscape.cncf.io
-# Total: 217 release feeds, 36 blog feeds
+# Total: 217 release feeds, 37 blog feeds
 
 feeds:
     - url: https://github.com/argoproj/argo-cd/releases.atom
@@ -527,6 +527,10 @@ blogs:
       category: sandbox
       project: Kubewarden
       blog_url: https://kubewarden.io/blog
+    - url: https://lwcn.dev/feed.xml
+      category: community
+      project: Last Week In Cloud Native
+      blog_url: https://lwcn.dev
     - url: https://meshery.io/feed.xml
       category: sandbox
       project: Meshery
