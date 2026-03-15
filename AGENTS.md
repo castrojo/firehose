@@ -46,6 +46,7 @@ Two pages, two RSS feeds:
 1. Go build + `./firehose` (generates `releases.json`)
 2. `npm ci && npm run build` (Astro + Pagefind)
 3. Deploy to GitHub Pages
+4. Build and push container image → `ghcr.io/castrojo/firehose` (daily at 8 AM UTC, after step 3)
 
 ## Core Principles
 
@@ -456,6 +457,44 @@ Work is NOT complete until `git push` succeeds.
 2. Commit all changes with conventional commit messages
 3. `git pull --rebase && git push`
 4. Verify `git status` shows "up to date with origin"
+
+## Container Image
+
+A production container image is built and published to `ghcr.io/castrojo/firehose` via
+`.github/workflows/build-container.yml`. It is a multi-stage Chainguard build:
+
+| Stage | Image | Purpose |
+|---|---|---|
+| `go-builder` | `cgr.dev/chainguard/go:latest` | Compile binary + fetch live feeds |
+| `site-builder` | `cgr.dev/chainguard/node:latest-dev` | `npm run build` → `dist/` |
+| runtime | `cgr.dev/chainguard/nginx:latest` | Serve static site (nonroot, port 8080) |
+
+**Key constraints:**
+- The Go binary hardcodes output to `../src/data/releases.json` relative to `firehose-go/` — the Containerfile creates `src/data/` before running it
+- `astro.config.mjs` sets `base: '/firehose'` — site files are copied to `/usr/share/nginx/html/firehose/` in the nginx stage, NOT the html root
+- Access locally at `http://localhost:8080/firehose/` — root `/` returns 404 by design
+- All `FROM` lines use SHA digests; Renovate updates them automatically via `renovate.json`
+- Build requires network (Go pipeline fetches 250+ live feeds, ~2 min)
+
+**Local container workflow:**
+```bash
+just container-build   # builds ghcr.io/castrojo/firehose:local (~2 min)
+just container-run     # runs on :8080 and opens browser
+```
+
+## Devcontainer
+
+`.devcontainer/` provides a Chainguard wolfi-based development environment.
+
+- **Base image:** `cgr.dev/chainguard/wolfi-base` (SHA-pinned, Renovate-managed)
+- **Installed:** `bash go-1.26 nodejs-25 npm just git curl podman`
+- **VS Code extensions:** `astro-build.astro-vscode`, `golang.go`, `dbaeumer.vscode-eslint`
+- **Port forwarding:** 4321 (Astro dev server), 8080 (container/nginx, silent)
+- **Post-create:** `npm ci && cd firehose-go && go mod download`
+
+Dev server (hot reload, no Pagefind): `just dev` → `http://localhost:4321/firehose`
+
+Container builds work inside the devcontainer: `just container-build && just container-run`
 
 ## License
 

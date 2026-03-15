@@ -8,7 +8,8 @@ RUN apk add --no-cache \
     go-1.26 \
     nodejs-25 \
     npm \
-    just
+    just \
+    podman
 
 ENV GOPATH=/root/go
 ENV PATH="${GOPATH}/bin:/usr/local/go/bin:${PATH}"
