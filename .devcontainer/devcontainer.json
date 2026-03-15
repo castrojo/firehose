@@ -1,1 +1,31 @@
-{ "name": "firehose", "image": "ghcr.io/bootc-dev/devenv-debian:latest" }
+{
+  "name": "firehose",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "forwardPorts": [4321],
+  "portsAttributes": {
+    "4321": {
+      "label": "Astro Dev Server",
+      "onAutoForward": "notify"
+    }
+  },
+  "containerEnv": {
+    "GOPATH": "/root/go"
+  },
+  "postCreateCommand": "npm ci && cd firehose-go && go mod download",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "astro-build.astro-vscode",
+        "golang.go",
+        "dbaeumer.vscode-eslint"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "go.toolsManagement.autoUpdate": false
+      }
+    }
+  }
+}
+

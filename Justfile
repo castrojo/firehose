@@ -22,3 +22,13 @@ serve:
 # Dev server with hot reload (skips Pagefind — search won't work)
 dev:
     npm run dev -- --port 4321
+
+# Build the production container image locally
+container-build:
+    podman build -t ghcr.io/castrojo/firehose:local -f Containerfile .
+
+# Run the locally built container and open a browser
+# Site is served at http://localhost:8080/firehose/ (matches GitHub Pages base path)
+container-run:
+    xdg-open http://localhost:8080/firehose & sleep 1 && podman run --rm -p 8080:8080 ghcr.io/castrojo/firehose:local
+
