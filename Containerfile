@@ -21,6 +21,8 @@ RUN mkdir -p src/data && cd firehose-go && ./firehose
 # ── Stage 2: Astro site builder ─────────────────────────────────────────────
 FROM cgr.dev/chainguard/node:latest-dev@sha256:35eba3b3a13163635bbdb31e3e93e1a1a80378b2b462bddd29d59e3184ff96b1 AS site-builder
 
+# node image runs as nonroot 'node' user by default — need root for npm ci
+USER root
 WORKDIR /build
 COPY package.json package-lock.json ./
 RUN npm ci
