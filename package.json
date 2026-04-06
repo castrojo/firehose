@@ -35,6 +35,6 @@
   },
   "devDependencies": {
     "@types/sanitize-html": "^2.16.1",
-    "pagefind": "^1.4.0"
+    "pagefind": "^1.5.0"
   }
 }
