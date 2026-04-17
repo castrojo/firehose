@@ -1,7 +1,7 @@
 # Feed Configuration for The Firehose (Go)
 # Managed by landscape-sync workflow — do not edit feed URLs manually
 # Source of truth: https://landscape.cncf.io
-# Total: 217 release feeds, 36 blog feeds
+# Total: 223 release feeds, 36 blog feeds
 
 feeds:
     - url: https://github.com/argoproj/argo-cd/releases.atom
@@ -416,8 +416,6 @@ feeds:
       category: sandbox
     - url: https://github.com/WasmEdge/WasmEdge/releases.atom
       category: sandbox
-    - url: https://github.com/containers/bootc/releases.atom
-      category: sandbox
     - url: https://github.com/bpfman/bpfman/releases.atom
       category: sandbox
     - url: https://github.com/containers/composefs/releases.atom
@@ -437,6 +435,20 @@ feeds:
     - url: https://github.com/spinframework/spin/releases.atom
       category: sandbox
     - url: https://github.com/truefoundry/KubeElasti/releases.atom
+      category: sandbox
+    - url: https://github.com/CoHDI/releases.atom
+      category: sandbox
+    - url: https://github.com/agones-dev/agones/releases.atom
+      category: sandbox
+    - url: https://github.com/alibaba/higress/releases.atom
+      category: sandbox
+    - url: https://github.com/bootc-dev/bootc/releases.atom
+      category: sandbox
+    - url: https://github.com/kai-scheduler/KAI-Scheduler/releases.atom
+      category: sandbox
+    - url: https://github.com/nmstate/nmstate/releases.atom
+      category: sandbox
+    - url: https://github.com/openeverest/openeverest/releases.atom
       category: sandbox
 blogs:
     - url: https://www.aeraki.net/blog/index.xml
