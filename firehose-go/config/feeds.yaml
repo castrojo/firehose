@@ -1,7 +1,7 @@
 # Feed Configuration for The Firehose (Go)
 # Managed by landscape-sync workflow — do not edit feed URLs manually
 # Source of truth: https://landscape.cncf.io
-# Total: 217 release feeds, 36 blog feeds
+# Total: 224 release feeds, 38 blog feeds
 
 feeds:
     - url: https://github.com/argoproj/argo-cd/releases.atom
@@ -416,8 +416,6 @@ feeds:
       category: sandbox
     - url: https://github.com/WasmEdge/WasmEdge/releases.atom
       category: sandbox
-    - url: https://github.com/containers/bootc/releases.atom
-      category: sandbox
     - url: https://github.com/bpfman/bpfman/releases.atom
       category: sandbox
     - url: https://github.com/containers/composefs/releases.atom
@@ -438,6 +436,22 @@ feeds:
       category: sandbox
     - url: https://github.com/truefoundry/KubeElasti/releases.atom
       category: sandbox
+    - url: https://github.com/CoHDI/releases.atom
+      category: sandbox
+    - url: https://github.com/agones-dev/agones/releases.atom
+      category: sandbox
+    - url: https://github.com/alibaba/higress/releases.atom
+      category: sandbox
+    - url: https://github.com/bootc-dev/bootc/releases.atom
+      category: sandbox
+    - url: https://github.com/kai-scheduler/KAI-Scheduler/releases.atom
+      category: sandbox
+    - url: https://github.com/nmstate/nmstate/releases.atom
+      category: sandbox
+    - url: https://github.com/openeverest/openeverest/releases.atom
+      category: sandbox
+    - url: https://github.com/volcano-sh/kthena/releases.atom
+      category: incubating
 blogs:
     - url: https://www.aeraki.net/blog/index.xml
       category: sandbox
@@ -583,3 +597,11 @@ blogs:
       category: sandbox
       project: werf
       blog_url: https://blog.werf.io
+    - url: https://openchoreo.dev/blog/rss.xml
+      category: sandbox
+      project: OpenChoreo
+      blog_url: https://openchoreo.dev/blog/
+    - url: https://openeverest.io/blog/index.xml
+      category: sandbox
+      project: OpenEverest
+      blog_url: https://openeverest.io/blog/

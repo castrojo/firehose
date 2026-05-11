@@ -1,0 +1,208 @@
+{
+  "added": [
+    {
+      "orgRepo": "CoHDI",
+      "name": "CoHDI",
+      "status": "sandbox",
+      "feedUrl": "https://github.com/CoHDI/releases.atom"
+    },
+    {
+      "orgRepo": "agones-dev/agones",
+      "name": "Agones",
+      "status": "sandbox",
+      "feedUrl": "https://github.com/agones-dev/agones/releases.atom"
+    },
+    {
+      "orgRepo": "alibaba/higress",
+      "name": "Higress",
+      "status": "sandbox",
+      "feedUrl": "https://github.com/alibaba/higress/releases.atom"
+    },
+    {
+      "orgRepo": "bootc-dev/bootc",
+      "name": "bootc",
+      "status": "sandbox",
+      "feedUrl": "https://github.com/bootc-dev/bootc/releases.atom"
+    },
+    {
+      "orgRepo": "kai-scheduler/KAI-Scheduler",
+      "name": "KAI Scheduler",
+      "status": "sandbox",
+      "feedUrl": "https://github.com/kai-scheduler/KAI-Scheduler/releases.atom"
+    },
+    {
+      "orgRepo": "nmstate/nmstate",
+      "name": "NMstate",
+      "status": "sandbox",
+      "feedUrl": "https://github.com/nmstate/nmstate/releases.atom"
+    },
+    {
+      "orgRepo": "openeverest/openeverest",
+      "name": "OpenEverest",
+      "status": "sandbox",
+      "feedUrl": "https://github.com/openeverest/openeverest/releases.atom"
+    },
+    {
+      "orgRepo": "volcano-sh/kthena",
+      "name": "Volcano-Kthena",
+      "status": "incubating",
+      "feedUrl": "https://github.com/volcano-sh/kthena/releases.atom"
+    }
+  ],
+  "removed": [
+    {
+      "orgRepo": "containers/bootc",
+      "name": "",
+      "status": "",
+      "feedUrl": "https://github.com/containers/bootc/releases.atom"
+    }
+  ],
+  "total": 224,
+  "changed": true,
+  "blogsAdded": [
+    {
+      "orgRepo": "openchoreo/openchoreo",
+      "name": "OpenChoreo",
+      "status": "sandbox",
+      "blogUrl": "https://openchoreo.dev/blog/",
+      "feedUrl": "https://openchoreo.dev/blog/rss.xml"
+    },
+    {
+      "orgRepo": "openeverest/openeverest",
+      "name": "OpenEverest",
+      "status": "sandbox",
+      "blogUrl": "https://openeverest.io/blog/",
+      "feedUrl": "https://openeverest.io/blog/index.xml"
+    }
+  ],
+  "blogsRemoved": null,
+  "blogsDiscoveryFailed": [
+    {
+      "orgRepo": "argoproj/argo-cd",
+      "name": "Argo",
+      "status": "graduated",
+      "blogUrl": "https://blog.argoproj.io/",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "fluent/fluentd",
+      "name": "Fluentd",
+      "status": "graduated",
+      "blogUrl": "http://www.fluentd.org/blog/",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "interlink-hq/interLink",
+      "name": "Interlink",
+      "status": "sandbox",
+      "blogUrl": "https://intertwin-eu.github.io/interLink/blog/",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "kedacore/keda",
+      "name": "KEDA",
+      "status": "graduated",
+      "blogUrl": "https://keda.sh/blog",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "keylime/keylime",
+      "name": "Keylime",
+      "status": "sandbox",
+      "blogUrl": "https://keylime.dev/blog",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "kgateway-dev/kgateway",
+      "name": "Kgateway",
+      "status": "sandbox",
+      "blogUrl": "https://kgateway.dev/blog",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "kumahq/kuma",
+      "name": "Kuma",
+      "status": "sandbox",
+      "blogUrl": "https://kuma.io/blog/",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "linkerd/linkerd2",
+      "name": "Linkerd",
+      "status": "graduated",
+      "blogUrl": "https://blog.linkerd.io/",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "microcks/microcks",
+      "name": "Microcks",
+      "status": "incubating",
+      "blogUrl": "https://microcks.io/blog/",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "oscal-compass/compliance-trestle",
+      "name": "OSCAL-COMPASS",
+      "status": "sandbox",
+      "blogUrl": "https://dzone.com/articles/compass-compliance-part-1",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "open-policy-agent/opa",
+      "name": "Open Policy Agent (OPA)",
+      "status": "graduated",
+      "blogUrl": "https://blog.openpolicyagent.org/",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "OpenFunction/OpenFunction",
+      "name": "OpenFunction",
+      "status": "sandbox",
+      "blogUrl": "https://openfunction.dev/blog/",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "getporter/porter",
+      "name": "Porter",
+      "status": "sandbox",
+      "blogUrl": "https://getporter.org/blog",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "radius-project/radius",
+      "name": "Radius",
+      "status": "sandbox",
+      "blogUrl": "https://blog.radapp.io/posts",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "spiffe/spiffe",
+      "name": "SPIFFE",
+      "status": "graduated",
+      "blogUrl": "https://blog.spiffe.io/",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "thanos-io/thanos",
+      "name": "Thanos",
+      "status": "incubating",
+      "blogUrl": "https://thanos.io/blog/",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "bpfman/bpfman",
+      "name": "bpfman",
+      "status": "sandbox",
+      "blogUrl": "https://bpfman.io/main/blog/",
+      "feedUrl": ""
+    },
+    {
+      "orgRepo": "grpc/grpc",
+      "name": "gRPC",
+      "status": "incubating",
+      "blogUrl": "http://www.grpc.io/blog/",
+      "feedUrl": ""
+    }
+  ],
+  "blogsTotal": 38
+}
