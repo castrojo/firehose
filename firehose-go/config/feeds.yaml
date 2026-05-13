@@ -627,10 +627,10 @@ blogs:
       category: incubating
       project: Flatcar Container Linux
       blog_url: https://www.flatcar.org/blog/
-    - url: http://www.fluentd.org/blog/feed.rss
+    - url: https://www.fluentd.org/blog/feed.rss
       category: graduated
       project: Fluentd
-      blog_url: http://www.fluentd.org/blog/
+      blog_url: https://www.fluentd.org/blog/
     - url: https://grpc.io/blog/index.xml
       category: incubating
       project: gRPC
