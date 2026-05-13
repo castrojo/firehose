@@ -659,10 +659,10 @@ blogs:
       category: graduated
       project: Knative
       blog_url: https://knative.dev/blog/
-    - url: http://konveyor.io/blog/index.xml
+    - url: https://konveyor.io/blog/index.xml
       category: sandbox
       project: Konveyor
-      blog_url: http://konveyor.io/blog/
+      blog_url: https://konveyor.io/blog/
     - url: https://kubeedge.io/blog/rss.xml
       category: graduated
       project: KubeEdge
