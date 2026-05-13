@@ -634,7 +634,7 @@ blogs:
     - url: https://grpc.io/blog/index.xml
       category: incubating
       project: gRPC
-      blog_url: http://www.grpc.io/blog/
+      blog_url: https://www.grpc.io/blog/
     - url: https://goharbor.io/blog/index.xml
       category: graduated
       project: Harbor
