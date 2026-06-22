@@ -1,7 +1,7 @@
 # Feed Configuration for The Firehose (Go)
 # Managed by landscape-sync workflow — do not edit feed URLs manually
 # Source of truth: https://landscape.cncf.io
-# Total: 217 release feeds, 73 blog feeds
+# Total: 225 release feeds, 49 blog feeds
 
 feeds:
     - url: https://github.com/argoproj/argo-cd/releases.atom
@@ -165,8 +165,6 @@ feeds:
     - url: https://github.com/getporter/porter/releases.atom
       category: sandbox
     - url: https://github.com/getsops/sops/releases.atom
-      category: sandbox
-    - url: https://github.com/hexa-org/policy-orchestrator/releases.atom
       category: sandbox
     - url: https://github.com/hwameistor/hwameistor/releases.atom
       category: sandbox
@@ -416,8 +414,6 @@ feeds:
       category: sandbox
     - url: https://github.com/WasmEdge/WasmEdge/releases.atom
       category: sandbox
-    - url: https://github.com/containers/bootc/releases.atom
-      category: sandbox
     - url: https://github.com/bpfman/bpfman/releases.atom
       category: sandbox
     - url: https://github.com/containers/composefs/releases.atom
@@ -437,6 +433,26 @@ feeds:
     - url: https://github.com/spinframework/spin/releases.atom
       category: sandbox
     - url: https://github.com/truefoundry/KubeElasti/releases.atom
+      category: sandbox
+    - url: https://github.com/Apicurio/apicurio-registry/releases.atom
+      category: sandbox
+    - url: https://github.com/CoHDI/releases.atom
+      category: sandbox
+    - url: https://github.com/agones-dev/agones/releases.atom
+      category: sandbox
+    - url: https://github.com/bootc-dev/bootc/releases.atom
+      category: sandbox
+    - url: https://github.com/higress-group/higress/releases.atom
+      category: sandbox
+    - url: https://github.com/kai-scheduler/KAI-Scheduler/releases.atom
+      category: sandbox
+    - url: https://github.com/llm-d/llm-d/releases.atom
+      category: sandbox
+    - url: https://github.com/nmstate/nmstate/releases.atom
+      category: sandbox
+    - url: https://github.com/openeverest/openeverest/releases.atom
+      category: sandbox
+    - url: https://github.com/velero-io/velero/releases.atom
       category: sandbox
 blogs:
     - url: https://www.aeraki.net/blog/index.xml
@@ -587,46 +603,6 @@ blogs:
       category: graduated
       project: Argo
       blog_url: https://blog.argoproj.io/
-    - url: https://medium.com/feed/buildpacks
-      category: incubating
-      project: Buildpacks
-      blog_url: https://medium.com/buildpacks
-    - url: https://cilium.io/blog/rss.xml
-      category: graduated
-      project: Cilium
-      blog_url: https://cilium.io/blog/
-    - url: https://cilium.io/newsletter/rss.xml
-      category: graduated
-      project: Cilium
-      blog_url: https://cilium.io/newsletter/
-    - url: https://cloudevents.io/blog/index.xml
-      category: graduated
-      project: CloudEvents
-      blog_url: https://cloudevents.io/blog/
-    - url: https://blog.crossplane.io/rss/
-      category: graduated
-      project: Crossplane
-      blog_url: https://blog.crossplane.io/
-    - url: https://d7y.io/blog/rss.xml
-      category: graduated
-      project: Dragonfly
-      blog_url: https://d7y.io/blog/
-    - url: https://blog.envoyproxy.io/feed
-      category: graduated
-      project: Envoy
-      blog_url: https://blog.envoyproxy.io/
-    - url: https://etcd.io/blog/index.xml
-      category: graduated
-      project: etcd
-      blog_url: https://etcd.io/blog/
-    - url: https://falco.org/blog/feed.xml
-      category: graduated
-      project: Falco
-      blog_url: https://falco.org/blog/
-    - url: https://www.flatcar.org/blog/index.xml
-      category: incubating
-      project: Flatcar Container Linux
-      blog_url: https://www.flatcar.org/blog/
     - url: https://www.fluentd.org/blog/feed.rss
       category: graduated
       project: Fluentd
@@ -635,46 +611,10 @@ blogs:
       category: incubating
       project: gRPC
       blog_url: https://www.grpc.io/blog/
-    - url: https://goharbor.io/blog/index.xml
-      category: graduated
-      project: Harbor
-      blog_url: https://goharbor.io/blog/
-    - url: https://helm.sh/blog/index.xml
-      category: graduated
-      project: Helm
-      blog_url: https://helm.sh/blog/
-    - url: https://karmada.io/blog/rss.xml
-      category: incubating
-      project: Karmada
-      blog_url: https://karmada.io/blog/
     - url: https://keda.sh/blog/index.xml
       category: graduated
       project: KEDA
       blog_url: https://keda.sh/blog/
-    - url: https://www.keycloak.org/rss.xml
-      category: incubating
-      project: Keycloak
-      blog_url: https://www.keycloak.org/blog
-    - url: https://knative.dev/blog/feed_rss_created.xml
-      category: graduated
-      project: Knative
-      blog_url: https://knative.dev/blog/
-    - url: https://konveyor.io/blog/index.xml
-      category: sandbox
-      project: Konveyor
-      blog_url: https://konveyor.io/blog/
-    - url: https://kubeedge.io/blog/rss.xml
-      category: graduated
-      project: KubeEdge
-      blog_url: https://kubeedge.io/blog/
-    - url: https://kubevirt.io/feed.xml
-      category: incubating
-      project: KubeVirt
-      blog_url: https://kubevirt.io/
-    - url: https://kyverno.io/blog/index.xml
-      category: graduated
-      project: Kyverno
-      blog_url: https://kyverno.io/blog/
     - url: https://linkerd.io/blog/feed.xml
       category: graduated
       project: Linkerd
@@ -683,30 +623,10 @@ blogs:
       category: incubating
       project: Microcks
       blog_url: https://microcks.io/blog/
-    - url: https://nats.io/blog/index.xml
-      category: incubating
-      project: NATS
-      blog_url: https://nats.io/blog/
-    - url: https://notaryproject.dev/blog/index.xml
-      category: incubating
-      project: Notary Project
-      blog_url: https://notaryproject.dev/blog/
-    - url: https://open-cluster-management.io/blog/index.xml
-      category: sandbox
-      project: Open Cluster Management
-      blog_url: https://open-cluster-management.io/blog/
     - url: https://blog.openpolicyagent.org/feed
       category: graduated
       project: Open Policy Agent (OPA)
       blog_url: https://blog.openpolicyagent.org/
-    - url: https://www.opencost.io/blog/rss.xml
-      category: incubating
-      project: OpenCost
-      blog_url: https://opencost.io/blog/
-    - url: https://openkruise.io/blog/rss.xml
-      category: incubating
-      project: OpenKruise
-      blog_url: https://openkruise.io/blog/
     - url: https://opentelemetry.io/blog/index.xml
       category: graduated
       project: OpenTelemetry
@@ -715,19 +635,19 @@ blogs:
       category: graduated
       project: SPIFFE
       blog_url: https://blog.spiffe.io/
-    - url: https://strimzi.io/feed.xml
-      category: incubating
-      project: Strimzi
-      blog_url: https://strimzi.io/
     - url: https://thanos.io/blog/index.xml
       category: incubating
       project: Thanos
       blog_url: https://thanos.io/blog/
-    - url: https://volcano.sh/en/blog/index.xml
-      category: incubating
-      project: Volcano
-      blog_url: https://volcano.sh/en/blog/
-    - url: https://wasmcloud.com/blog/rss.xml
-      category: incubating
-      project: wasmCloud
-      blog_url: https://wasmcloud.com/blog/
+    - url: https://openchoreo.dev/blog/rss.xml
+      category: sandbox
+      project: OpenChoreo
+      blog_url: https://openchoreo.dev/blog/
+    - url: https://openeverest.io/blog/index.xml
+      category: sandbox
+      project: OpenEverest
+      blog_url: https://openeverest.io/blog/
+    - url: https://blog.radapp.io/posts/index.xml
+      category: sandbox
+      project: Radius
+      blog_url: https://blog.radapp.io/posts
