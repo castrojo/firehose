@@ -58,3 +58,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for GitHub Pages setup, automated deployment,
 ## Contributing
 
 See [AGENTS.md](AGENTS.md) for architecture details and contribution guidelines.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
